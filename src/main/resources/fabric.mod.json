@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "id": "${id}",
+  "version": "${version}",
+  "name": "Lootables API",
+  "description": "API for creating and offering 'loot box' type selectable loot.",
+  "authors": [
+    "fzzyhmstrs"
+  ],
+  "contact": {
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/lootables",
+    "issues": "https://github.com/fzzyhmstrs/lootables/issues",
+    "sources": "https://github.com/fzzyhmstrs/lootables"
+  },
+  "license": "TDL-M",
+  "icon": "icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      {
+        "adapter": "kotlin",
+        "value": "me.fzzyhmstrs.lootables.Lootables"
+      }
+    ],
+    "client": [
+      {
+        "adapter": "kotlin",
+        "value": "me.fzzyhmstrs.lootables.LootablesClient"
+      }
+    ]
+  },
+  "mixins": [
+    "lootables.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${loaderVersion}",
+    "fabric": "*",
+    "fabric-language-kotlin": ">=${fabricKotlinVersion}",
+    "minecraft": "~1.21",
+    "java": ">=21"
+  }
+}
