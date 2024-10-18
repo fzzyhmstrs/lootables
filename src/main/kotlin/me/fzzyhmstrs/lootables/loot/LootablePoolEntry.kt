@@ -14,11 +14,13 @@ package me.fzzyhmstrs.lootables.loot
 
 import com.mojang.serialization.MapCodec
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.text.Text
 import net.minecraft.util.math.BlockPos
 
 interface LootablePoolEntry { 
     fun type(): LootablePoolEntryType
-    fun apply(player: PlayerEntty, origin: BlockPos)
+    fun apply(player: PlayerEntity, origin: BlockPos)
+    fun provideDescription(): Text
 
     companion object {
         val MAP_CODEC: MapCodec<LootablePoolEntry> = LootablePoolEntryType.CODEC.dispatchMap({ entry -> entry.type() }, { type -> type.codec() })
