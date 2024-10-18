@@ -12,6 +12,7 @@
 
 package me.fzzyhmstrs.lootables.loot
 
+import com.mojang.serialization.MapCodec
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.util.math.BlockPos
 
