@@ -12,22 +12,15 @@
 
 package me.fzzyhmstrs.lootables.loot
 
-import com.mojang.serialization.MapCodec
+import io.netty.buffer.ByteBuf
 import me.fzzyhmstrs.lootables.client.render.TileIcon
-import me.fzzyhmstrs.lootables.client.render.TileIconProvider
-import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.text.Text
-import net.minecraft.util.Identifier
-import net.minecraft.util.math.BlockPos
-import java.util.Optional
+import net.minecraft.network.codec.PacketCodec
 
-interface LootablePoolEntry {
+interface LootablePoolEntryDisplay {
     fun type(): LootablePoolEntryType
-    fun apply(player: PlayerEntity, origin: BlockPos)
-    fun defaultDescription(): Text
-    fun createDisplay(): LootablePoolEntryDisplay
+    fun provideIcons(): List<TileIcon>
 
     companion object {
-        val MAP_CODEC: MapCodec<LootablePoolEntry> = LootablePoolEntryType.CODEC.dispatchMap({ entry -> entry.type() }, { type -> type.codec() })
+        val PACKET_CODEC: PacketCodec<ByteBuf, LootablePoolEntryDisplay> = LootablePoolEntryType.PACKET_CODEC.dispatch({ display -> display.type() }, {type -> type.s2c()})
     }
 }

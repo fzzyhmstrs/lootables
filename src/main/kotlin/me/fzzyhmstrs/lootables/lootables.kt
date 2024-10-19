@@ -13,6 +13,7 @@
 package me.fzzyhmstrs.lootables
 
 import com.llamalad7.mixinextras.MixinExtrasBootstrap
+import me.fzzyhmstrs.lootables.loot.LootablesData
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
@@ -27,7 +28,9 @@ import kotlin.random.Random
 object Lootables: ModInitializer {
     const val MOD_ID = "lootables"
     val LOGGER: Logger = LoggerFactory.getLogger("lootables")
+
     override fun onInitialize() {
+        LootablesData.init()
     }
 
     fun random(): Random {
