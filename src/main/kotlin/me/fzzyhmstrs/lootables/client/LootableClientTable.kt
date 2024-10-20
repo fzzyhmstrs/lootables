@@ -10,9 +10,7 @@
  *
  */
 
-package me.fzzyhmstrs.lootables.client.render
+package me.fzzyhmstrs.lootables.client
 
-@FunctionalInterface
-fun interface TileIconProvider {
-    fun provideIcons(): List<TileIcon>
+class LootableClientTable() {
 }

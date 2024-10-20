@@ -25,9 +25,18 @@ import net.minecraft.text.Text
 import net.minecraft.text.TextCodecs
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.Identifier
+import net.minecraft.util.math.Vec3d
 import java.util.*
 
-class LootablePool private constructor(internal val id: Identifier, internal val rarity: LootableRarity, internal val entry: LootablePoolEntry, private val description: Optional<Text>, private val maxUses: Int = -1, private val conditions: List<LootCondition> = listOf()) {
+class LootablePool private constructor(
+    internal val id: Identifier,
+    internal val rarity: LootableRarity,
+    internal val entry: LootablePoolEntry,
+    private val description: Optional<Text>,
+    private val weight: Optional<Int>,
+    private val maxUses: Int = -1,
+    private val conditions: List<LootCondition> = listOf())
+{
 
     fun canApply(context: LootContext): Boolean {
         val entity = context.get(LootContextParameters.THIS_ENTITY) ?: return false
@@ -40,9 +49,13 @@ class LootablePool private constructor(internal val id: Identifier, internal val
         return true
     }
 
-    fun apply(player: PlayerEntity, origin: BlockPos) {
+    fun apply(player: PlayerEntity, origin: Vec3d) {
         LootablesData.use(id, player.uuid)
         this.entry.apply(player, origin)
+    }
+
+    fun getWeight(): Int {
+        return weight.orElse(rarity.weight)
     }
 
     fun createData(): LootablePoolData {
@@ -61,6 +74,7 @@ class LootablePool private constructor(internal val id: Identifier, internal val
                 LootableRarity.CODEC.optionalFieldOf("rarity", LootableRarity.COMMON).forGetter(LootablePool::rarity),
                 LootablePoolEntry.MAP_CODEC.codec().fieldOf("entry").forGetter(LootablePool::entry),
                 TextCodecs.CODEC.optionalFieldOf("desc").forGetter(LootablePool::description),
+                Codec.intRange(1, Int.MAX_VALUE).optionalFieldOf("weight").orElse(Optional.empty()).forGetter(LootablePool::weight),
                 Codec.INT.optionalFieldOf("max_uses", -1).forGetter(LootablePool::maxUses),
                 CONDITION_CODEC.forGetter(LootablePool::conditions)
             ).apply(instance, ::LootablePool)

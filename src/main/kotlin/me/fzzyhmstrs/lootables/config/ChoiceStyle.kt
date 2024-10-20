@@ -10,11 +10,17 @@
  *
  */
 
-package me.fzzyhmstrs.lootables.client.render
+package me.fzzyhmstrs.lootables.config
 
-import net.minecraft.client.gui.DrawContext
+import me.fzzyhmstrs.fzzy_config.util.EnumTranslatable
+import me.fzzyhmstrs.lootables.Lootables
+import net.minecraft.util.Identifier
 
-@FunctionalInterface
-fun interface TileIcon {
-    fun render(context: DrawContext, x: Int, y: Int)
+enum class ChoiceStyle(val id: Identifier): EnumTranslatable {
+    HORIZONTAL(Lootables.identity("decoration/horizontal")),
+    STACKED(Lootables.identity("decoration/stacked"));
+
+    override fun prefix(): String {
+        return "lootables.config.choiceStyle"
+    }
 }

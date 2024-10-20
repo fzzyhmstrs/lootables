@@ -15,50 +15,45 @@ package me.fzzyhmstrs.lootables.loot.entry
 import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
+import me.fzzyhmstrs.fzzy_config.util.FcText
 import me.fzzyhmstrs.fzzy_config.util.FcText.translate
+import me.fzzyhmstrs.lootables.impl.LootablesApiImpl
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntry
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryDisplay
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryType
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryTypes
+import me.fzzyhmstrs.lootables.loot.display.CustomLootablePoolEntryDisplay
 import me.fzzyhmstrs.lootables.loot.display.ItemLootablePoolEntryDisplay
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.text.Text
+import net.minecraft.util.Identifier
 import net.minecraft.util.ItemScatterer
 import net.minecraft.util.math.Vec3d
 
-class ItemLootablePoolEntry(private val itemStack: ItemStack, private val dropItems: Boolean = true): LootablePoolEntry {
+class CustomLootablePoolEntry(private val id: Identifier): LootablePoolEntry {
 
     override fun type(): LootablePoolEntryType {
-        return LootablePoolEntryTypes.ITEM
+        return LootablePoolEntryTypes.CUSTOM
     }
 
     override fun apply(player: PlayerEntity, origin: Vec3d) {
-        if (dropItems) {
-            ItemScatterer.spawn(player.world, origin.x, origin.y, origin.z, itemStack.copy())
-        } else {
-            player.inventory.offerOrDrop(itemStack.copy())
-        }
+        LootablesApiImpl.getCustomEntry(id)?.apply(player, origin)
     }
 
     override fun defaultDescription(): Text {
-        return "lootables.entry.item".translate(itemStack.count, itemStack.item.name)
+        return LootablesApiImpl.getCustomEntry(id)?.defaultDescription() ?: FcText.empty()
     }
 
     override fun createDisplay(): LootablePoolEntryDisplay {
-        return ItemLootablePoolEntryDisplay(itemStack)
+        return CustomLootablePoolEntryDisplay(id)
     }
 
     companion object {
-
-        private val ITEM_CODEC: Codec<ItemStack> = Codec.withAlternative(ItemStack.CODEC, ItemStack.ITEM_CODEC.xmap({ re -> ItemStack(re) }, { i -> i.item.registryEntry }))
-
-        val CODEC: MapCodec<ItemLootablePoolEntry> = RecordCodecBuilder.mapCodec { instance: RecordCodecBuilder.Instance<ItemLootablePoolEntry> ->
-            instance.group(
-                ITEM_CODEC.fieldOf("item").forGetter(ItemLootablePoolEntry::itemStack),
-                Codec.BOOL.optionalFieldOf("dropItems", true).forGetter(ItemLootablePoolEntry::dropItems)
-            ).apply(instance, ::ItemLootablePoolEntry)
-        }
+        val CODEC: MapCodec<CustomLootablePoolEntry> = Identifier.CODEC.fieldOf("id").xmap(
+            ::CustomLootablePoolEntry,
+            CustomLootablePoolEntry::id
+        )
     }
 
 }

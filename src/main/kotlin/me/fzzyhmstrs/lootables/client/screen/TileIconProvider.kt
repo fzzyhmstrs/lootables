@@ -10,17 +10,9 @@
  *
  */
 
-package me.fzzyhmstrs.lootables.loot
+package me.fzzyhmstrs.lootables.client.screen
 
-import me.fzzyhmstrs.lootables.client.screen.TileIcon
-import net.minecraft.network.RegistryByteBuf
-import net.minecraft.network.codec.PacketCodec
-
-interface LootablePoolEntryDisplay {
-    fun type(): LootablePoolEntryType
+@FunctionalInterface
+fun interface TileIconProvider {
     fun provideIcons(): List<TileIcon>
-
-    companion object {
-        val PACKET_CODEC: PacketCodec<RegistryByteBuf, LootablePoolEntryDisplay> = LootablePoolEntryType.PACKET_CODEC.dispatch({ display -> display.type() }, {type -> type.s2c()})
-    }
 }

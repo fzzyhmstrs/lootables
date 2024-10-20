@@ -12,13 +12,12 @@
 
 package me.fzzyhmstrs.lootables
 
-import com.llamalad7.mixinextras.MixinExtrasBootstrap
 import me.fzzyhmstrs.lootables.loot.LootablesData
+import me.fzzyhmstrs.lootables.network.LootablesNetworking
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
 import net.fabricmc.api.ModInitializer
-import net.fabricmc.loader.api.entrypoint.PreLaunchEntrypoint
 import net.minecraft.util.Identifier
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -31,6 +30,7 @@ object Lootables: ModInitializer {
 
     override fun onInitialize() {
         LootablesData.init()
+        LootablesNetworking.init()
     }
 
     fun random(): Random {

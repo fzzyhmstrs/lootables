@@ -16,24 +16,25 @@ import com.mojang.serialization.Codec
 import com.mojang.serialization.DataResult
 import com.mojang.serialization.MapCodec
 import io.netty.buffer.ByteBuf
+import net.minecraft.network.RegistryByteBuf
 import net.minecraft.network.codec.PacketCodec
 import net.minecraft.network.codec.PacketCodecs
 import net.minecraft.util.Identifier
 
 import java.util.IdentityHashMap
 
-class LootablePoolEntryType private constructor(private val codec: MapCodec<out LootablePoolEntry>, private val s2cCodec: PacketCodec<ByteBuf, out LootablePoolEntryDisplay>) {
+class LootablePoolEntryType private constructor(private val codec: MapCodec<out LootablePoolEntry>, private val s2cCodec: PacketCodec<RegistryByteBuf, out LootablePoolEntryDisplay>) {
 
     fun codec(): MapCodec<out LootablePoolEntry> {
         return this.codec
     }
 
-    fun s2c(): PacketCodec<ByteBuf, out LootablePoolEntryDisplay> {
+    fun s2c(): PacketCodec<RegistryByteBuf, out LootablePoolEntryDisplay> {
         return s2cCodec
     }
 
     companion object {
-        fun create(id: Identifier, codec: MapCodec<out LootablePoolEntry>, s2cCodec: PacketCodec<ByteBuf, out LootablePoolEntryDisplay>): LootablePoolEntryType {
+        fun create(id: Identifier, codec: MapCodec<out LootablePoolEntry>, s2cCodec: PacketCodec<RegistryByteBuf, out LootablePoolEntryDisplay>): LootablePoolEntryType {
             val type = LootablePoolEntryType(codec, s2cCodec)
             if (idToType.containsKey(id)) throw IllegalStateException("Duplicate type registered: $id")
             idToType[id] = type
@@ -49,7 +50,7 @@ class LootablePoolEntryType private constructor(private val codec: MapCodec<out 
             { type -> typeToId[type]?.let{ DataResult.success(it) } ?: DataResult.error{ "Lootable Poo Entry Type not registered with a key" } }
         )
 
-        val PACKET_CODEC: PacketCodec<ByteBuf, LootablePoolEntryType> = PacketCodecs.codec(CODEC)
+        val PACKET_CODEC: PacketCodec<RegistryByteBuf, LootablePoolEntryType> = PacketCodecs.codec(CODEC).cast<RegistryByteBuf>()
     }
 
 }

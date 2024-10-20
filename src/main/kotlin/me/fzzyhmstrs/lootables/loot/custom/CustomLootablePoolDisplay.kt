@@ -10,17 +10,10 @@
  *
  */
 
-package me.fzzyhmstrs.lootables.loot
+package me.fzzyhmstrs.lootables.loot.custom
 
 import me.fzzyhmstrs.lootables.client.screen.TileIcon
-import net.minecraft.network.RegistryByteBuf
-import net.minecraft.network.codec.PacketCodec
 
-interface LootablePoolEntryDisplay {
-    fun type(): LootablePoolEntryType
+interface CustomLootablePoolDisplay {
     fun provideIcons(): List<TileIcon>
-
-    companion object {
-        val PACKET_CODEC: PacketCodec<RegistryByteBuf, LootablePoolEntryDisplay> = LootablePoolEntryType.PACKET_CODEC.dispatch({ display -> display.type() }, {type -> type.s2c()})
-    }
 }

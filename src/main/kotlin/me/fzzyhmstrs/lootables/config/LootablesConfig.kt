@@ -18,7 +18,13 @@ import me.fzzyhmstrs.fzzy_config.config.Config
 import me.fzzyhmstrs.fzzy_config.validation.number.ValidatedInt
 import me.fzzyhmstrs.lootables.Lootables
 
-class LootablesConfig: Config(Lootables.identity("lootables")) {
+class LootablesConfig: Config(Lootables.identity("config")) {
+
+    @NonSync
+    var tileWidth = 128
+
+    @NonSync
+    var tileHeight = 128
 
     @NonSync
     var easeInTiles = true

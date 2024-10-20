@@ -10,37 +10,41 @@
  *
  */
 
-package me.fzzyhmstrs.lootables.client.render
+package me.fzzyhmstrs.lootables.client.screen
 
+import me.fzzyhmstrs.fzzy_config.util.FcText
 import me.fzzyhmstrs.lootables.config.LootablesConfig
 import me.fzzyhmstrs.lootables.loot.LootableRarity
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.DrawContext
+import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder
+import net.minecraft.client.gui.widget.ClickableWidget
 import net.minecraft.text.OrderedText
 import net.minecraft.text.Text
 import net.minecraft.util.Util
 import net.minecraft.util.math.ColorHelper
 import net.minecraft.util.math.MathHelper
+import java.util.function.Supplier
 import kotlin.math.cos
 import kotlin.math.max
 import kotlin.math.sin
 
-class ChoiceTileRenderer(
+class ChoiceTileWidget(
     private val client: MinecraftClient,
-    private var width: Int,
-    private var height: Int,
+    x: Int,
+    y: Int,
+    width: Int,
+    height: Int,
     private val rarity: LootableRarity,
     private val icons: List<TileIcon>,
+    private val choiceCallback: Runnable,
+    private val canClick: Supplier<Boolean>,
     description: Text,
-    delay: Int = 0)
+    delay: Int = 0): ClickableWidget(x, y, if(width < 62) 62 else width, if (height < 39) 39 else height, FcText.empty())
 {
 
-    init {
-        if (width < 62) width = 62
-        if (height < 39) height = 39
-    }
-
     private val descriptions: List<OrderedText> = client.textRenderer.wrapLines(description, width - 6)
+    private var clicked = false
 
     private var easeInAnimator: Animator = if(LootablesConfig.INSTANCE.easeInTiles && LootablesConfig.INSTANCE.easeInDuration > 0) {
         EaseIn(delay)
@@ -54,7 +58,12 @@ class ChoiceTileRenderer(
         Static
     }
 
-    fun render(context: DrawContext, x: Int, y: Int, hovered: Boolean) {
+
+    override fun renderWidget(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
+        renderTile(context, x, y, this.isSelected || this.clicked, this.clicked)
+    }
+
+    private fun renderTile(context: DrawContext, x: Int, y: Int, hovered: Boolean, clicked: Boolean) {
         val time = Util.getMeasuringTimeMs()
         if (!easeInAnimator.shouldRender(time)) return
         context.matrices.push()
@@ -160,7 +169,7 @@ class ChoiceTileRenderer(
         override fun offsetY(time: Long): Float {
             val progress = progress(time)
             if (progress >= 0.9999f) {
-                this@ChoiceTileRenderer.easeInAnimator = Static
+                this@ChoiceTileWidget.easeInAnimator = Static
             }
             return ((progress * progress) - (2f * progress) + 1f) * LootablesConfig.INSTANCE.easeInAmount
         }
@@ -168,7 +177,7 @@ class ChoiceTileRenderer(
         override fun lerpInternal(time: Long, color: Int, hovered: Boolean): Int {
             val progress = progress(time)
             if (progress >= 0.9999f) {
-                this@ChoiceTileRenderer.easeInAnimator = Static
+                this@ChoiceTileWidget.easeInAnimator = Static
             }
             return ColorHelper.Argb.lerp(progress, ColorHelper.Argb.withAlpha(0x0F, color), color)
         }
@@ -176,7 +185,7 @@ class ChoiceTileRenderer(
         override fun lerp(time: Long, startColor: Int, endColor: Int, hovered: Boolean): Int {
             val progress = progress(time)
             if (progress >= 0.9999f) {
-                this@ChoiceTileRenderer.easeInAnimator = Static
+                this@ChoiceTileWidget.easeInAnimator = Static
             }
             return ColorHelper.Argb.lerp(progress, ColorHelper.Argb.withAlpha(0x0F, endColor), endColor)
         }
@@ -219,5 +228,9 @@ class ChoiceTileRenderer(
         override fun shouldRender(time: Long): Boolean {
             return true
         }
+    }
+
+    override fun appendClickableNarrations(builder: NarrationMessageBuilder) {
+        TODO("Not yet implemented")
     }
 }

@@ -10,27 +10,22 @@
  *
  */
 
-package me.fzzyhmstrs.lootables.loot
+package me.fzzyhmstrs.lootables.api
 
+import io.netty.buffer.ByteBuf
 import net.minecraft.network.codec.PacketCodec
 import net.minecraft.network.codec.PacketCodecs
-import net.minecraft.text.Text
-import net.minecraft.text.TextCodecs
 import net.minecraft.util.Identifier
 
-data class LootablePoolData(val id: Identifier, val description: Text, val display: LootablePoolEntryDisplay) {
+class IdKey @JvmOverloads constructor(val id: Identifier, val count: Int = 1) {
 
     companion object {
-        val PACKET_CODEC = PacketCodec.tuple(
+        val PACKET_CODEC: PacketCodec<ByteBuf, IdKey> = PacketCodec.tuple(
             Identifier.PACKET_CODEC,
-            LootablePoolData::id,
-            TextCodecs.PACKET_CODEC,
-            LootablePoolData::description,
-            LootablePoolEntryDisplay.PACKET_CODEC,
-            LootablePoolData::display,
-            ::LootablePoolData
+            IdKey::id,
+            PacketCodecs.INTEGER,
+            IdKey::count,
+            ::IdKey
         )
-
-        val LIST_PACKET_CODEC = PACKET_CODEC.collect(PacketCodecs.toList())
     }
 }

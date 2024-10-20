@@ -16,8 +16,10 @@ import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import com.google.gson.JsonPrimitive
+import com.mojang.serialization.JsonOps
 import me.fzzyhmstrs.fzzy_config.api.ConfigApi
 import me.fzzyhmstrs.lootables.Lootables
+import me.fzzyhmstrs.lootables.api.IdKey
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener
@@ -27,70 +29,154 @@ import net.minecraft.util.Identifier
 import java.io.File
 
 import java.util.UUID
+import kotlin.math.max
+import kotlin.math.min
 
 object LootablesData: SimpleSynchronousResourceReloadListener {
 
-    private val usesMap: MutableMap<Identifier, MutableMap<UUID, Int>> by lazy {
-        loadUsesMap()
+    private val usageData: UsageData by lazy {
+        loadUsageData()
     }
 
     private var lootableTables: Map<Identifier, LootableTable> = mapOf()
+    private var dataInvalid = true
+    private var lootableSyncData: Map<Identifier, List<LootablePoolData>> = mapOf()
+
+    fun getSyncData(): Map<Identifier, List<LootablePoolData>> {
+        if (dataInvalid) {
+            lootableSyncData = lootableTables.mapValues { (_, table) -> table.prepareForSync() }
+        }
+        return lootableSyncData
+    }
+
+    fun getTable(id: Identifier): LootableTable? {
+        return lootableTables[id]
+    }
 
     private val gson = GsonBuilder().setPrettyPrinting().create()
 
-    private fun loadUsesMap(): MutableMap<Identifier, MutableMap<UUID, Int>> {
+    fun getUses(id: Identifier, uuid: UUID): Int {
+        return usageData.usesMap[id]?.get(uuid) ?: 0
+    }
+
+    fun use(id: Identifier, uuid: UUID) {
+        val map = usageData.usesMap.computeIfAbsent(id) { _ -> mutableMapOf() }
+        val uses = map[uuid] ?: 0
+        map[uuid] = uses + 1
+    }
+
+    fun keyAvailable(key: IdKey, uuid: UUID): Boolean {
+        return (usageData.keyMap[key.id]?.get(uuid) ?: 0) < key.count
+    }
+
+    fun applyKey(key: IdKey, uuid: UUID) {
+        val map = usageData.keyMap.computeIfAbsent(key.id) { _ -> mutableMapOf() }
+        val uses = map[uuid] ?: 0
+        map[uuid] = min(uses + 1, key.count)
+    }
+
+    fun retractKey(key: IdKey, uuid: UUID) {
+        val map = usageData.keyMap.computeIfAbsent(key.id) { _ -> mutableMapOf() }
+        val uses = map[uuid] ?: 0
+        map[uuid] = max(uses - 1, 0)
+    }
+
+    private fun loadUsageData(): UsageData {
         try {
             val dir = ConfigApi.platform().gameDir()
             val f = File(dir, "lootables_uses.json")
-            if (!f.exists()) return mutableMapOf()
+            if (!f.exists()) return UsageData(mutableMapOf(), mutableMapOf())
             val str = f.readLines().joinToString("\n")
             if (str.isEmpty()) {
-                return mutableMapOf()
+                return UsageData(mutableMapOf(), mutableMapOf())
             }
             val json = JsonParser.parseString(str)
             if (!json.isJsonObject) {
-                Lootables.LOGGER.error("Lootables usage map file was malformed. Using empty map.")
+                Lootables.LOGGER.error("Lootables usage data file was malformed. Using empty map.")
+                return UsageData(mutableMapOf(), mutableMapOf())
             }
-            val map: MutableMap<Identifier, MutableMap<UUID, Int>> = mutableMapOf()
-            for ((idStr, element) in json.asJsonObject.entrySet()) {
-                if (!element.isJsonObject) {
-                    Lootables.LOGGER.error("Lootables usage file encountered read error for element $idStr. Not an object")
-                    continue
+            val keyMapJson = json.asJsonObject["key_map"]
+            val keyMap = if (!keyMapJson.isJsonObject) {
+                Lootables.LOGGER.error("Lootables key map was malformed. Using empty map.")
+                mutableMapOf()
+            } else {
+                val keyMapTemp: MutableMap<Identifier, MutableMap<UUID, Int>> = mutableMapOf()
+                for ((idStr, element) in keyMapJson.asJsonObject.entrySet()) {
+                    if (!element.isJsonObject) {
+                        Lootables.LOGGER.error("Lootables key map encountered read error for element $idStr. Not an object")
+                        continue
+                    }
+                    val id = Identifier.tryParse(idStr)
+                    if (id == null) {
+                        Lootables.LOGGER.error("Lootables key map encountered read error for element $idStr. Not an object")
+                        continue
+                    }
+                    val elementMap: MutableMap<UUID, Int> = mutableMapOf()
+                    for ((uuidStr, elementElement) in element.asJsonObject.entrySet()) {
+                        val uuid = UUID.fromString(uuidStr)
+                        val usages = elementElement.asInt
+                        elementMap[uuid] = usages
+                    }
+                    keyMapTemp[id] = elementMap
                 }
-                val id = Identifier.tryParse(idStr)
-                if (id == null) {
-                    Lootables.LOGGER.error("Lootables usage file encountered read error for element $idStr. Not an object")
-                    continue
-                }
-                val elementMap: MutableMap<UUID, Int> = mutableMapOf()
-                for ((uuidStr, elementElement) in element.asJsonObject.entrySet()) {
-                    val uuid = UUID.fromString(uuidStr)
-                    val usages = elementElement.asInt
-                    elementMap[uuid] = usages
-                }
-                map[id] = elementMap
+                keyMapTemp
             }
-            return map
+            val usesMapJson = json.asJsonObject["uses_map"]
+            val usesMap = if (!usesMapJson.isJsonObject) {
+                Lootables.LOGGER.error("Lootables usage map was malformed. Using empty map.")
+                mutableMapOf()
+            } else {
+                val usesMapTemp: MutableMap<Identifier, MutableMap<UUID, Int>> = mutableMapOf()
+                for ((idStr, element) in usesMapJson.asJsonObject.entrySet()) {
+                    if (!element.isJsonObject) {
+                        Lootables.LOGGER.error("Lootables usage map encountered read error for element $idStr. Not an object")
+                        continue
+                    }
+                    val id = Identifier.tryParse(idStr)
+                    if (id == null) {
+                        Lootables.LOGGER.error("Lootables usage map encountered read error for element $idStr. Not an object")
+                        continue
+                    }
+                    val elementMap: MutableMap<UUID, Int> = mutableMapOf()
+                    for ((uuidStr, elementElement) in element.asJsonObject.entrySet()) {
+                        val uuid = UUID.fromString(uuidStr)
+                        val usages = elementElement.asInt
+                        elementMap[uuid] = usages
+                    }
+                    usesMapTemp[id] = elementMap
+                }
+                usesMapTemp
+            }
+            return UsageData(usesMap, keyMap)
         } catch (e: Throwable) {
             Lootables.LOGGER.error("Critical exception encountered while reading lootables usage map. Using empty map.")
             e.printStackTrace()
-            return mutableMapOf()
+            return UsageData(mutableMapOf(), mutableMapOf())
         }
     }
 
-
-
-    private fun saveUsesMap() {
+    private fun saveUsageData() {
         val dir = ConfigApi.platform().gameDir()
         val f = File(dir, "lootables_uses.json")
         val json = JsonObject()
-        for ((id, map) in usesMap) {
+        val keyJson = JsonObject()
+        for ((id, map) in usageData.keyMap) {
             val mapJson = JsonObject()
             for ((uuid, uses) in map) {
                 mapJson.add(uuid.toString(), JsonPrimitive(uses))
             }
-            json.add(id.toString(), mapJson)
+            keyJson.add(id.toString(), mapJson)
         }
+        json.add("key_map", keyJson)
+        val usesJson = JsonObject()
+        for ((id, map) in usageData.usesMap) {
+            val mapJson = JsonObject()
+            for ((uuid, uses) in map) {
+                mapJson.add(uuid.toString(), JsonPrimitive(uses))
+            }
+            usesJson.add(id.toString(), mapJson)
+        }
+        json.add("uses_map", usesJson)
         if (f.exists()) {
             f.writeText(gson.toJson(json))
         } else if (f.createNewFile()) {
@@ -100,21 +186,22 @@ object LootablesData: SimpleSynchronousResourceReloadListener {
         }
     }
 
-    fun getUses(id: Identifier, uuid: UUID): Int {
-        return usesMap.get(id)?.get(uuid) ?: 0
-    }
-
-    fun use(id: Identifier, uuid: UUID) {
-        val map = usesMap.computeIfAbsent(id) { _ -> mutableMapOf() }
-        val uses = map[uuid] ?: 0
-        map[uuid] = uses + 1
-    }
-
     override fun reload(manager: ResourceManager) {
+        dataInvalid = true
+        lootableSyncData = mapOf()
         val map: MutableMap<Identifier, LootableTable> = mutableMapOf()
         manager.findResources("lootable_tables") { path -> path.path.endsWith(".json") }
             .forEach { (id, resource) ->
-
+                try {
+                    val reader = resource.reader
+                    val json = JsonParser.parseReader(reader)
+                    val result = LootableTable.CODEC.parse(JsonOps.INSTANCE, json)
+                    val tableId = Identifier.of(id.namespace, id.path.removePrefix("lootable_tables/").removeSuffix(".json"))
+                    result.ifError { error -> Lootables.LOGGER.error(error.messageSupplier.get()) }.ifSuccess { table -> map[tableId] = table }
+                } catch (e: Throwable) {
+                    Lootables.LOGGER.error("Error parsing lootable table $id")
+                    e.printStackTrace()
+                }
             }
         lootableTables = map
     }
@@ -125,10 +212,11 @@ object LootablesData: SimpleSynchronousResourceReloadListener {
 
     fun init() {
         ServerLifecycleEvents.BEFORE_SAVE.register { _, _, _ ->
-            saveUsesMap()
+            saveUsageData()
         }
         ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(this)
     }
 
+    private class UsageData(val usesMap: MutableMap<Identifier, MutableMap<UUID, Int>>, val keyMap: MutableMap<Identifier, MutableMap<UUID, Int>>)
 
 }
