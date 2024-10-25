@@ -22,7 +22,14 @@ object LootablesClientNetworking {
 
     internal fun handleChoicesS2C(payload: ChoicesS2CCustomPayload, context: ClientPlayNetworkContext) {
         val choicesLeft = payload.choicesToMake
-        val screen = ChoicesScreen(payload, choicesLeft, MinecraftClient.getInstance().currentScreen)
+        //don't stack choice screens on unchecked user spam, use the previous choice screen iterations screen
+        val previousScreen = MinecraftClient.getInstance().currentScreen
+        val oldScreen = if (previousScreen is ChoicesScreen) {
+            previousScreen.oldScreen
+        } else {
+            previousScreen
+        }
+        val screen = ChoicesScreen(payload, choicesLeft, oldScreen)
         MinecraftClient.getInstance().setScreen(screen)
     }
 
