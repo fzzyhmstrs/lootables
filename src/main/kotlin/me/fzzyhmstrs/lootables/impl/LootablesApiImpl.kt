@@ -32,6 +32,8 @@ internal object LootablesApiImpl {
     private val customEntries: MutableMap<Identifier, CustomLootableEntry> = mutableMapOf()
 
     internal fun supplyLootWithChoices(tableId: Identifier, playerEntity: ServerPlayerEntity, origin: Vec3d, key: IdKey?, rolls: Int = 3, choices: Int = 1): Boolean {
+        if (choices > rolls) throw IllegalArgumentException("Number of choices ($choices) greater than number of rolls ($rolls)")
+        if (rolls < 1) throw IllegalArgumentException("Number of rolls can't be less than 1")
         if (key != null && !LootablesData.keyAvailable(key, playerEntity.uuid)) {
             return false
         }
@@ -49,6 +51,7 @@ internal object LootablesApiImpl {
     }
 
     internal fun supplyLootRandomly(tableId: Identifier, playerEntity: ServerPlayerEntity, origin: Vec3d, key: IdKey?, rolls: Int = 1): Boolean {
+        if (rolls < 1) throw IllegalArgumentException("Number of rolls can't be less than 1")
         if (key != null && !LootablesData.keyAvailable(key, playerEntity.uuid)) {
             return false
         }
