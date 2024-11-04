@@ -13,11 +13,14 @@
 package me.fzzyhmstrs.lootables.loot
 
 import me.fzzyhmstrs.lootables.Lootables
+import net.minecraft.network.codec.PacketCodecs
 import net.minecraft.util.Identifier
 import net.minecraft.util.StringIdentifiable
 import net.minecraft.util.Util
+import net.minecraft.util.function.ValueLists
 import net.minecraft.util.math.ColorHelper
 import java.awt.Color
+import java.util.function.IntFunction
 import java.util.function.Supplier
 
 enum class LootableRarity(private val id: String, val weight: Int, val bgColor: Supplier<Int>, val startColor: Supplier<Int>, val endColor: Supplier<Int>, val bgHoveredColor: Supplier<Int>, val startHoveredColor: Supplier<Int>, val endHoveredColor: Supplier<Int>, val dividerId: Identifier): StringIdentifiable {
@@ -45,5 +48,9 @@ enum class LootableRarity(private val id: String, val weight: Int, val bgColor: 
 
     internal companion object {
         internal val CODEC = StringIdentifiable.createCodec { entries.toTypedArray() }
+        private val INDEX_TO_VALUE: IntFunction<LootableRarity> = ValueLists.createIdToValueFunction(
+            LootableRarity::ordinal, entries.toTypedArray(), ValueLists.OutOfBoundsHandling.ZERO
+        )
+        internal val PACKET_CODEC = PacketCodecs.indexed(INDEX_TO_VALUE, LootableRarity::ordinal)
     }
 }

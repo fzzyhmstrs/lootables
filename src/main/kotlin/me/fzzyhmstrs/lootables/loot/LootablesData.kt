@@ -20,7 +20,9 @@ import com.mojang.serialization.JsonOps
 import me.fzzyhmstrs.fzzy_config.api.ConfigApi
 import me.fzzyhmstrs.lootables.Lootables
 import me.fzzyhmstrs.lootables.api.IdKey
+import me.fzzyhmstrs.lootables.network.DataSyncS2CCustomPayload
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
+import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener
 import net.minecraft.resource.ResourceManager
@@ -214,7 +216,18 @@ object LootablesData: SimpleSynchronousResourceReloadListener {
         ServerLifecycleEvents.BEFORE_SAVE.register { _, _, _ ->
             saveUsageData()
         }
+
         ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(this)
+
+        ServerLifecycleEvents.END_DATA_PACK_RELOAD.register { server, _, _ ->
+            for (player in server.playerManager.playerList) {
+                ConfigApi.network().send(DataSyncS2CCustomPayload(getSyncData()), player)
+            }
+        }
+
+        ServerPlayConnectionEvents.JOIN.register { handler, _, _ ->
+            ConfigApi.network().send(DataSyncS2CCustomPayload(getSyncData()), handler.getPlayer())
+        }
     }
 
     private class UsageData(val usesMap: MutableMap<Identifier, MutableMap<UUID, Int>>, val keyMap: MutableMap<Identifier, MutableMap<UUID, Int>>)

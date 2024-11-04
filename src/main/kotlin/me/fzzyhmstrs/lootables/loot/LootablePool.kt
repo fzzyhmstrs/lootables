@@ -23,7 +23,6 @@ import net.minecraft.loot.context.LootContext
 import net.minecraft.loot.context.LootContextParameters
 import net.minecraft.text.Text
 import net.minecraft.text.TextCodecs
-import net.minecraft.util.math.BlockPos
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.Vec3d
 import java.util.*
@@ -59,7 +58,7 @@ class LootablePool private constructor(
     }
 
     fun createData(): LootablePoolData {
-        return LootablePoolData(id, description.orElse(entry.defaultDescription()), entry.createDisplay())
+        return LootablePoolData(id, description.orElse(entry.defaultDescription()), rarity, entry.createDisplay())
     }
 
     companion object {

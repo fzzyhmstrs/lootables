@@ -1,3 +1,5 @@
 {
-	"item.template_kotlin.item_id": "Item Name"
+	"lootables.screen.choices_multiple": "%s Choices Left",
+	"lootables.screen.choices_single": "1 Choice Left",
+	"lootables.screen.choices_ready": "Confirm Choices"
 }

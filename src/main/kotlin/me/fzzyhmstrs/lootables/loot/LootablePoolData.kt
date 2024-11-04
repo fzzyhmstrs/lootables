@@ -18,7 +18,7 @@ import net.minecraft.text.Text
 import net.minecraft.text.TextCodecs
 import net.minecraft.util.Identifier
 
-data class LootablePoolData(val id: Identifier, val description: Text, val display: LootablePoolEntryDisplay) {
+data class LootablePoolData(val id: Identifier, val description: Text, val rarity: LootableRarity, val display: LootablePoolEntryDisplay) {
 
     companion object {
         val PACKET_CODEC = PacketCodec.tuple(
@@ -26,6 +26,8 @@ data class LootablePoolData(val id: Identifier, val description: Text, val displ
             LootablePoolData::id,
             TextCodecs.PACKET_CODEC,
             LootablePoolData::description,
+            LootableRarity.PACKET_CODEC,
+            LootablePoolData::rarity,
             LootablePoolEntryDisplay.PACKET_CODEC,
             LootablePoolData::display,
             ::LootablePoolData

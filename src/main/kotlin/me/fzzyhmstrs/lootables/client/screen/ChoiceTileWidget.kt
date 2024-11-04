@@ -13,17 +13,20 @@
 package me.fzzyhmstrs.lootables.client.screen
 
 import me.fzzyhmstrs.fzzy_config.util.FcText
+import me.fzzyhmstrs.fzzy_config.util.RenderUtil.drawTex
 import me.fzzyhmstrs.lootables.config.LootablesConfig
 import me.fzzyhmstrs.lootables.loot.LootableRarity
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder
 import net.minecraft.client.gui.widget.ClickableWidget
+import net.minecraft.client.input.KeyCodes
 import net.minecraft.text.OrderedText
 import net.minecraft.text.Text
 import net.minecraft.util.Util
 import net.minecraft.util.math.ColorHelper
 import net.minecraft.util.math.MathHelper
+import java.util.function.Consumer
 import java.util.function.Supplier
 import kotlin.math.cos
 import kotlin.math.max
@@ -37,7 +40,7 @@ class ChoiceTileWidget(
     height: Int,
     private val rarity: LootableRarity,
     private val icons: List<TileIcon>,
-    private val choiceCallback: Runnable,
+    private val choiceCallback: Consumer<Boolean>,
     private val canClick: Supplier<Boolean>,
     description: Text,
     delay: Int = 0): ClickableWidget(x, y, if(width < 62) 62 else width, if (height < 39) 39 else height, FcText.empty())
@@ -58,9 +61,31 @@ class ChoiceTileWidget(
         Static
     }
 
+    private fun onPress() {
+        if (canClick.get() || clicked) {
+            clicked = !clicked
+            choiceCallback.accept(clicked)
+        }
+    }
+
+    override fun onClick(mouseX: Double, mouseY: Double) {
+        this.onPress()
+    }
+
+    override fun keyPressed(keyCode: Int, scanCode: Int, modifiers: Int): Boolean {
+        if (!this.active || !this.visible) {
+            return false
+        } else if (KeyCodes.isToggle(keyCode)) {
+            this.playDownSound(MinecraftClient.getInstance().soundManager)
+            this.onPress()
+            return true
+        } else {
+            return false
+        }
+    }
 
     override fun renderWidget(context: DrawContext, mouseX: Int, mouseY: Int, delta: Float) {
-        renderTile(context, x, y, this.isSelected || this.clicked, this.clicked)
+        renderTile(context, x, y, (this.isSelected && canClick.get()) || this.clicked, this.clicked)
     }
 
     private fun renderTile(context: DrawContext, x: Int, y: Int, hovered: Boolean, clicked: Boolean) {
@@ -68,15 +93,20 @@ class ChoiceTileWidget(
         if (!easeInAnimator.shouldRender(time)) return
         context.matrices.push()
         context.matrices.translate(0f, easeInAnimator.offsetY(time), 0f)
-        val bg = hoveredAnimator.lerp(time, easeInAnimator.lerpInternal(time, rarity.bgColor.get(), hovered), rarity.bgHoveredColor.get(), hovered)
-        renderHorizontalLine(context, x, y - 1, width, 0, bg)
-        renderHorizontalLine(context, x, y + height, width, 0, bg)
-        renderRectangle(context, x, y, width, height, 0, bg)
-        renderVerticalLine(context, x - 1, y, height, 0, bg)
-        renderVerticalLine(context, x + width, y, height, 0, bg)
-        val sc = hoveredAnimator.lerp(time, easeInAnimator.lerpInternal(time, rarity.startColor.get(), hovered), rarity.startHoveredColor.get(), hovered)
-        val ec = hoveredAnimator.lerp(time, easeInAnimator.lerpInternal(time, rarity.endColor.get(), hovered), rarity.endHoveredColor.get(), hovered)
-        renderBorder(context, x, y + 1, width, height, 0, sc, ec)
+
+        //background
+        val backgroundColor = hoveredAnimator.lerp(time, easeInAnimator.lerpInternal(time, rarity.bgColor.get(), hovered), rarity.bgHoveredColor.get(), hovered)
+        renderHorizontalLine(context, x, y - 1, width, 0, backgroundColor)
+        renderHorizontalLine(context, x, y + height, width, 0, backgroundColor)
+        renderRectangle(context, x, y, width, height, 0, backgroundColor)
+        renderVerticalLine(context, x - 1, y, height, 0, backgroundColor)
+        renderVerticalLine(context, x + width, y, height, 0, backgroundColor)
+
+        val startColor = hoveredAnimator.lerp(time, easeInAnimator.lerpInternal(time, rarity.startColor.get(), hovered), rarity.startHoveredColor.get(), hovered)
+        val endColor = hoveredAnimator.lerp(time, easeInAnimator.lerpInternal(time, rarity.endColor.get(), hovered), rarity.endHoveredColor.get(), hovered)
+        renderBorder(context, x, y, width, height, 0, startColor, endColor)
+
+        //description
         val textHeight = descriptions.size * 10 - 1
         val availableTextHeight = (y + height - 3) - (y + 3 + 18 + 5)
         val textColor = hoveredAnimator.lerp(time, easeInAnimator.lerpInternal(time, 0xC4C4C4, hovered), 0xFFFFFF, hovered)
@@ -100,6 +130,28 @@ class ChoiceTileWidget(
                 linePosition += 10
             }
         }
+
+        //icons
+        var iconStartPoint = ((x + (x + width)) / 2) - (((icons.size * 18) + ((icons.size - 1) * 1)) / 2)
+        for (icon in icons) {
+            icon.render(context, iconStartPoint, y + 3)
+            iconStartPoint += 19
+        }
+
+        // divider
+        val dividerStartPoint = ((x + (x + width)) / 2) - 28
+        context.drawTex(rarity.dividerId, dividerStartPoint, y + 3 + 18, 56, 5, startColor)
+
+        if (width >= 68) {
+            renderHorizontalLine(context, x + 3, y + 3 + 18 + 2, dividerStartPoint - x + 2, 0, startColor)
+            renderHorizontalLine(context, dividerStartPoint + 57, y + 3 + 18 + 2, dividerStartPoint - x + 2, 0, startColor)
+        }
+
+        // outer border
+        if (clicked) {
+            renderBorder(context, x - 3, y - 3, width + 6, height + 6, 0, startColor, endColor)
+        }
+
         context.matrices.pop()
     }
 
@@ -124,6 +176,14 @@ class ChoiceTileWidget(
 
     private fun renderRectangle(context: DrawContext, x: Int, y: Int, width: Int, height: Int, z: Int, color: Int) {
         context.fill(x, y, x + width, y + height, z, color)
+    }
+
+    override fun setWidth(width: Int) {
+        this.width = max(width, 62)
+    }
+
+    override fun setHeight(height: Int) {
+        this.height = max(height, 39)
     }
 
     private interface Animator {

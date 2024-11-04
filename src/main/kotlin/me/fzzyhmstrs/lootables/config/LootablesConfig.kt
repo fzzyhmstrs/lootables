@@ -21,9 +21,11 @@ import me.fzzyhmstrs.lootables.Lootables
 class LootablesConfig: Config(Lootables.identity("config")) {
 
     @NonSync
+    @ValidatedInt.Restrict(62, 256)
     var tileWidth = 128
 
     @NonSync
+    @ValidatedInt.Restrict(39, 256)
     var tileHeight = 128
 
     @NonSync
@@ -43,6 +45,9 @@ class LootablesConfig: Config(Lootables.identity("config")) {
     @NonSync
     @ValidatedInt.Restrict(0, 10)
     var hoverDelay = 2
+
+    @NonSync
+    val tileStackingStyle = ValidatedChoiceStyle()
 
     companion object {
         val INSTANCE = ConfigApi.registerAndLoadConfig({ LootablesConfig() })
