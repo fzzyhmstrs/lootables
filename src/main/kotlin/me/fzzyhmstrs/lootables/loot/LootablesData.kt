@@ -13,6 +13,7 @@
 package me.fzzyhmstrs.lootables.loot
 
 import com.google.gson.GsonBuilder
+import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import com.google.gson.JsonPrimitive
@@ -34,15 +35,20 @@ import java.util.UUID
 import kotlin.math.max
 import kotlin.math.min
 
-object LootablesData: SimpleSynchronousResourceReloadListener {
-
-    private val usageData: UsageData by lazy {
-        loadUsageData()
-    }
+internal object LootablesData: SimpleSynchronousResourceReloadListener {
 
     private var lootableTables: Map<Identifier, LootableTable> = mapOf()
     private var dataInvalid = true
     private var lootableSyncData: Map<Identifier, List<LootablePoolData>> = mapOf()
+    private val pendingChoicesMap: MutableMap<UUID, PendingChoices> = mutableMapOf()
+    private val abortedChoices: MutableSet<UUID> = mutableSetOf()
+    private val storedChoices: MutableMap<UUID, List<Identifier>> by lazy {
+        loadStoredChoices()
+    }
+
+    private val usageData: UsageData by lazy {
+        loadUsageData()
+    }
 
     fun getSyncData(): Map<Identifier, List<LootablePoolData>> {
         if (dataInvalid) {
@@ -81,6 +87,39 @@ object LootablesData: SimpleSynchronousResourceReloadListener {
         val map = usageData.keyMap.computeIfAbsent(key.id) { _ -> mutableMapOf() }
         val uses = map[uuid] ?: 0
         map[uuid] = max(uses - 1, 0)
+    }
+
+    fun applyChosen(payload: ChosenC2SCustomPayload, playerEntity: ServerPlayerEntity) {
+        val pending = pendingChoicesMap[payload.choiceKey]
+        pending?.succeed()
+        getTable(payload.table)?.applyPoolsById(payload.chosen, playerEntity, pending?.pos ?: Vec3d.ZERO)
+        pendingChoicesMap.remove(payload.choiceKey)
+    }
+
+    fun applyAbort(payload: AbortChoicesC2SCustomPayload, playerEntity: ServerPlayerEntity) {
+        if (abortedChoices.contains(payload.choiceKey)) return
+        val pending = pendingChoicesMap[payload.choiceKey] ?: return
+        pending.abort()
+        if (pending.key != null) {
+            retractKey(pending.key, playerEntity.uuid)
+        }
+        abortedChoices.add(payload.choiceKey)
+    }
+
+    fun setPending(choiceKey: UUID, playerEntity: ServerPlayerEntity, pos: Vec3d, poolChoices: List<Identifier>, key: IdKey?, onSuccess: BiConsumer<ServerPlayerEntity, Vec3d>, onAbort: BiConsumer<ServerPlayerEntity, Vec3d>) {
+        pendingChoicesMap[choiceKey] = PendingChoices(playerEntity, pos, poolChoices, key, onSuccess, onAbort)
+    }
+
+    fun getPendingPools(choiceKey: UUID): List<Identifier>? {
+        val pending = pendingChoicesMap[payload.choiceKey] ?: return null
+        abortedChoices.remove(choiceKey)
+        return pending.poolChoices
+    }
+
+    fun getStoredPools(choiceKey: UUID): List<Identifier>? {
+        val stored = storedChoices[choiceKey] ?: return null
+        storedChoices.remove(choiceKey)
+        return stored
     }
 
     private fun loadUsageData(): UsageData {
@@ -125,7 +164,7 @@ object LootablesData: SimpleSynchronousResourceReloadListener {
             }
             val usesMapJson = json.asJsonObject["uses_map"]
             val usesMap = if (!usesMapJson.isJsonObject) {
-                Lootables.LOGGER.error("Lootables usage map was malformed. Using empty map.")
+                Lootables.LOGGER.error("Lootables usage map was malformed. Using empty data.")
                 mutableMapOf()
             } else {
                 val usesMapTemp: MutableMap<Identifier, MutableMap<UUID, Int>> = mutableMapOf()
@@ -151,40 +190,117 @@ object LootablesData: SimpleSynchronousResourceReloadListener {
             }
             return UsageData(usesMap, keyMap)
         } catch (e: Throwable) {
-            Lootables.LOGGER.error("Critical exception encountered while reading lootables usage map. Using empty map.")
+            Lootables.LOGGER.error("Critical exception encountered while reading lootables usage data. Using empty data.")
             e.printStackTrace()
             return UsageData(mutableMapOf(), mutableMapOf())
         }
     }
 
     private fun saveUsageData() {
-        val dir = ConfigApi.platform().gameDir()
-        val f = File(dir, "lootables_uses.json")
-        val json = JsonObject()
-        val keyJson = JsonObject()
-        for ((id, map) in usageData.keyMap) {
-            val mapJson = JsonObject()
-            for ((uuid, uses) in map) {
-                mapJson.add(uuid.toString(), JsonPrimitive(uses))
+        if (usageData.isEmpty()) return
+        try {
+            val dir = ConfigApi.platform().gameDir()
+            val f = File(dir, "lootables_uses.json")
+            val json = JsonObject()
+            val keyJson = JsonObject()
+            for ((id, map) in usageData.keyMap) {
+                val mapJson = JsonObject()
+                for ((uuid, uses) in map) {
+                    mapJson.add(uuid.toString(), JsonPrimitive(uses))
+                }
+                keyJson.add(id.toString(), mapJson)
             }
-            keyJson.add(id.toString(), mapJson)
-        }
-        json.add("key_map", keyJson)
-        val usesJson = JsonObject()
-        for ((id, map) in usageData.usesMap) {
-            val mapJson = JsonObject()
-            for ((uuid, uses) in map) {
-                mapJson.add(uuid.toString(), JsonPrimitive(uses))
+            json.add("key_map", keyJson)
+            val usesJson = JsonObject()
+            for ((id, map) in usageData.usesMap) {
+                val mapJson = JsonObject()
+                for ((uuid, uses) in map) {
+                    mapJson.add(uuid.toString(), JsonPrimitive(uses))
+                }
+                usesJson.add(id.toString(), mapJson)
             }
-            usesJson.add(id.toString(), mapJson)
+            json.add("uses_map", usesJson)
+            if (f.exists()) {
+                f.writeText(gson.toJson(json))
+            } else if (f.createNewFile()) {
+                f.writeText(gson.toJson(json))
+            } else {
+                Lootables.LOGGER.error("Couldn't create new lootables_uses json; data wasn't saved.")
+            }
+        } catch(e: Throwable) {
+            Lootables.LOGGER.error("Critical exception encountered while saving lootables usage data. Not saved.")
+            e.printStackTrace()
         }
-        json.add("uses_map", usesJson)
-        if (f.exists()) {
-            f.writeText(gson.toJson(json))
-        } else if (f.createNewFile()) {
-            f.writeText(gson.toJson(json))
-        } else {
-            Lootables.LOGGER.error("Couldn't create new lootables_uses json; data wasn't saved.")
+    }
+
+    private fun loadStoredChoices(): MutableMap<UUID, List<Identifier>> {
+        if (storedChoices.isEmpty()) return
+        try {
+            val dir = ConfigApi.platform().gameDir()
+            val f = File(dir, "lootables_choices.json")
+            if (!f.exists()) return mutableMapOf()
+            val str = f.readLines().joinToString("\n")
+            if (str.isEmpty()) {
+                return mutableMapOf()
+            }
+            val json = JsonParser.parseString(str)
+            if (!json.isJsonObject) {
+                Lootables.LOGGER.error("Lootables stored choices file was malformed. Using empty map.")
+                return mutableMapOf()
+            }
+            val map: MutableMap<UUID, List<Identifier>> = mutableMapOf()
+            for ((uuidStr, element) in json.asJsonObject.entrySet()) {
+                if (!element.isJsonArray) {
+                    Lootables.LOGGER.error("Lootables stored choices encountered read error for element $idStr. Not an array")
+                    continue
+                }
+                val uuid = UUID.fromString(uuidStr)
+                val list: MutableList<Identifier> = mutableListOf()
+                for (idElement in element.asJsonArray) {
+                    if (!idElement.isJsonPrimitive) {
+                        Lootables.LOGGER.error("Lootables stored choices encountered read error for list in element $idStr. Not a string")
+                        continue
+                    }
+                    val id = Identifier.tryParse(idElement.asString)
+                    if (id == null) {
+                        Lootables.LOGGER.error("Lootables stored choices encountered read error for list in element $idStr. Not a valid identifier")
+                        continue
+                    }
+                    list.add(id)
+                }
+                map[uuid] = list
+            }
+            return map
+        } catch(e: Exception) {
+            Lootables.LOGGER.error("Critical exception encountered while reading lootables stored choices.")
+            e.printStackTrace()
+            return mutableMapOf()
+        }
+    }
+
+    private fun saveStoredChoices() {
+        if (storedChoices.isEmpty()) return
+        try {
+            val dir = ConfigApi.platform().gameDir()
+            val f = File(dir, "lootables_choices.json")
+            val json = JsonObject()
+            for ((uuid, pendingChoices) in pendingChoicesMap) {
+                val jsonArray = JsonArray()
+                for (choice in pendingChoices.poolChoices) {
+                    jsonArray.add(choice.toString())
+                }
+                json.add(uuid.toString(), jsonArray)
+            }
+            if (f.exists()) {
+                f.writeText(gson.toJson(json))
+            } else if (f.createNewFile()) {
+                f.writeText(gson.toJson(json))
+            } else {
+                Lootables.LOGGER.error("Couldn't create new lootables_uses json; data wasn't saved.")
+            }
+        } catch(e: Throwable) {
+            Lootables.LOGGER.error("Critical exception encountered while saving lootables stored choice data. Not saved.")
+            e.printStackTrace()
         }
     }
 
@@ -228,8 +344,38 @@ object LootablesData: SimpleSynchronousResourceReloadListener {
         ServerPlayConnectionEvents.JOIN.register { handler, _, _ ->
             ConfigApi.network().send(DataSyncS2CCustomPayload(getSyncData()), handler.getPlayer())
         }
+
+        ServerPlayConnectionEvents.DISCONNECT.register { handler, _, _ ->
+            for ((uuid, pendingChoices) in pendingChoicesMap) {
+                if (pendingChoices.playerEntity == handler.getPlayer()) {
+                    pendingChoices.abort()
+                    storedChoices.add(uuid)
+                }
+            }
+        }
+
+        ServerLifecycleEvents.SERVER_STOPPING.register { _, _ ->
+            for ((uuid, pendingChoices) in pendingChoicesMap) {
+                pendingChoices.abort()
+                storedChoices.add(uuid)
+            }
+            saveStoredChoices()
+        }
     }
 
-    private class UsageData(val usesMap: MutableMap<Identifier, MutableMap<UUID, Int>>, val keyMap: MutableMap<Identifier, MutableMap<UUID, Int>>)
+    private class UsageData(val usesMap: MutableMap<Identifier, MutableMap<UUID, Int>>, val keyMap: MutableMap<Identifier, MutableMap<UUID, Int>>) {
+        fun isEmpty(): Boolean {
+            return usesMap.isEmpty() && keyMap.isEmpty()
+        }
+    }
 
+    internal data class PendingChoices(val playerEntity: ServerPlayerEntity, val pos: Vec3d, val poolChoices: List<Identifier>, val key: IdKey?, val onSuccess: BiConsumer<ServerPlayerEntity, Vec3d>, val onAbort: BiConsumer<ServerPlayerEntity, Vec3d>) {
+        fun succeed() {
+            onSuccess.accept(playerEntity, pos)
+        }
+
+        fun abort() {
+            onAbort.accept(playerEntity, pos)
+        }
+    }
 }
