@@ -29,17 +29,13 @@ import kotlin.math.ceil
 
 class ChoicesScreen(private val choiceData: ChoicesS2CCustomPayload, private var choicesLeft: Int, internal val oldScreen: Screen?): Screen(FcText.empty()) {
 
-    override fun close() {
-        this.client?.setScreen(oldScreen)
-    }
-
     private val maxChoices = choicesLeft
     private val canClick: Supplier<Boolean> = Supplier { choicesLeft > 0 }
     private var widgets: List<ChoiceTileWidget> = listOf()
     private var confirmWidget = ConfirmChoicesWidget(
         0,
         0,
-        { !canClick.get() },
+        { choicesLeft <= 0 },
         {
             if (choicesLeft > 1)
                 "lootables.screen.choices_multiple".translate(choicesLeft)
@@ -51,8 +47,8 @@ class ChoicesScreen(private val choiceData: ChoicesS2CCustomPayload, private var
 
     override fun init() {
         super.init()
-        val data = LootablesClientData.getData(choiceData.table, choiceData.choices)
         if (widgets.isEmpty()) {
+            val data = LootablesClientData.getData(choiceData.table, choiceData.choices)
             // stacked widget building
             val list: MutableList<ChoiceTileWidget> = mutableListOf()
             if (LootablesConfig.INSTANCE.tileStackingStyle.get() == ChoiceStyle.STACKED && data.size > 2) {
@@ -64,6 +60,7 @@ class ChoicesScreen(private val choiceData: ChoicesS2CCustomPayload, private var
                 for (i in 1..topRowCount) {
                     list.add(ChoiceTileWidget(
                         MinecraftClient.getInstance(),
+                        data[dataIndex].id,
                         widgetX,
                         widgetY,
                         LootablesConfig.INSTANCE.tileWidth,
@@ -85,6 +82,7 @@ class ChoicesScreen(private val choiceData: ChoicesS2CCustomPayload, private var
                 for (i in 1.. bottomRowCount) {
                     list.add(ChoiceTileWidget(
                         MinecraftClient.getInstance(),
+                        data[dataIndex].id,
                         widgetX,
                         widgetY,
                         LootablesConfig.INSTANCE.tileWidth,
@@ -112,6 +110,7 @@ class ChoicesScreen(private val choiceData: ChoicesS2CCustomPayload, private var
                 for (i in data.indices) {
                     list.add(ChoiceTileWidget(
                         MinecraftClient.getInstance(),
+                        data[i].id,
                         widgetX,
                         widgetY,
                         LootablesConfig.INSTANCE.tileWidth,
@@ -179,6 +178,16 @@ class ChoicesScreen(private val choiceData: ChoicesS2CCustomPayload, private var
         }
     }
 
+    override fun close() {
+        ConfigApi.network().send(AbortChoicesC2SCustomPayload(choiceData.choiceKey))
+        this.client?.setScreen(oldScreen)
+    }
+
+    private fun sendChosen() {
+        ConfigApi.network().send(ChosenC2SCustomPayload(choiceData.table, choiceData.choiceKey, widgets.mapNotNull { it.id() }))
+        this.client?.setScreen(oldScreen)
+    }
+
     private inner class ConfirmChoicesWidget(i: Int, j: Int, private val isReady: Supplier<Boolean>, private val textSupplier: Supplier<Text>) : PressableWidget(i, j, 110, 20, textSupplier.get()) {
 
         override fun getMessage(): Text {
@@ -191,7 +200,7 @@ class ChoicesScreen(private val choiceData: ChoicesS2CCustomPayload, private var
 
         override fun onPress() {
             if (isReady.get()) {
-
+                this@ChoicesScreen.sendChosen()
             }
         }
     }
