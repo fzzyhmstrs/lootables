@@ -31,7 +31,7 @@ internal object LootablesApiImpl {
 
     private val customEntries: MutableMap<Identifier, CustomLootableEntry> = mutableMapOf()
 
-    internal fun supplyLootWithChoices(tableId: Identifier, playerEntity: ServerPlayerEntity, origin: Vec3d, key: IdKey?, rolls: Int = 3, choices: Int = 1): Boolean {
+    internal fun supplyLootWithChoices(tableId: Identifier, playerEntity: ServerPlayerEntity, origin: Vec3d, onSuccess: BiConsumer<ServerPlayerEntity, Vec3d> = BiConsumer { _, _ -> }, onAbort: BiConsumer<ServerPlayerEntity, Vec3d> = BiConsumer { _, _ -> },  key: IdKey?, rolls: Int = 3, choices: Int = 1): Boolean {
         if (choices > rolls) throw IllegalArgumentException("Number of choices ($choices) greater than number of rolls ($rolls)")
         if (rolls < 1) throw IllegalArgumentException("Number of rolls can't be less than 1")
         if (key != null && !LootablesData.keyAvailable(key, playerEntity.uuid)) {
@@ -42,10 +42,21 @@ internal object LootablesApiImpl {
             Lootables.LOGGER.error("Choices roll: Lootable table doesn't exist for ID $tableId")
             return false
         }
-        val params = LootContextParameterSet.Builder(playerEntity.serverWorld).add(LootContextParameters.THIS_ENTITY, playerEntity).add(LootContextParameters.ORIGIN, origin)
-        val context = LootContext.Builder(params.build(LootContextTypes.CHEST)).build(Optional.empty())
-        val poolChoices = table.supplyPoolsById(context, rolls)
-        val payload = ChoicesS2CCustomPayload(tableId, Optional.ofNullable(key), poolChoices, origin, choices)
+        val choiceKey = UUID.nameUUIDFromBytes((tableId.toString + playerEntity.uuid.toString + key.toString()).toByteArray())
+        val pendingPoolChoices = LootablesData.getPendingPools(choiceKey)
+        val poolChoices = if(pendingPoolChoices != null) {
+            pendingPoolChoices
+        } else {
+            val params = LootContextParameterSet.Builder(playerEntity.serverWorld).add(LootContextParameters.THIS_ENTITY, playerEntity).add(LootContextParameters.ORIGIN, origin)
+            val context = LootContext.Builder(params.build(LootContextTypes.CHEST)).build(Optional.empty())
+            val newPoolChoices = table.supplyPoolsById(context, rolls)
+            LootablesData.setPending(choiceKey, playerEntity, origin, newPoolChoices, key, onSuccess, onAbort)
+            newPoolChoices
+        }
+        
+        if (key != null)
+            LootablesData.applyKey(key, playerEntity.uuid)
+        val payload = ChoicesS2CCustomPayload(tableId, choiceKey, poolChoices, choices)
         ConfigApi.network().send(payload, playerEntity)
         return true
     }
