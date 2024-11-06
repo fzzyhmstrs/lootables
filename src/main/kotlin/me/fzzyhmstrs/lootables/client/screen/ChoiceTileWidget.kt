@@ -23,6 +23,7 @@ import net.minecraft.client.gui.widget.ClickableWidget
 import net.minecraft.client.input.KeyCodes
 import net.minecraft.text.OrderedText
 import net.minecraft.text.Text
+import net.minecraft.util.Identifier
 import net.minecraft.util.Util
 import net.minecraft.util.math.ColorHelper
 import net.minecraft.util.math.MathHelper
@@ -34,6 +35,7 @@ import kotlin.math.sin
 
 class ChoiceTileWidget(
     private val client: MinecraftClient,
+    private val id: Identifier,
     x: Int,
     y: Int,
     width: Int,
@@ -59,6 +61,10 @@ class ChoiceTileWidget(
         Hover()
     } else {
         Static
+    }
+
+    internal fun id(): Identifier? {
+        return if(clicked) id else null
     }
 
     private fun onPress() {
@@ -212,7 +218,9 @@ class ChoiceTileWidget(
         }
     }
 
-    private inner class EaseIn(private val delay: Int): Animator {
+    private inner class EaseIn(_delay: Int): Animator {
+
+        private val delay: Int = _delay * 50
 
         private val startTime: Long by lazy {
             System.currentTimeMillis()
