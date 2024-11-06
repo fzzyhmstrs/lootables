@@ -47,11 +47,17 @@ internal object LootablesApiImpl {
         val poolChoices = if(pendingPoolChoices != null) {
             pendingPoolChoices
         } else {
-            val params = LootContextParameterSet.Builder(playerEntity.serverWorld).add(LootContextParameters.THIS_ENTITY, playerEntity).add(LootContextParameters.ORIGIN, origin)
-            val context = LootContext.Builder(params.build(LootContextTypes.CHEST)).build(Optional.empty())
-            val newPoolChoices = table.supplyPoolsById(context, rolls)
-            LootablesData.setPending(choiceKey, playerEntity, origin, newPoolChoices, key, onSuccess, onAbort)
-            newPoolChoices
+            val storedPoolChoices = LootablesData.getStoredPools(choiceKey)
+            if (storedPoolChoices != null) {
+                LootablesData.setPending(choiceKey, playerEntity, origin, storedPoolChoices, key, onSuccess, onAbort)
+                storedPoolChoices
+            } else {
+                val params = LootContextParameterSet.Builder(playerEntity.serverWorld).add(LootContextParameters.THIS_ENTITY, playerEntity).add(LootContextParameters.ORIGIN, origin)
+                val context = LootContext.Builder(params.build(LootContextTypes.CHEST)).build(Optional.empty())
+                val newPoolChoices = table.supplyPoolsById(context, rolls)
+                LootablesData.setPending(choiceKey, playerEntity, origin, newPoolChoices, key, onSuccess, onAbort)
+                newPoolChoices
+            }
         }
         
         if (key != null)
