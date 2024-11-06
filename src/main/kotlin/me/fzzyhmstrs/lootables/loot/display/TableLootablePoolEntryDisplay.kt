@@ -22,7 +22,7 @@ import net.minecraft.item.ItemStack
 class TableLootablePoolEntryDisplay(private val itemStacks: List<ItemStack>): LootablePoolEntryDisplay {
 
     override fun type(): LootablePoolEntryType {
-        return LootablePoolEntryTypes.ITEM
+        return LootablePoolEntryTypes.TABLE
     }
 
     override fun provideIcons(): List<TileIcon> {
