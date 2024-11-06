@@ -23,7 +23,7 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
 import java.util.*
 
-class ChosenC2SCustomPayload(val table: Identifier, val key: Optional<IdKey>, val chosen: List<Identifier>, val pos: Vec3d): CustomPayload {
+class ChosenC2SCustomPayload(val table: Identifier, val choiceKey: UUID, val chosen: List<Identifier>): CustomPayload {
 
     override fun getId(): Id<out CustomPayload> {
         return TYPE
@@ -35,12 +35,10 @@ class ChosenC2SCustomPayload(val table: Identifier, val key: Optional<IdKey>, va
         val CODEC = PacketCodec.tuple(
             Identifier.PACKET_CODEC,
             ChosenC2SCustomPayload::table,
-            PacketCodecs.optional(IdKey.PACKET_CODEC),
-            ChosenC2SCustomPayload::key,
+            PacketCodecs.STRING.xmap(UUID::fromString, UUID::toString),
+            ChosenC2SCustomPayload::choiceKey,
             Identifier.PACKET_CODEC.collect(PacketCodecs.toList()),
             ChosenC2SCustomPayload::chosen,
-            PacketCodec.tuple(PacketCodecs.DOUBLE, Vec3d::x, PacketCodecs.DOUBLE, Vec3d::y, PacketCodecs.DOUBLE, Vec3d::z, ::Vec3d),
-            ChosenC2SCustomPayload::pos,
             ::ChosenC2SCustomPayload
         )
     }
