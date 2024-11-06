@@ -22,7 +22,7 @@ import net.minecraft.util.Identifier
 import net.minecraft.util.math.Vec3d
 import java.util.Optional
 
-class ChoicesS2CCustomPayload(val table: Identifier, val key: Optional<IdKey>, val choices: List<Identifier>, val pos: Vec3d, val choicesToMake: Int): CustomPayload {
+class ChoicesS2CCustomPayload(val table: Identifier, val choiceKey: UUID, val choices: List<Identifier>, val choicesToMake: Int): CustomPayload {
 
     override fun getId(): Id<out CustomPayload> {
         return TYPE
@@ -34,12 +34,10 @@ class ChoicesS2CCustomPayload(val table: Identifier, val key: Optional<IdKey>, v
         val CODEC = PacketCodec.tuple(
             Identifier.PACKET_CODEC,
             ChoicesS2CCustomPayload::table,
-            PacketCodecs.optional(IdKey.PACKET_CODEC),
-            ChoicesS2CCustomPayload::key,
+            PacketCodecs.STRING.xmap(UUID::fromString, UUID::toString),
+            ChoicesS2CCustomPayload::choiceKey,
             Identifier.PACKET_CODEC.collect(PacketCodecs.toList()),
             ChoicesS2CCustomPayload::choices,
-            PacketCodec.tuple(PacketCodecs.DOUBLE, Vec3d::x, PacketCodecs.DOUBLE, Vec3d::y, PacketCodecs.DOUBLE, Vec3d::z, ::Vec3d),
-            ChoicesS2CCustomPayload::pos,
             PacketCodecs.INTEGER,
             ChoicesS2CCustomPayload::choicesToMake,
             ::ChoicesS2CCustomPayload
