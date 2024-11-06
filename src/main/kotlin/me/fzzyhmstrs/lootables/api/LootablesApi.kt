@@ -18,6 +18,8 @@ import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.Vec3d
 
+import java.util.function.BiConsumer
+
 /**
  * API for interacting with Lootable Tables, as well as other miscellaneous methods
  * @author fzzyhmstrs
@@ -30,6 +32,8 @@ object LootablesApi {
      * @param tableId [Identifier] - the resource location of the Lootable Table you want to supply loot from
      * @param playerEntity [ServerPlayerEntity] the player to supply loot to
      * @param origin [Vec3d] the location you want loot supplied to. This may not be applicable if, for example, loot is added directly to the player inventory. However, some loot will interact with the location, providing an AOE buff perhaps, or scattering loot on the ground, or summoning a mount, and so on. 
+     * @param onSuccess [BiConsumer]&lt;[ServerPlayerEntity], [Vec3d]&gt; action to take when choices are made successfully. This isn't run when this method returns true. That indicates that the choices were _generated_ successfully. This will fire when the player makes choices on the client side and the C2S confirmation packet is received on the server.
+     * @param onAbort [BiConsumer]&lt;[ServerPlayerEntity], [Vec3d]&gt; action to take when choices are aborted by the player (not made). This isn't run when this method returns false. That indicates that the choices caouldn't be _generated_. This will fire when the player closes the screen for some reason before they make their loot choices. The choices generated will be stored, and if this method is called with the same tableId, player, and idkey, those aborted choices will be resent. This prevents players from, for example, continuously rerolling a loot bag item by escaping the choices screen until they get a roll they like. 
      * @param key [IdKey], Nullable. A bounded key that indicates how many times this specific loot supply can be obtained by the player. Useful for containers that can only be looted once per player, for example. If null, no tracking will be done of how many times this supply is called for a specific player.
      * @param rolls Int, default 3. How many choice tiles will be rolled from the Lootable Tables available pools. If the Lootable Table doesn't have this many pools, it will supply all of its pools instead.
      * @param choices Int, default 1. How many tiles a user must pick before confirming their selection.
@@ -40,21 +44,48 @@ object LootablesApi {
      */
     @JvmStatic
     @JvmOverloads
-    fun supplyLootWithChoices(tableId: Identifier, playerEntity: ServerPlayerEntity, origin: Vec3d, key: IdKey? = null, rolls: Int = 3, choices: Int = 1): Boolean {
-        return LootablesApiImpl.supplyLootWithChoices(tableId, playerEntity, origin, key, rolls, choices)
+    fun supplyLootWithChoices(
+        tableId: Identifier, 
+        playerEntity: ServerPlayerEntity, 
+        origin: Vec3d, 
+        onSuccess: BiConsumer<ServerPlayerEntity, Vec3d> = BiConsumer { _, _ -> }, 
+        onAbort: BiConsumer<ServerPlayerEntity, Vec3d> = BiConsumer { _, _ -> }, 
+        key: IdKey? = null, 
+        rolls: Int = 3, 
+        choices: Int = 1)
+    : Boolean {
+        return LootablesApiImpl.supplyLootWithChoices(tableId, playerEntity, origin, onSuccess, onAbort, key, rolls, choices)
     }
 
     /**
-     * 
+     * Provide loot drops from a lootable table via loot choices, randomly. Will roll pools and supply the chosen loot automatically. Basically an advanced vanilla loot table roll. 
+     * @param tableId [Identifier] - the resource location of the Lootable Table you want to supply loot from
+     * @param playerEntity [ServerPlayerEntity] the player to supply loot to
+     * @param origin [Vec3d] the location you want loot supplied to. This may not be applicable if, for example, loot is added directly to the player inventory. However, some loot will interact with the location, providing an AOE buff perhaps, or scattering loot on the ground, or summoning a mount, and so on. 
+     * @param key [IdKey], Nullable. A bounded key that indicates how many times this specific loot supply can be obtained by the player. Useful for containers that can only be looted once per player, for example. If null, no tracking will be done of how many times this supply is called for a specific player.
+     * @param rolls Int, default 1. How many pools will be rolled from the Lootable Tables available pools. If the Lootable Table doesn't have this many pools, it will supply all of its pools instead.
      * @author fzzyhmstrs
      * @since 0.1.0
      */
     @JvmStatic
     @JvmOverloads
-    fun supplyLootRandomly(tableId: Identifier, playerEntity: ServerPlayerEntity, origin: Vec3d, key: IdKey? = null, rolls: Int = 1): Boolean {
+    fun supplyLootRandomly(
+        tableId: Identifier, 
+        playerEntity: ServerPlayerEntity, 
+        origin: Vec3d, 
+        key: IdKey? = null, 
+        rolls: Int = 1)
+    : Boolean {
         return LootablesApiImpl.supplyLootRandomly(tableId, playerEntity, origin, key, rolls)
     }
 
+    /**
+     * Registers a [CustomLootableEntry] for use in the `custom` lootable pool type.
+     * @param id [Identifier] unique id to register this entry to
+     * @param entry [CustomLootableEntry] the entry to register
+     * @author fzzyhmstrs
+     * @since 0.1.0
+     */
     @JvmStatic
     fun registerCustomEntry(id: Identifier, entry: CustomLootableEntry) {
         LootablesApiImpl.registerCustomEntry(id, entry)
