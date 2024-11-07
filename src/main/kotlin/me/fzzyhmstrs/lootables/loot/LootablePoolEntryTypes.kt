@@ -25,5 +25,9 @@ object LootablePoolEntryTypes {
     val CUSTOM = LootablePoolEntryType.create(Lootables.identity("custom"), CustomLootablePoolEntry.CODEC, CustomLootablePoolEntryDisplay.PACKET_CODEC.cast())
     val ITEM = LootablePoolEntryType.create(Lootables.identity("item"), ItemLootablePoolEntry.CODEC, ItemLootablePoolEntryDisplay.PACKET_CODEC)
     val POOL = LootablePoolEntryType.create(Lootables.identity("pool"), PoolLootablePoolEntry.CODEC, PoolLootablePoolEntryDisplay.PACKET_CODEC)
-
+    val TABLE = LootablePoolEntryType.create(Lootables.identity("table"), TableLootablePoolEntry.CODEC, TableLootablePoolEntryDisplay.PACKET_CODEC)
+    val XP = LootablePoolEntryType.create(Lootables.identity("xp"), ExperienceLootablePoolEntry.CODEC, ExperienceLootablePoolEntryDisplay.PACKET_CODEC)
+    val HEAL = LootablePoolEntryType.create(Lootables.identity("heal"), HealLootablePoolEntry.CODEC, HealLootablePoolEntryDisplay.PACKET_CODEC)
+    val STATUS = LootablePoolEntryType.create(Lootables.identity("status"), StatusEffectLootablePoolEntry.CODEC, StatusEffectLootablePoolEntryDisplay.PACKET_CODEC)
+    val ATTRIBUTE = LootablePoolEntryType.create(Lootables.identity("attribute"), AttributeLootablePoolEntry.CODEC, AttributeLootablePoolEntryDisplay.PACKET_CODEC)
 }
