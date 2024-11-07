@@ -42,7 +42,7 @@ import java.util.function.Consumer
 class TableLootablePoolEntry(private val table: RegistryEntry<LootTable>, private val dropItems: Boolean = true): LootablePoolEntry {
 
     override fun type(): LootablePoolEntryType {
-        return LootablePoolEntryTypes.ITEM
+        return LootablePoolEntryTypes.TABLE
     }
 
     override fun apply(player: PlayerEntity, origin: Vec3d) {
@@ -72,7 +72,7 @@ class TableLootablePoolEntry(private val table: RegistryEntry<LootTable>, privat
         val CODEC: MapCodec<TableLootablePoolEntry> = RecordCodecBuilder.mapCodec { instance: RecordCodecBuilder.Instance<TableLootablePoolEntry> ->
             instance.group(
                 LootTable.ENTRY_CODEC.fieldOf("table").forGetter(TableLootablePoolEntry::table),
-                Codec.BOOL.optionalFieldOf("drop_items", true).forGetter(TableLootablePoolEntry::dropItems)
+                Codec.BOOL.optionalFieldOf("drop_items", false).forGetter(TableLootablePoolEntry::dropItems)
             ).apply(instance, ::TableLootablePoolEntry)
         }
     }
