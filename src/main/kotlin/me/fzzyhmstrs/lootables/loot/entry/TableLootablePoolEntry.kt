@@ -64,7 +64,7 @@ class TableLootablePoolEntry(private val table: RegistryEntry<LootTable>, privat
         val list: MutableList<ItemStack> = mutableListOf()
         val params = LootContextParameterSet.Builder(playerEntity.serverWorld).add(LootContextParameters.THIS_ENTITY, playerEntity).add(LootContextParameters.ORIGIN, playerEntity.pos).luck(playerEntity.luck)
         table.value().generateLoot(params.build(LootContextTypes.CHEST), list::add)
-        return PoolLootablePoolEntryDisplay(list)
+        return TableLootablePoolEntryDisplay(list)
     }
 
     companion object {
