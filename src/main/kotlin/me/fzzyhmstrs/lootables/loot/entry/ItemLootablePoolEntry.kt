@@ -28,7 +28,7 @@ import net.minecraft.text.Text
 import net.minecraft.util.ItemScatterer
 import net.minecraft.util.math.Vec3d
 
-class ItemLootablePoolEntry(private val itemStack: ItemStack, private val dropItems: Boolean = true): LootablePoolEntry {
+class ItemLootablePoolEntry(private val itemStack: ItemStack, private val dropItems: Boolean = false): LootablePoolEntry {
 
     override fun type(): LootablePoolEntryType {
         return LootablePoolEntryTypes.ITEM
@@ -57,7 +57,7 @@ class ItemLootablePoolEntry(private val itemStack: ItemStack, private val dropIt
         val CODEC: MapCodec<ItemLootablePoolEntry> = RecordCodecBuilder.mapCodec { instance: RecordCodecBuilder.Instance<ItemLootablePoolEntry> ->
             instance.group(
                 ITEM_CODEC.fieldOf("item").forGetter(ItemLootablePoolEntry::itemStack),
-                Codec.BOOL.optionalFieldOf("drop_items", true).forGetter(ItemLootablePoolEntry::dropItems)
+                Codec.BOOL.optionalFieldOf("drop_items", false).forGetter(ItemLootablePoolEntry::dropItems)
             ).apply(instance, ::ItemLootablePoolEntry)
         }
     }
