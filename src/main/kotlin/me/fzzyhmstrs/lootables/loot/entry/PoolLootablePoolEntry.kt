@@ -36,7 +36,7 @@ import net.minecraft.util.math.Vec3d
 import java.util.*
 import java.util.function.Consumer
 
-class PoolLootablePoolEntry(private val pool: LootPool, private val dropItems: Boolean = true): LootablePoolEntry {
+class PoolLootablePoolEntry(private val pool: LootPool, private val dropItems: Boolean = false): LootablePoolEntry {
 
     override fun type(): LootablePoolEntryType {
         return LootablePoolEntryTypes.POOL
