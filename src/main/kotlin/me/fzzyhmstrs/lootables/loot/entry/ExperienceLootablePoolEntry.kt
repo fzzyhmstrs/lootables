@@ -54,7 +54,7 @@ class ExperienceLootablePoolEntry(private val xp: Int, private val levels: Boole
     }
 
     override fun defaultDescription(): Text {
-        return if(levels) "lootables.entry.xp.levels".translate() else "lootables.entry.xp.points".translate()
+        return if(levels) "lootables.entry.xp.levels".translate(xp) else "lootables.entry.xp.points".translate(xp)
     }
 
     override fun createDisplay(playerEntity: ServerPlayerEntity): LootablePoolEntryDisplay {
