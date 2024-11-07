@@ -17,6 +17,7 @@ import me.fzzyhmstrs.lootables.Lootables
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.loot.context.LootContext
 import net.minecraft.loot.context.LootContextParameters
+import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.Vec3d
 
@@ -67,8 +68,8 @@ class LootableTable private constructor(private val pools: List<LootablePool>, p
         }
     }
 
-    fun prepareForSync(): List<LootablePoolData> {
-        return pools.map { it.createData() }
+    fun prepareForSync(playerEntity: ServerPlayerEntity): List<LootablePoolData> {
+        return pools.map { it.createData(playerEntity) }
     }
 
     private tailrec fun binary(list: List<PoolEntry>, left: Int, right: Int, target: Int): PoolEntry {

@@ -23,6 +23,7 @@ import me.fzzyhmstrs.lootables.loot.LootablePoolEntryTypes
 import me.fzzyhmstrs.lootables.loot.display.ItemLootablePoolEntryDisplay
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
+import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.Text
 import net.minecraft.util.ItemScatterer
 import net.minecraft.util.math.Vec3d
@@ -42,10 +43,10 @@ class ItemLootablePoolEntry(private val itemStack: ItemStack, private val dropIt
     }
 
     override fun defaultDescription(): Text {
-        return "lootables.entry.item".translate(itemStack.count, itemStack.item.name)
+        return if(dropItems) "lootables.entry.item.drop".translate(itemStack.count, itemStack.item.name) else "lootables.entry.item.give".translate(itemStack.count, itemStack.item.name)
     }
 
-    override fun createDisplay(): LootablePoolEntryDisplay {
+    override fun createDisplay(playerEntity: ServerPlayerEntity): LootablePoolEntryDisplay {
         return ItemLootablePoolEntryDisplay(itemStack)
     }
 
@@ -56,7 +57,7 @@ class ItemLootablePoolEntry(private val itemStack: ItemStack, private val dropIt
         val CODEC: MapCodec<ItemLootablePoolEntry> = RecordCodecBuilder.mapCodec { instance: RecordCodecBuilder.Instance<ItemLootablePoolEntry> ->
             instance.group(
                 ITEM_CODEC.fieldOf("item").forGetter(ItemLootablePoolEntry::itemStack),
-                Codec.BOOL.optionalFieldOf("dropItems", true).forGetter(ItemLootablePoolEntry::dropItems)
+                Codec.BOOL.optionalFieldOf("drop_items", true).forGetter(ItemLootablePoolEntry::dropItems)
             ).apply(instance, ::ItemLootablePoolEntry)
         }
     }

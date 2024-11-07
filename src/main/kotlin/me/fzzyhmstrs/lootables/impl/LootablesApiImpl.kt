@@ -26,12 +26,13 @@ import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.Vec3d
 import java.util.*
+import java.util.function.BiConsumer
 
 internal object LootablesApiImpl {
 
     private val customEntries: MutableMap<Identifier, CustomLootableEntry> = mutableMapOf()
 
-    internal fun supplyLootWithChoices(tableId: Identifier, playerEntity: ServerPlayerEntity, origin: Vec3d, onSuccess: BiConsumer<ServerPlayerEntity, Vec3d> = BiConsumer { _, _ -> }, onAbort: BiConsumer<ServerPlayerEntity, Vec3d> = BiConsumer { _, _ -> },  key: IdKey?, rolls: Int = 3, choices: Int = 1): Boolean {
+    internal fun supplyLootWithChoices(tableId: Identifier, playerEntity: ServerPlayerEntity, origin: Vec3d, onSuccess: BiConsumer<ServerPlayerEntity, Vec3d> = BiConsumer { _, _ -> }, onAbort: BiConsumer<ServerPlayerEntity, Vec3d> = BiConsumer { _, _ -> }, key: IdKey?, rolls: Int = 3, choices: Int = 1): Boolean {
         if (choices > rolls) throw IllegalArgumentException("Number of choices ($choices) greater than number of rolls ($rolls)")
         if (rolls < 1) throw IllegalArgumentException("Number of rolls can't be less than 1")
         if (key != null && !LootablesData.keyAvailable(key, playerEntity.uuid)) {
@@ -42,7 +43,7 @@ internal object LootablesApiImpl {
             Lootables.LOGGER.error("Choices roll: Lootable table doesn't exist for ID $tableId")
             return false
         }
-        val choiceKey = UUID.nameUUIDFromBytes((tableId.toString + playerEntity.uuid.toString + key.toString()).toByteArray())
+        val choiceKey = UUID.nameUUIDFromBytes((tableId.toString() + playerEntity.uuid.toString() + key.toString()).toByteArray())
         val pendingPoolChoices = LootablesData.getPendingPools(choiceKey)
         val poolChoices = if(pendingPoolChoices != null) {
             pendingPoolChoices
@@ -59,7 +60,7 @@ internal object LootablesApiImpl {
                 newPoolChoices
             }
         }
-        
+
         if (key != null)
             LootablesData.applyKey(key, playerEntity.uuid)
         val payload = ChoicesS2CCustomPayload(tableId, choiceKey, poolChoices, choices)

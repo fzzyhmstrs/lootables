@@ -1,4 +1,9 @@
 {
+	"lootables.entry.item.drop": "Drops %1$s %2$s",
+	"lootables.entry.item.give": "Gives %1$s %2$s",
+	"lootables.entry.pool.drop": "Drops items from a loot pool",
+	"lootables.entry.pool.give": "Gives items from a loot pool",
+
 	"lootables.screen.choices_multiple": "%s Choices Left",
 	"lootables.screen.choices_single": "1 Choice Left",
 	"lootables.screen.choices_ready": "Confirm Choices"

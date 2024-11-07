@@ -14,15 +14,15 @@ package me.fzzyhmstrs.lootables.loot
 
 import com.mojang.serialization.MapCodec
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.Text
-import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Vec3d
 
 interface LootablePoolEntry {
     fun type(): LootablePoolEntryType
     fun apply(player: PlayerEntity, origin: Vec3d)
     fun defaultDescription(): Text
-    fun createDisplay(): LootablePoolEntryDisplay
+    fun createDisplay(playerEntity: ServerPlayerEntity): LootablePoolEntryDisplay
 
     companion object {
         val MAP_CODEC: MapCodec<LootablePoolEntry> = LootablePoolEntryType.CODEC.dispatchMap({ entry -> entry.type() }, { type -> type.codec() })

@@ -12,12 +12,15 @@
 
 package me.fzzyhmstrs.lootables.client.screen
 
+import me.fzzyhmstrs.fzzy_config.api.ConfigApi
 import me.fzzyhmstrs.fzzy_config.util.FcText
 import me.fzzyhmstrs.fzzy_config.util.FcText.translate
 import me.fzzyhmstrs.lootables.client.LootablesClientData
 import me.fzzyhmstrs.lootables.config.ChoiceStyle
 import me.fzzyhmstrs.lootables.config.LootablesConfig
+import me.fzzyhmstrs.lootables.network.AbortChoicesC2SCustomPayload
 import me.fzzyhmstrs.lootables.network.ChoicesS2CCustomPayload
+import me.fzzyhmstrs.lootables.network.ChosenC2SCustomPayload
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder
@@ -159,9 +162,9 @@ class ChoicesScreen(private val choiceData: ChoicesS2CCustomPayload, private var
                 widgetY += 12
                 confirmWidget.setPosition(widgetX, widgetY)
             } else {
-                var widgetX = (width / 2) - (((data.size * LootablesConfig.INSTANCE.tileWidth) + ((data.size - 1) * 12)) / 2)
+                var widgetX = (width / 2) - (((widgets.size * LootablesConfig.INSTANCE.tileWidth) + ((widgets.size - 1) * 12)) / 2)
                 var widgetY = (height / 2) - ((LootablesConfig.INSTANCE.tileHeight + 12 + 20) / 2)
-                for (i in data.indices) {
+                for (i in widgets.indices) {
                     widgets[i].setPosition(widgetX, widgetY)
                     widgetX += LootablesConfig.INSTANCE.tileWidth
                     widgetX += 12
@@ -179,12 +182,12 @@ class ChoicesScreen(private val choiceData: ChoicesS2CCustomPayload, private var
     }
 
     override fun close() {
-        ConfigApi.network().send(AbortChoicesC2SCustomPayload(choiceData.choiceKey))
+        ConfigApi.network().send(AbortChoicesC2SCustomPayload(choiceData.choiceKey), null)
         this.client?.setScreen(oldScreen)
     }
 
     private fun sendChosen() {
-        ConfigApi.network().send(ChosenC2SCustomPayload(choiceData.table, choiceData.choiceKey, widgets.mapNotNull { it.id() }))
+        ConfigApi.network().send(ChosenC2SCustomPayload(choiceData.table, choiceData.choiceKey, widgets.mapNotNull { it.id() }), null)
         this.client?.setScreen(oldScreen)
     }
 

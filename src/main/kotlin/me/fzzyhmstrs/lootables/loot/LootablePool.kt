@@ -21,6 +21,7 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.loot.condition.LootCondition
 import net.minecraft.loot.context.LootContext
 import net.minecraft.loot.context.LootContextParameters
+import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.Text
 import net.minecraft.text.TextCodecs
 import net.minecraft.util.Identifier
@@ -57,8 +58,8 @@ class LootablePool private constructor(
         return weight.orElse(rarity.weight)
     }
 
-    fun createData(): LootablePoolData {
-        return LootablePoolData(id, description.orElse(entry.defaultDescription()), rarity, entry.createDisplay())
+    fun createData(playerEntity: ServerPlayerEntity): LootablePoolData {
+        return LootablePoolData(id, description.orElse(entry.defaultDescription()), rarity, entry.createDisplay(playerEntity))
     }
 
     companion object {

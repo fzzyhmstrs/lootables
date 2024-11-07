@@ -21,6 +21,8 @@ import com.mojang.serialization.JsonOps
 import me.fzzyhmstrs.fzzy_config.api.ConfigApi
 import me.fzzyhmstrs.lootables.Lootables
 import me.fzzyhmstrs.lootables.api.IdKey
+import me.fzzyhmstrs.lootables.network.AbortChoicesC2SCustomPayload
+import me.fzzyhmstrs.lootables.network.ChosenC2SCustomPayload
 import me.fzzyhmstrs.lootables.network.DataSyncS2CCustomPayload
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents
@@ -28,10 +30,13 @@ import net.fabricmc.fabric.api.resource.ResourceManagerHelper
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener
 import net.minecraft.resource.ResourceManager
 import net.minecraft.resource.ResourceType
+import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.Identifier
+import net.minecraft.util.math.Vec3d
 import java.io.File
 
 import java.util.UUID
+import java.util.function.BiConsumer
 import kotlin.math.max
 import kotlin.math.min
 
@@ -50,9 +55,9 @@ internal object LootablesData: SimpleSynchronousResourceReloadListener {
         loadUsageData()
     }
 
-    fun getSyncData(): Map<Identifier, List<LootablePoolData>> {
+    fun getSyncData(playerEntity: ServerPlayerEntity): Map<Identifier, List<LootablePoolData>> {
         if (dataInvalid) {
-            lootableSyncData = lootableTables.mapValues { (_, table) -> table.prepareForSync() }
+            lootableSyncData = lootableTables.mapValues { (_, table) -> table.prepareForSync(playerEntity) }
         }
         return lootableSyncData
     }
@@ -111,7 +116,7 @@ internal object LootablesData: SimpleSynchronousResourceReloadListener {
     }
 
     fun getPendingPools(choiceKey: UUID): List<Identifier>? {
-        val pending = pendingChoicesMap[payload.choiceKey] ?: return null
+        val pending = pendingChoicesMap[choiceKey] ?: return null
         abortedChoices.remove(choiceKey)
         return pending.poolChoices
     }
@@ -234,7 +239,7 @@ internal object LootablesData: SimpleSynchronousResourceReloadListener {
     }
 
     private fun loadStoredChoices(): MutableMap<UUID, List<Identifier>> {
-        if (storedChoices.isEmpty()) return
+        if (storedChoices.isEmpty()) return mutableMapOf()
         try {
             val dir = ConfigApi.platform().gameDir()
             val f = File(dir, "lootables_choices.json")
@@ -251,19 +256,19 @@ internal object LootablesData: SimpleSynchronousResourceReloadListener {
             val map: MutableMap<UUID, List<Identifier>> = mutableMapOf()
             for ((uuidStr, element) in json.asJsonObject.entrySet()) {
                 if (!element.isJsonArray) {
-                    Lootables.LOGGER.error("Lootables stored choices encountered read error for element $idStr. Not an array")
+                    Lootables.LOGGER.error("Lootables stored choices encountered read error for element $uuidStr. Not an array")
                     continue
                 }
                 val uuid = UUID.fromString(uuidStr)
                 val list: MutableList<Identifier> = mutableListOf()
                 for (idElement in element.asJsonArray) {
                     if (!idElement.isJsonPrimitive) {
-                        Lootables.LOGGER.error("Lootables stored choices encountered read error for list in element $idStr. Not a string")
+                        Lootables.LOGGER.error("Lootables stored choices encountered read error for list in element $uuidStr. Not a string")
                         continue
                     }
                     val id = Identifier.tryParse(idElement.asString)
                     if (id == null) {
-                        Lootables.LOGGER.error("Lootables stored choices encountered read error for list in element $idStr. Not a valid identifier")
+                        Lootables.LOGGER.error("Lootables stored choices encountered read error for list in element $uuidStr. Not a valid identifier")
                         continue
                     }
                     list.add(id)
@@ -337,27 +342,27 @@ internal object LootablesData: SimpleSynchronousResourceReloadListener {
 
         ServerLifecycleEvents.END_DATA_PACK_RELOAD.register { server, _, _ ->
             for (player in server.playerManager.playerList) {
-                ConfigApi.network().send(DataSyncS2CCustomPayload(getSyncData()), player)
+                ConfigApi.network().send(DataSyncS2CCustomPayload(getSyncData(player)), player)
             }
         }
 
         ServerPlayConnectionEvents.JOIN.register { handler, _, _ ->
-            ConfigApi.network().send(DataSyncS2CCustomPayload(getSyncData()), handler.getPlayer())
+            ConfigApi.network().send(DataSyncS2CCustomPayload(getSyncData(handler.getPlayer())), handler.getPlayer())
         }
 
-        ServerPlayConnectionEvents.DISCONNECT.register { handler, _, _ ->
+        ServerPlayConnectionEvents.DISCONNECT.register { handler, _ ->
             for ((uuid, pendingChoices) in pendingChoicesMap) {
                 if (pendingChoices.playerEntity == handler.getPlayer()) {
                     pendingChoices.abort()
-                    storedChoices.add(uuid)
+                    storedChoices[uuid] = pendingChoices.poolChoices
                 }
             }
         }
 
-        ServerLifecycleEvents.SERVER_STOPPING.register { _, _ ->
+        ServerLifecycleEvents.SERVER_STOPPING.register { _ ->
             for ((uuid, pendingChoices) in pendingChoicesMap) {
                 pendingChoices.abort()
-                storedChoices.add(uuid)
+                storedChoices[uuid] = pendingChoices.poolChoices
             }
             saveStoredChoices()
         }

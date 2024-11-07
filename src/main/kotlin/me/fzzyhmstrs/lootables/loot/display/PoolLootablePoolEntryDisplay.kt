@@ -18,6 +18,9 @@ import me.fzzyhmstrs.lootables.loot.LootablePoolEntryType
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryTypes
 import net.minecraft.client.MinecraftClient
 import net.minecraft.item.ItemStack
+import net.minecraft.network.RegistryByteBuf
+import net.minecraft.network.codec.PacketCodec
+import net.minecraft.network.codec.PacketCodecs
 
 class PoolLootablePoolEntryDisplay(private val itemStacks: List<ItemStack>): LootablePoolEntryDisplay {
 
@@ -42,7 +45,7 @@ class PoolLootablePoolEntryDisplay(private val itemStacks: List<ItemStack>): Loo
                 TileIcon { context, x, y ->
                     val time = System.currentTimeMillis() / 1000L
                     val index = time % it.size
-                    val itemStack = it[index]
+                    val itemStack = it[index.toInt()]
                     context.drawItem(itemStack, x, y)
                     context.drawItemInSlot(MinecraftClient.getInstance().textRenderer, itemStack, x, y)
                 }
@@ -51,9 +54,9 @@ class PoolLootablePoolEntryDisplay(private val itemStacks: List<ItemStack>): Loo
     }
 
     companion object {
-        val PACKET_CODEC = ItemStack.PACKET_CODEC.collect(PacketCodecs.toList()).xmap(
-            ::ItemLootablePoolEntryDisplay,
-            ItemLootablePoolEntryDisplay::itemStacks
+        val PACKET_CODEC: PacketCodec<RegistryByteBuf, PoolLootablePoolEntryDisplay> = ItemStack.PACKET_CODEC.collect(PacketCodecs.toList()).xmap(
+            ::PoolLootablePoolEntryDisplay,
+            PoolLootablePoolEntryDisplay::itemStacks
         )
     }
 }
