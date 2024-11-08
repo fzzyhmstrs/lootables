@@ -13,12 +13,8 @@
 package me.fzzyhmstrs.lootables.loot
 
 import me.fzzyhmstrs.lootables.Lootables
-import me.fzzyhmstrs.lootables.loot.display.CustomLootablePoolEntryDisplay
-import me.fzzyhmstrs.lootables.loot.display.ItemLootablePoolEntryDisplay
-import me.fzzyhmstrs.lootables.loot.display.PoolLootablePoolEntryDisplay
-import me.fzzyhmstrs.lootables.loot.entry.CustomLootablePoolEntry
-import me.fzzyhmstrs.lootables.loot.entry.ItemLootablePoolEntry
-import me.fzzyhmstrs.lootables.loot.entry.PoolLootablePoolEntry
+import me.fzzyhmstrs.lootables.loot.display.*
+import me.fzzyhmstrs.lootables.loot.entry.*
 
 object LootablePoolEntryTypes {
 

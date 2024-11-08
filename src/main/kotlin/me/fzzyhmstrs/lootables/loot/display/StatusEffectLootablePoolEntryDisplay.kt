@@ -17,9 +17,15 @@ import me.fzzyhmstrs.lootables.loot.LootablePoolEntryDisplay
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryType
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryTypes
 import net.minecraft.client.MinecraftClient
+import net.minecraft.entity.effect.StatusEffect
 import net.minecraft.item.ItemStack
+import net.minecraft.network.RegistryByteBuf
+import net.minecraft.network.codec.PacketCodec
+import net.minecraft.network.codec.PacketCodecs
+import net.minecraft.registry.RegistryKeys
+import net.minecraft.registry.entry.RegistryEntry
 
-class ItemLootablePoolEntryDisplay(private val itemStack: ItemStack): LootablePoolEntryDisplay {
+class StatusEffectLootablePoolEntryDisplay(private val effect: RegistryEntry<StatusEffect>): LootablePoolEntryDisplay {
 
     override fun type(): LootablePoolEntryType {
         return LootablePoolEntryTypes.ITEM
@@ -27,15 +33,15 @@ class ItemLootablePoolEntryDisplay(private val itemStack: ItemStack): LootablePo
 
     override fun provideIcons(): List<TileIcon> {
         return listOf(TileIcon { context, x, y ->
-            context.drawItem(itemStack, x + 1, y + 1)
-            context.drawItemInSlot(MinecraftClient.getInstance().textRenderer, itemStack, x + 1, y + 1)
+            val sprite = MinecraftClient.getInstance().statusEffectSpriteManager.getSprite(effect)
+            context.drawSprite(x, y, 0, 18, 18, sprite)
         })
     }
 
     companion object {
-        val PACKET_CODEC = ItemStack.PACKET_CODEC.xmap(
-            ::ItemLootablePoolEntryDisplay,
-            ItemLootablePoolEntryDisplay::itemStack
+        val PACKET_CODEC: PacketCodec<RegistryByteBuf, StatusEffectLootablePoolEntryDisplay> = StatusEffect.ENTRY_PACKET_CODEC.xmap(
+            ::StatusEffectLootablePoolEntryDisplay,
+            StatusEffectLootablePoolEntryDisplay::effect
         )
     }
 }

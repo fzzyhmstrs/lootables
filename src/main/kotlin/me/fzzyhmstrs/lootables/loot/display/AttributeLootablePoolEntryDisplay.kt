@@ -12,14 +12,24 @@
 
 package me.fzzyhmstrs.lootables.loot.display
 
+import me.fzzyhmstrs.fzzy_config.util.RenderUtil.drawTex
+import me.fzzyhmstrs.lootables.Lootables
 import me.fzzyhmstrs.lootables.client.screen.TileIcon
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryDisplay
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryType
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryTypes
 import net.minecraft.client.MinecraftClient
+import net.minecraft.entity.attribute.EntityAttribute
+import net.minecraft.entity.effect.StatusEffect
 import net.minecraft.item.ItemStack
+import net.minecraft.network.RegistryByteBuf
+import net.minecraft.network.codec.PacketCodec
+import net.minecraft.network.codec.PacketCodecs
+import net.minecraft.registry.Registries
+import net.minecraft.registry.RegistryKeys
+import net.minecraft.registry.entry.RegistryEntry
 
-class ItemLootablePoolEntryDisplay(private val itemStack: ItemStack): LootablePoolEntryDisplay {
+class AttributeLootablePoolEntryDisplay(private val effect: RegistryEntry<EntityAttribute>): LootablePoolEntryDisplay {
 
     override fun type(): LootablePoolEntryType {
         return LootablePoolEntryTypes.ITEM
@@ -27,15 +37,15 @@ class ItemLootablePoolEntryDisplay(private val itemStack: ItemStack): LootablePo
 
     override fun provideIcons(): List<TileIcon> {
         return listOf(TileIcon { context, x, y ->
-            context.drawItem(itemStack, x + 1, y + 1)
-            context.drawItemInSlot(MinecraftClient.getInstance().textRenderer, itemStack, x + 1, y + 1)
+            val id = Registries.ATTRIBUTE.getId(effect.value())?.withPath{ path -> "attribute/$path" } ?: Lootables.identity("attribute/unknown")
+            context.drawTex(id, x, y, 18, 18)
         })
     }
 
     companion object {
-        val PACKET_CODEC = ItemStack.PACKET_CODEC.xmap(
-            ::ItemLootablePoolEntryDisplay,
-            ItemLootablePoolEntryDisplay::itemStack
+        val PACKET_CODEC: PacketCodec<RegistryByteBuf, AttributeLootablePoolEntryDisplay> = EntityAttribute.PACKET_CODEC.xmap(
+            ::AttributeLootablePoolEntryDisplay,
+            AttributeLootablePoolEntryDisplay::effect
         )
     }
 }

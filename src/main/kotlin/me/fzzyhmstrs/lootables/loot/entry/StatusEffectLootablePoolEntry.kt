@@ -20,8 +20,10 @@ import me.fzzyhmstrs.lootables.loot.LootablePoolEntry
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryDisplay
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryType
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryTypes
+import me.fzzyhmstrs.lootables.loot.display.HealLootablePoolEntryDisplay
 import me.fzzyhmstrs.lootables.loot.display.ItemLootablePoolEntryDisplay
 import me.fzzyhmstrs.lootables.loot.display.PoolLootablePoolEntryDisplay
+import net.minecraft.entity.effect.StatusEffectInstance
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.loot.LootPool
@@ -32,6 +34,7 @@ import net.minecraft.loot.context.LootContextParameterSet
 import net.minecraft.loot.context.LootContextParameters
 import net.minecraft.loot.context.LootContextTypes
 import net.minecraft.registry.entry.RegistryEntry
+import net.minecraft.screen.ScreenTexts
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.Text
 import net.minecraft.util.ItemScatterer
@@ -56,8 +59,7 @@ class StatusEffectLootablePoolEntry(private val instance: StatusEffectInstance):
     private fun getStatusEffectDescription(statusEffect: StatusEffectInstance): Text {
         val mutableText = statusEffect.effectType.value().name.copy()
         if (statusEffect.amplifier in 1..9) {
-            mutableText.append(ScreenTexts.SPACE)
-                .append(Text.translatable("enchantment.level." + (statusEffect.amplifier + 1)))
+            mutableText.append(ScreenTexts.SPACE).append(Text.translatable("enchantment.level." + (statusEffect.amplifier + 1)))
         }
         return mutableText
     }

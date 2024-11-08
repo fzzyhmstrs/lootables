@@ -15,36 +15,33 @@ package me.fzzyhmstrs.lootables.loot.entry
 import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
+import me.fzzyhmstrs.fzzy_config.util.FcText
 import me.fzzyhmstrs.fzzy_config.util.FcText.translate
+import me.fzzyhmstrs.lootables.Lootables
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntry
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryDisplay
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryType
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryTypes
-import me.fzzyhmstrs.lootables.loot.display.ItemLootablePoolEntryDisplay
-import me.fzzyhmstrs.lootables.loot.display.PoolLootablePoolEntryDisplay
+import me.fzzyhmstrs.lootables.loot.display.AttributeLootablePoolEntryDisplay
+import net.minecraft.component.type.AttributeModifiersComponent
 import net.minecraft.entity.attribute.EntityAttribute
 import net.minecraft.entity.attribute.EntityAttributeModifier
 import net.minecraft.entity.attribute.EntityAttributeModifier.Operation
 import net.minecraft.entity.attribute.EntityAttributes
 import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.item.ItemStack
-import net.minecraft.loot.LootPool
-import net.minecraft.loot.LootTable
-import net.minecraft.loot.LootTables
-import net.minecraft.loot.context.LootContext
-import net.minecraft.loot.context.LootContextParameterSet
-import net.minecraft.loot.context.LootContextParameters
-import net.minecraft.loot.context.LootContextTypes
 import net.minecraft.registry.entry.RegistryEntry
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.Text
-import net.minecraft.util.ItemScatterer
+import net.minecraft.util.Identifier
+import net.minecraft.util.Util
 import net.minecraft.util.math.Vec3d
+import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
 import java.util.*
 import java.util.function.Consumer
 
 class AttributeLootablePoolEntry(private val attribute: RegistryEntry<EntityAttribute>, private val id: Identifier, private val value: Double, private val operation: Operation, private val persistent: Boolean = false): LootablePoolEntry {
-    
+
     override fun type(): LootablePoolEntryType {
         return LootablePoolEntryTypes.ATTRIBUTE
     }
@@ -52,9 +49,9 @@ class AttributeLootablePoolEntry(private val attribute: RegistryEntry<EntityAttr
     override fun apply(player: PlayerEntity, origin: Vec3d) {
         val suffix = Lootables.random().nextLong().toString()
         if(persistent) {
-            entity.getAttributeInstance(attribute)?.addPersistentModifier(EntityAttributeModifier(id.withSuffixedPath(suffix), value, operation))
+            player.getAttributeInstance(attribute)?.addPersistentModifier(EntityAttributeModifier(id.withSuffixedPath(suffix), value, operation))
         } else {
-            entity.getAttributeInstance(attribute)?.addTemporaryModifier(EntityAttributeModifier(id.withSuffixedPath(suffix), value, operation))
+            player.getAttributeInstance(attribute)?.addTemporaryModifier(EntityAttributeModifier(id.withSuffixedPath(suffix), value, operation))
         }
     }
 
@@ -64,31 +61,33 @@ class AttributeLootablePoolEntry(private val attribute: RegistryEntry<EntityAttr
 
     private fun attributeDescription(): Text {
         var d = value
-            if(operation == Operation.ADD_MULTIPLIED_BASE || operation == Operation.ADD_MULTIPLIED_TOTAL) {
-                d *= 100
-            } else if (attribute.matches(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE)) {
-                d *= 10
-            }
-            if (d > 0.0) {
-                FcText.translatable("attribute.modifier.plus." + operation.id,
-                    AttributeModifiersComponent.DECIMAL_FORMAT.format(d),
-                    Text.translatable(attribute.value().translationKey)
-                ).formatted(attribute.value().getFormatting(true))
-            } else if (d < 0.0) {
-                FcText.translatable("attribute.modifier.take." + operation.id,
-                    AttributeModifiersComponent.DECIMAL_FORMAT.format(-d),
-                    Text.translatable(attribute.value().translationKey)
-                ).formatted(attribute.value().getFormatting(false))
-            } else {
-                FcText.empty()
-            }
+        if(operation == Operation.ADD_MULTIPLIED_BASE || operation == Operation.ADD_MULTIPLIED_TOTAL) {
+            d *= 100
+        } else if (attribute.matches(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE)) {
+            d *= 10
+        }
+        return if (d > 0.0) {
+            FcText.translatable("attribute.modifier.plus." + operation.id,
+                AttributeModifiersComponent.DECIMAL_FORMAT.format(d),
+                Text.translatable(attribute.value().translationKey)
+            ).formatted(attribute.value().getFormatting(true))
+        } else if (d < 0.0) {
+            FcText.translatable("attribute.modifier.take." + operation.id,
+                AttributeModifiersComponent.DECIMAL_FORMAT.format(-d),
+                Text.translatable(attribute.value().translationKey)
+            ).formatted(attribute.value().getFormatting(false))
+        } else {
+            FcText.empty()
+        }
     }
 
     override fun createDisplay(playerEntity: ServerPlayerEntity): LootablePoolEntryDisplay {
-        return AttributeLootablePoolEntryDisplay(private val attribute: RegistryEntry<EntityAttribute>)
+        return AttributeLootablePoolEntryDisplay(attribute)
     }
 
     companion object {
+
+        val DECIMAL_FORMAT = Util.make(DecimalFormat("#.##")) { format: DecimalFormat -> format.decimalFormatSymbols = DecimalFormatSymbols.getInstance(Locale.ROOT) }
 
         val CODEC: MapCodec<AttributeLootablePoolEntry> = RecordCodecBuilder.mapCodec { instance: RecordCodecBuilder.Instance<AttributeLootablePoolEntry> ->
             instance.group(

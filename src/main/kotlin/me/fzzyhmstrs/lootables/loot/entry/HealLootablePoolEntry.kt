@@ -20,6 +20,7 @@ import me.fzzyhmstrs.lootables.loot.LootablePoolEntry
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryDisplay
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryType
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryTypes
+import me.fzzyhmstrs.lootables.loot.display.HealLootablePoolEntryDisplay
 import me.fzzyhmstrs.lootables.loot.display.ItemLootablePoolEntryDisplay
 import me.fzzyhmstrs.lootables.loot.display.PoolLootablePoolEntryDisplay
 import net.minecraft.entity.player.PlayerEntity
