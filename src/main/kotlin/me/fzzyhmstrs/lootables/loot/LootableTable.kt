@@ -27,8 +27,16 @@ class LootableTable private constructor(private val pools: List<LootablePool>, p
         if (rolls <= 0) return listOf()
         val entryList: MutableList<PoolEntry> = mutableListOf()
         var totalWeight = 0
+        val guaranteedChoices: MutableList<LootablePool> = mutableListOf()
         for (pool in pools) {
             if (!pool.canApply(context)) continue
+            if (pool.guaranteed) {
+                guaranteedChoices.add(pool)
+                if (guaranteedChoices.size == rolls) {
+                    return guaranteedChoices
+                }
+                continue
+            }
             val previousWeight = totalWeight
             totalWeight += pool.getWeight()
             entryList.add(PoolEntry(previousWeight, totalWeight, pool))
@@ -37,8 +45,8 @@ class LootableTable private constructor(private val pools: List<LootablePool>, p
             return entryList.map { it.pool }
         }
         val choices: MutableList<Int> = mutableListOf()
-        val results: MutableList<LootablePool> = mutableListOf()
-        for (i in 1..rolls) {
+        val results: MutableList<LootablePool> = guaranteedChoices
+        for (i in results.size until rolls) {
             var rand = Lootables.random().nextInt(totalWeight) + 1
             while (choices.contains(rand)) {
                 rand = Lootables.random().nextInt(totalWeight) + 1

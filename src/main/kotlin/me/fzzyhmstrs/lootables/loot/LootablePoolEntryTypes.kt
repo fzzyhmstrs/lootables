@@ -26,4 +26,5 @@ object LootablePoolEntryTypes {
     val HEAL = LootablePoolEntryType.create(Lootables.identity("heal"), HealLootablePoolEntry.CODEC, HealLootablePoolEntryDisplay.PACKET_CODEC)
     val STATUS = LootablePoolEntryType.create(Lootables.identity("status"), StatusEffectLootablePoolEntry.CODEC, StatusEffectLootablePoolEntryDisplay.PACKET_CODEC)
     val ATTRIBUTE = LootablePoolEntryType.create(Lootables.identity("attribute"), AttributeLootablePoolEntry.CODEC, AttributeLootablePoolEntryDisplay.PACKET_CODEC)
+    val MULTI = LootablePoolEntryType.create(Lootables.identity("multi"), MultiLootablePoolEntry.CODEC, MultiLootablePoolEntryDisplay.PACKET_CODEC)
 }

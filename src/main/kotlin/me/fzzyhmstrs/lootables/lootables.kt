@@ -19,14 +19,15 @@ import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
 import net.fabricmc.api.ModInitializer
 import net.minecraft.util.Identifier
+import net.minecraft.util.math.random.Random
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import kotlin.random.Random
 
 
 object Lootables: ModInitializer {
     const val MOD_ID = "lootables"
     val LOGGER: Logger = LoggerFactory.getLogger("lootables")
+    private val random = Random.createThreadSafe()
 
     override fun onInitialize() {
         LootablesData.init()
@@ -34,7 +35,7 @@ object Lootables: ModInitializer {
     }
 
     fun random(): Random {
-        return Random(System.currentTimeMillis())
+        return random
     }
 
     fun identity(path: String): Identifier {
@@ -49,6 +50,6 @@ object LootablesClient: ClientModInitializer {
     }
 
     fun random(): Random {
-        return Random(System.currentTimeMillis())
+        return Random.createThreadSafe()
     }
 }
