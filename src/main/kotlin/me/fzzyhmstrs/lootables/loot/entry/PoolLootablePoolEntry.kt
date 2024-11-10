@@ -20,7 +20,6 @@ import me.fzzyhmstrs.lootables.loot.LootablePoolEntry
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryDisplay
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryType
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryTypes
-import me.fzzyhmstrs.lootables.loot.display.ItemLootablePoolEntryDisplay
 import me.fzzyhmstrs.lootables.loot.display.PoolLootablePoolEntryDisplay
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
@@ -54,7 +53,7 @@ class PoolLootablePoolEntry(private val pool: LootPool, private val dropItems: B
         pool.addGeneratedLoot(consumer, context)
     }
 
-    override fun defaultDescription(): Text {
+    override fun defaultDescription(playerEntity: ServerPlayerEntity): Text {
         return if(dropItems) "lootables.entry.pool.drop".translate() else "lootables.entry.pool.give".translate()
     }
 

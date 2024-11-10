@@ -41,7 +41,7 @@ class ChoiceTileWidget(
     width: Int,
     height: Int,
     private val rarity: LootableRarity,
-    private val icons: List<TileIcon>,
+    private val icons: Supplier<List<TileIcon>>,
     private val choiceCallback: Consumer<Boolean>,
     private val canClick: Supplier<Boolean>,
     description: Text,
@@ -138,8 +138,9 @@ class ChoiceTileWidget(
         }
 
         //icons
-        var iconStartPoint = ((x + (x + width)) / 2) - (((icons.size * 18) + ((icons.size - 1) * 1)) / 2)
-        for (icon in icons) {
+        val iconsList = icons.get()
+        var iconStartPoint = ((x + (x + width)) / 2) - (((iconsList.size * 18) + ((iconsList.size - 1) * 1)) / 2)
+        for (icon in iconsList) {
             icon.render(context, iconStartPoint, y + 3)
             iconStartPoint += 19
         }
@@ -299,6 +300,6 @@ class ChoiceTileWidget(
     }
 
     override fun appendClickableNarrations(builder: NarrationMessageBuilder) {
-        TODO("Not yet implemented")
+        appendDefaultNarrations(builder)
     }
 }

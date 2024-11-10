@@ -15,13 +15,11 @@ package me.fzzyhmstrs.lootables.loot
 import com.mojang.serialization.Codec
 import com.mojang.serialization.DataResult
 import com.mojang.serialization.MapCodec
-import io.netty.buffer.ByteBuf
 import net.minecraft.network.RegistryByteBuf
 import net.minecraft.network.codec.PacketCodec
 import net.minecraft.network.codec.PacketCodecs
 import net.minecraft.util.Identifier
-
-import java.util.IdentityHashMap
+import java.util.*
 
 class LootablePoolEntryType private constructor(private val codec: MapCodec<out LootablePoolEntry>, private val s2cCodec: PacketCodec<RegistryByteBuf, out LootablePoolEntryDisplay>) {
 

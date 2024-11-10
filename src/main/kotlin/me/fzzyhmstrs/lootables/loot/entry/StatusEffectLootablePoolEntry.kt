@@ -12,35 +12,21 @@
 
 package me.fzzyhmstrs.lootables.loot.entry
 
-import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import me.fzzyhmstrs.fzzy_config.util.FcText.translate
+import me.fzzyhmstrs.lootables.Lootables
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntry
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryDisplay
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryType
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryTypes
 import me.fzzyhmstrs.lootables.loot.display.HealLootablePoolEntryDisplay
-import me.fzzyhmstrs.lootables.loot.display.ItemLootablePoolEntryDisplay
-import me.fzzyhmstrs.lootables.loot.display.PoolLootablePoolEntryDisplay
 import net.minecraft.entity.effect.StatusEffectInstance
 import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.item.ItemStack
-import net.minecraft.loot.LootPool
-import net.minecraft.loot.LootTable
-import net.minecraft.loot.LootTables
-import net.minecraft.loot.context.LootContext
-import net.minecraft.loot.context.LootContextParameterSet
-import net.minecraft.loot.context.LootContextParameters
-import net.minecraft.loot.context.LootContextTypes
-import net.minecraft.registry.entry.RegistryEntry
 import net.minecraft.screen.ScreenTexts
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.Text
-import net.minecraft.util.ItemScatterer
 import net.minecraft.util.math.Vec3d
-import java.util.*
-import java.util.function.Consumer
 
 class StatusEffectLootablePoolEntry(private val instance: StatusEffectInstance): LootablePoolEntry {
 
@@ -52,8 +38,8 @@ class StatusEffectLootablePoolEntry(private val instance: StatusEffectInstance):
         player.addStatusEffect(StatusEffectInstance(instance))
     }
 
-    override fun defaultDescription(): Text {
-        return "lootables.entry.status".translate(getStatusEffectDescription(instance), instance.duration)
+    override fun defaultDescription(playerEntity: ServerPlayerEntity): Text {
+        return "lootables.entry.status".translate(getStatusEffectDescription(instance), Lootables.DECIMAL_FORMAT.format(instance.duration / 20f))
     }
 
     private fun getStatusEffectDescription(statusEffect: StatusEffectInstance): Text {

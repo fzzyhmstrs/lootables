@@ -21,7 +21,7 @@ import net.minecraft.util.math.Vec3d
 interface LootablePoolEntry {
     fun type(): LootablePoolEntryType
     fun apply(player: PlayerEntity, origin: Vec3d)
-    fun defaultDescription(): Text
+    fun defaultDescription(playerEntity: ServerPlayerEntity): Text
     fun createDisplay(playerEntity: ServerPlayerEntity): LootablePoolEntryDisplay
 
     companion object {

@@ -51,7 +51,7 @@ class TableLootablePoolEntry(private val table: RegistryEntry<LootTable>, privat
         table.value().generateLoot(params.build(LootContextTypes.CHEST), consumer)
     }
 
-    override fun defaultDescription(): Text {
+    override fun defaultDescription(playerEntity: ServerPlayerEntity): Text {
         return if(dropItems) "lootables.entry.table.drop".translate() else "lootables.entry.table.give".translate()
     }
 

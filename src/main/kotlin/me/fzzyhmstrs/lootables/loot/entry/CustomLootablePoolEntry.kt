@@ -36,7 +36,7 @@ class CustomLootablePoolEntry(private val id: Identifier): LootablePoolEntry {
         LootablesApiImpl.getCustomEntry(id)?.apply(player, origin)
     }
 
-    override fun defaultDescription(): Text {
+    override fun defaultDescription(playerEntity: ServerPlayerEntity): Text {
         return LootablesApiImpl.getCustomEntry(id)?.defaultDescription() ?: FcText.empty()
     }
 

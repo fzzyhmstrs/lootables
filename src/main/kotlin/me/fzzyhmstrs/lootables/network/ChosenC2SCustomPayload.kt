@@ -13,14 +13,11 @@
 package me.fzzyhmstrs.lootables.network
 
 import me.fzzyhmstrs.lootables.Lootables
-import me.fzzyhmstrs.lootables.api.IdKey
 import net.minecraft.network.codec.PacketCodec
 import net.minecraft.network.codec.PacketCodecs
 import net.minecraft.network.packet.CustomPayload
 import net.minecraft.network.packet.CustomPayload.Id
 import net.minecraft.util.Identifier
-import net.minecraft.util.math.BlockPos
-import net.minecraft.util.math.Vec3d
 import java.util.*
 
 class ChosenC2SCustomPayload(val table: Identifier, val choiceKey: UUID, val chosen: List<Identifier>): CustomPayload {

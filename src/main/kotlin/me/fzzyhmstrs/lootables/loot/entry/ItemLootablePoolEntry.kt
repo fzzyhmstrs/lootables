@@ -42,7 +42,7 @@ class ItemLootablePoolEntry(private val itemStack: ItemStack, private val dropIt
         }
     }
 
-    override fun defaultDescription(): Text {
+    override fun defaultDescription(playerEntity: ServerPlayerEntity): Text {
         return if(dropItems) "lootables.entry.item.drop".translate(itemStack.count, itemStack.item.name) else "lootables.entry.item.give".translate(itemStack.count, itemStack.item.name)
     }
 

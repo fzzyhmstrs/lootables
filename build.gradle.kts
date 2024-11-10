@@ -11,6 +11,8 @@ import com.matthewprenger.cursegradle.CurseArtifact
 import com.matthewprenger.cursegradle.CurseProject
 import com.matthewprenger.cursegradle.CurseRelation
 import com.matthewprenger.cursegradle.Options
+import net.fabricmc.loom.task.RemapJarTask
+import org.gradle.jvm.tasks.Jar
 
 plugins {
     id("fabric-loom")
@@ -19,10 +21,12 @@ plugins {
     id("com.matthewprenger.cursegradle") version "1.4.0"
     id("com.modrinth.minotaur") version "2.+"
 }
+
 base {
     val archivesBaseName: String by project
     archivesName.set(archivesBaseName)
 }
+
 val log: File = file("changelog.md")
 val minecraftVersion: String by project
 val modVersion: String by project
@@ -31,6 +35,7 @@ val mavenGroup: String by project
 group = mavenGroup
 println("## Changelog for ${base.archivesName.get()} $version \n\n" + log.readText())
 println(base.archivesName.get().replace('_','-'))
+
 repositories {
     maven {
         name = "Modrinth"
@@ -46,6 +51,25 @@ repositories {
     mavenLocal()
     mavenCentral()
 }
+
+sourceSets {
+    create("testmod") {
+        compileClasspath += sourceSets.main.get().compileClasspath
+        runtimeClasspath += sourceSets.main.get().runtimeClasspath
+    }
+}
+
+val testmodImplementation by configurations.getting {
+    extendsFrom(configurations.implementation.get())
+}
+
+idea {
+    module {
+        testSources.from(sourceSets["testmod"].java.srcDirs)
+        testSources.from(sourceSets["testmod"].kotlin.srcDirs)
+    }
+}
+
 dependencies {
     minecraft("com.mojang:minecraft:$minecraftVersion")
     val yarnMappings: String by project
@@ -60,6 +84,18 @@ dependencies {
     val fzzyConfigVersion: String by project
     modImplementation("me.fzzyhmstrs:fzzy_config:$fzzyConfigVersion") {
         exclude("net.fabricmc.fabric-api")
+    }
+
+    testmodImplementation(sourceSets.main.get().output)
+}
+
+loom {
+    runs {
+        create("testmodClient"){
+            client()
+            name = "Testmod Client"
+            source(sourceSets["testmod"])
+        }
     }
 }
 
@@ -107,7 +143,29 @@ tasks {
         targetCompatibility = javaVersion
         withSourcesJar()
     }
+
+    modrinth.get().group = "upload"
+    modrinthSyncBody.get().group = "upload"
 }
+
+val testmodJar =  tasks.register("testmodJar", Jar::class) {
+    from(sourceSets["testmod"].output)
+    destinationDirectory =  File(project.layout.buildDirectory.get().asFile, "testmod")
+    archiveClassifier = "testmod"
+}
+
+val remapTestmodJar =  tasks.register("remapTestmodJar", RemapJarTask::class){
+    dependsOn(testmodJar.get())
+    input.set(testmodJar.get().archiveFile)
+    archiveClassifier = "testmod"
+    addNestedDependencies = false
+    //destinationDirectory =  File(project.layout.buildDirectory.get().asFile, "testmod")
+}
+
+tasks.build{
+    dependsOn(remapTestmodJar.get())
+}
+
 if (System.getenv("MODRINTH_TOKEN") != null) {
     modrinth {
         val modrinthSlugName: String by project

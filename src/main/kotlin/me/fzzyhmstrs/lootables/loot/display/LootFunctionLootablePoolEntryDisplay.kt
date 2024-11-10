@@ -17,18 +17,13 @@ import me.fzzyhmstrs.lootables.loot.LootablePoolEntryType
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryTypes
 import net.minecraft.network.RegistryByteBuf
 import net.minecraft.network.codec.PacketCodec
-import net.minecraft.network.codec.PacketCodecs
 
-class ExperienceLootablePoolEntryDisplay(private val levels: Boolean): SimpleLootablePoolEntryDisplay(if(levels) Lootables.identity("display/experience_levels") else Lootables.identity("display/experience_points")) {
+object LootFunctionLootablePoolEntryDisplay: SimpleLootablePoolEntryDisplay(Lootables.identity("display/function")) {
 
     override fun type(): LootablePoolEntryType {
-        return LootablePoolEntryTypes.XP
+        return LootablePoolEntryTypes.FUNCTION
     }
 
-    companion object {
-        val PACKET_CODEC: PacketCodec<RegistryByteBuf, ExperienceLootablePoolEntryDisplay> = PacketCodecs.BOOL.xmap(
-            ::ExperienceLootablePoolEntryDisplay,
-            ExperienceLootablePoolEntryDisplay::levels
-        ).cast()
-    }
+    val PACKET_CODEC: PacketCodec<RegistryByteBuf, LootFunctionLootablePoolEntryDisplay> = PacketCodec.unit(this)
+
 }

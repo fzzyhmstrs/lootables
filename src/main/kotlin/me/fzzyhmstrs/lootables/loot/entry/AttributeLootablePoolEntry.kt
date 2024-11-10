@@ -33,12 +33,7 @@ import net.minecraft.registry.entry.RegistryEntry
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
-import net.minecraft.util.Util
 import net.minecraft.util.math.Vec3d
-import java.text.DecimalFormat
-import java.text.DecimalFormatSymbols
-import java.util.*
-import java.util.function.Consumer
 
 class AttributeLootablePoolEntry(private val attribute: RegistryEntry<EntityAttribute>, private val id: Identifier, private val value: Double, private val operation: Operation, private val persistent: Boolean = false): LootablePoolEntry {
 
@@ -55,7 +50,7 @@ class AttributeLootablePoolEntry(private val attribute: RegistryEntry<EntityAttr
         }
     }
 
-    override fun defaultDescription(): Text {
+    override fun defaultDescription(playerEntity: ServerPlayerEntity): Text {
         return if(persistent) "lootables.entry.attribute.persistent".translate(attributeDescription()) else "lootables.entry.attribute.temporary".translate(attributeDescription())
     }
 
@@ -86,8 +81,6 @@ class AttributeLootablePoolEntry(private val attribute: RegistryEntry<EntityAttr
     }
 
     companion object {
-
-        val DECIMAL_FORMAT = Util.make(DecimalFormat("#.##")) { format: DecimalFormat -> format.decimalFormatSymbols = DecimalFormatSymbols.getInstance(Locale.ROOT) }
 
         val CODEC: MapCodec<AttributeLootablePoolEntry> = RecordCodecBuilder.mapCodec { instance: RecordCodecBuilder.Instance<AttributeLootablePoolEntry> ->
             instance.group(

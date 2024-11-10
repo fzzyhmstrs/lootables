@@ -18,14 +18,13 @@ import me.fzzyhmstrs.lootables.impl.LootablesApiImpl
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryDisplay
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryType
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryTypes
-import net.minecraft.item.ItemStack
 import net.minecraft.network.codec.PacketCodec
 import net.minecraft.util.Identifier
 
 class CustomLootablePoolEntryDisplay(private val id: Identifier): LootablePoolEntryDisplay {
 
     override fun type(): LootablePoolEntryType {
-        return LootablePoolEntryTypes.ITEM
+        return LootablePoolEntryTypes.CUSTOM
     }
 
     override fun provideIcons(): List<TileIcon> {

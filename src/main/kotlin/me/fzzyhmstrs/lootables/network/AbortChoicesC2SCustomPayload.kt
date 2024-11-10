@@ -13,14 +13,9 @@
 package me.fzzyhmstrs.lootables.network
 
 import me.fzzyhmstrs.lootables.Lootables
-import me.fzzyhmstrs.lootables.api.IdKey
-import net.minecraft.network.codec.PacketCodec
 import net.minecraft.network.codec.PacketCodecs
 import net.minecraft.network.packet.CustomPayload
 import net.minecraft.network.packet.CustomPayload.Id
-import net.minecraft.util.Identifier
-import net.minecraft.util.math.BlockPos
-import net.minecraft.util.math.Vec3d
 import java.util.*
 
 class AbortChoicesC2SCustomPayload(val choiceKey: UUID): CustomPayload {
@@ -30,9 +25,8 @@ class AbortChoicesC2SCustomPayload(val choiceKey: UUID): CustomPayload {
     }
 
     companion object {
-        val TYPE: Id<ChosenC2SCustomPayload> = Id(Lootables.identity("abort_choices_c2s"))
+        val TYPE: Id<AbortChoicesC2SCustomPayload> = Id(Lootables.identity("abort_choices_c2s"))
 
         val CODEC = PacketCodecs.STRING.xmap(UUID::fromString, UUID::toString).xmap(::AbortChoicesC2SCustomPayload, AbortChoicesC2SCustomPayload::choiceKey)
-        )
     }
 }

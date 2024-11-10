@@ -19,15 +19,26 @@ import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
 import net.fabricmc.api.ModInitializer
 import net.minecraft.util.Identifier
+import net.minecraft.util.Util
 import net.minecraft.util.math.random.Random
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
+import java.util.*
 
 
 object Lootables: ModInitializer {
     const val MOD_ID = "lootables"
     val LOGGER: Logger = LoggerFactory.getLogger("lootables")
     private val random = Random.createThreadSafe()
+    val DECIMAL_FORMAT by lazy {
+        Util.make(DecimalFormat("#.##")) { format: DecimalFormat ->
+            format.decimalFormatSymbols = DecimalFormatSymbols.getInstance(
+                Locale.ROOT
+            )
+        }
+    }
 
     override fun onInitialize() {
         LootablesData.init()

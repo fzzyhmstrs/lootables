@@ -18,24 +18,26 @@ import me.fzzyhmstrs.lootables.loot.LootablePoolEntryType
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryTypes
 import net.minecraft.network.codec.PacketCodecs
 
-class MultiLootablePoolEntryDisplay(private val children: List<LootablePoolEntryDisplay>): LootablePoolEntryDisplay {
+class RandomLootablePoolEntryDisplay(private val children: List<LootablePoolEntryDisplay>): LootablePoolEntryDisplay {
 
     override fun type(): LootablePoolEntryType {
-        return LootablePoolEntryTypes.MULTI
+        return LootablePoolEntryTypes.RANDOM
     }
 
-    private val icons by lazy {
-        children.map { it.provideIcons() }.stream().collect({ mutableListOf() }, { list, newList -> list.addAll(newList) }, MutableList<TileIcon>::addAll )
+    private val iconChoices by lazy {
+        children.map { it.provideIcons() }
     }
 
     override fun provideIcons(): List<TileIcon> {
-        return icons
+        val time = System.currentTimeMillis() / 1000L
+        val index = time % iconChoices.size
+        return iconChoices[index.toInt()]
     }
 
     companion object {
         val PACKET_CODEC = LootablePoolEntryDisplay.PACKET_CODEC.collect(PacketCodecs.toList()).xmap(
-            ::MultiLootablePoolEntryDisplay,
-            MultiLootablePoolEntryDisplay::children
+            ::RandomLootablePoolEntryDisplay,
+            RandomLootablePoolEntryDisplay::children
         )
     }
 }

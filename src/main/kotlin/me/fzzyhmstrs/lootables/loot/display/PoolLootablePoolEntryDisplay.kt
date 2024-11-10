@@ -28,12 +28,12 @@ class PoolLootablePoolEntryDisplay(private val itemStacks: List<ItemStack>): Loo
         return LootablePoolEntryTypes.POOL
     }
 
-    override fun provideIcons(): List<TileIcon> {
+    private val icons: List<TileIcon> by lazy {
         val stackListList: MutableList<MutableList<ItemStack>> = mutableListOf(mutableListOf(), mutableListOf(), mutableListOf(), mutableListOf(), mutableListOf())
         for ((i, stack) in itemStacks.withIndex()) {
             stackListList[i % 5].add(stack)
         }
-        return stackListList.mapNotNull {
+        stackListList.mapNotNull {
             if(it.isEmpty()) {
                 null
             } else if (it.size == 1) {
@@ -51,6 +51,10 @@ class PoolLootablePoolEntryDisplay(private val itemStacks: List<ItemStack>): Loo
                 }
             }
         }
+    }
+
+    override fun provideIcons(): List<TileIcon> {
+        return icons
     }
 
     companion object {

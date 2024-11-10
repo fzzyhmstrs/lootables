@@ -22,19 +22,12 @@ object LootablesNetworking {
     fun init() {
         ConfigApi.network().registerS2C(ChoicesS2CCustomPayload.TYPE, ChoicesS2CCustomPayload.CODEC, LootablesClientNetworking::handleChoicesS2C)
         ConfigApi.network().registerS2C(DataSyncS2CCustomPayload.TYPE, DataSyncS2CCustomPayload.CODEC, LootablesClientNetworking::handleDataSyncS2C)
-        ConfigApi.network().registerC2S(ChosenC2SCustomPayload.TYPE, ChosenC2SCustomPayload.CODEC, this::handleChosenS2C)
+        ConfigApi.network().registerC2S(ChosenC2SCustomPayload.TYPE, ChosenC2SCustomPayload.CODEC, this::handleChosenC2S)
         ConfigApi.network().registerC2S(AbortChoicesC2SCustomPayload.TYPE, AbortChoicesC2SCustomPayload.CODEC, this::handleAbortChoicesC2S)
     }
 
     private fun handleChosenC2S(payload: ChosenC2SCustomPayload, context: ServerPlayNetworkContext) {
         LootablesData.applyChosen(payload, context.player())
-        /*val table = LootablesData.getTable(payload.table) ?: return
-        val key = payload.key
-        if (key.isPresent) {
-            if (!LootablesData.keyAvailable(key.get(), context.player().uuid)) return
-            LootablesData.applyKey(key.get(), context.player().uuid)
-        }
-        table.applyPoolsById(payload.chosen, context.player(), payload.pos)*/
     }
 
     private fun handleAbortChoicesC2S(payload: AbortChoicesC2SCustomPayload, context: ServerPlayNetworkContext) {

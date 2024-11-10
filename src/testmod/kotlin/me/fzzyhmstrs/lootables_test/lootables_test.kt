@@ -10,10 +10,19 @@
  *
  */
 
-package me.fzzyhmstrs.lootables.loot.custom
+package me.fzzyhmstrs.lootables_test
 
-import me.fzzyhmstrs.lootables.client.screen.TileIcon
+import net.fabricmc.api.ClientModInitializer
+import net.fabricmc.api.ModInitializer
 
-fun interface CustomLootablePoolDisplay {
-    fun provideIcons(): List<TileIcon>
+object LootablesTest: ModInitializer {
+
+    override fun onInitialize() {
+    }
+}
+
+object LootablesTestClient: ClientModInitializer {
+
+    override fun onInitializeClient() {
+    }
 }

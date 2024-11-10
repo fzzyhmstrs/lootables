@@ -27,4 +27,8 @@ object LootablePoolEntryTypes {
     val STATUS = LootablePoolEntryType.create(Lootables.identity("status"), StatusEffectLootablePoolEntry.CODEC, StatusEffectLootablePoolEntryDisplay.PACKET_CODEC)
     val ATTRIBUTE = LootablePoolEntryType.create(Lootables.identity("attribute"), AttributeLootablePoolEntry.CODEC, AttributeLootablePoolEntryDisplay.PACKET_CODEC)
     val MULTI = LootablePoolEntryType.create(Lootables.identity("multi"), MultiLootablePoolEntry.CODEC, MultiLootablePoolEntryDisplay.PACKET_CODEC)
+    val RANDOM = LootablePoolEntryType.create(Lootables.identity("random"), RandomLootablePoolEntry.CODEC, RandomLootablePoolEntryDisplay.PACKET_CODEC)
+    val FUNCTION = LootablePoolEntryType.create(Lootables.identity("function"), LootFunctionLootablePoolEntry.CODEC, LootFunctionLootablePoolEntryDisplay.PACKET_CODEC)
+    val ADVANCEMENT = LootablePoolEntryType.create(Lootables.identity("advancement"), AdvancementLootablePoolEntry.CODEC, AdvancementLootablePoolEntryDisplay.PACKET_CODEC)
+
 }

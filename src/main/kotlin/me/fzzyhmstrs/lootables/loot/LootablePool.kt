@@ -60,7 +60,7 @@ class LootablePool private constructor(
     }
 
     fun createData(playerEntity: ServerPlayerEntity): LootablePoolData {
-        return LootablePoolData(id, description.orElse(entry.defaultDescription()), rarity, entry.createDisplay(playerEntity))
+        return LootablePoolData(id, description.orElse(entry.defaultDescription(playerEntity)), rarity, entry.createDisplay(playerEntity))
     }
 
     companion object {

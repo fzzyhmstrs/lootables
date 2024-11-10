@@ -14,6 +14,7 @@ package me.fzzyhmstrs.lootables.loot
 
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import me.fzzyhmstrs.lootables.Lootables
+import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.loot.context.LootContext
 import net.minecraft.loot.context.LootContextParameters
@@ -43,6 +44,9 @@ class LootableTable private constructor(private val pools: List<LootablePool>, p
         }
         if (entryList.size <= rolls) {
             return entryList.map { it.pool }
+        }
+        if (FabricLoader.getInstance().isDevelopmentEnvironment) {
+            println(entryList)
         }
         val choices: MutableList<Int> = mutableListOf()
         val results: MutableList<LootablePool> = guaranteedChoices
@@ -81,6 +85,11 @@ class LootableTable private constructor(private val pools: List<LootablePool>, p
     }
 
     private tailrec fun binary(list: List<PoolEntry>, left: Int, right: Int, target: Int): PoolEntry {
+        if (FabricLoader.getInstance().isDevelopmentEnvironment) {
+            println("left: $left")
+            println("right: $right")
+            println("target: $target")
+        }
         val mid = (left + right) / 2
         val entry = list[mid]
         if (entry.previousIndex < target && entry.weightIndex >= target) return entry
@@ -96,7 +105,7 @@ class LootableTable private constructor(private val pools: List<LootablePool>, p
         return binary(list, l2, r2, target)
     }
 
-    private class PoolEntry(val previousIndex: Int, val weightIndex: Int, val pool: LootablePool)
+    private data class PoolEntry(val previousIndex: Int, val weightIndex: Int, val pool: LootablePool)
 
     companion object {
         fun of(pools: List<LootablePool>): LootableTable {

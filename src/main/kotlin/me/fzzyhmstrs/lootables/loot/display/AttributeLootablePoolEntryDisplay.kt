@@ -18,21 +18,16 @@ import me.fzzyhmstrs.lootables.client.screen.TileIcon
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryDisplay
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryType
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryTypes
-import net.minecraft.client.MinecraftClient
 import net.minecraft.entity.attribute.EntityAttribute
-import net.minecraft.entity.effect.StatusEffect
-import net.minecraft.item.ItemStack
 import net.minecraft.network.RegistryByteBuf
 import net.minecraft.network.codec.PacketCodec
-import net.minecraft.network.codec.PacketCodecs
 import net.minecraft.registry.Registries
-import net.minecraft.registry.RegistryKeys
 import net.minecraft.registry.entry.RegistryEntry
 
 class AttributeLootablePoolEntryDisplay(private val effect: RegistryEntry<EntityAttribute>): LootablePoolEntryDisplay {
 
     override fun type(): LootablePoolEntryType {
-        return LootablePoolEntryTypes.ITEM
+        return LootablePoolEntryTypes.ATTRIBUTE
     }
 
     override fun provideIcons(): List<TileIcon> {

@@ -1,10 +1,24 @@
 {
+	"lootables.entry.advancement": "Unlock advancement %s",
+	"lootables.entry.attribute.persistent": "§6Permanently gain:§r\n%s",
+	"lootables.entry.attribute.temporary": "§Temporarily gain:§r\n%s",
+	"lootables.entry.function": "Apply modifiers to items in your %s slot(s)",
+	"lootables.entry.heal": "Heal %s hearts",
 	"lootables.entry.item.drop": "Drops %1$s %2$s",
-	"lootables.entry.item.give": "Gives %1$s %2$s",
-	"lootables.entry.pool.drop": "Drops items from a loot pool",
-	"lootables.entry.pool.give": "Gives items from a loot pool",
+	"lootables.entry.item.give": "Get %1$s %2$s",
+	"lootables.entry.pool.drop": "Drops shown loot pool",
+	"lootables.entry.pool.give": "Get shown loot pool",
+	"lootables.entry.multi": "§6Get all of:§r",
+	"lootables.entry.random": "§6Randomly get 1 of:§r",
+	"lootables.entry.status": "Gain %1$s for %2$s seconds",
+	"lootables.entry.table.drop": "Drops shown loot table",
+	"lootables.entry.table.give": "Get shown loot table",
+	"lootables.entry.xp.levels": "Gain %s XP Levels",
+	"lootables.entry.xp.points": "Gain %s XP Points",
 
 	"lootables.screen.choices_multiple": "%s Choices Left",
 	"lootables.screen.choices_single": "1 Choice Left",
-	"lootables.screen.choices_ready": "Confirm Choices"
+	"lootables.screen.choices_ready": "Confirm Choices",
+
+	"lootables.command.error.no_table": ""
 }

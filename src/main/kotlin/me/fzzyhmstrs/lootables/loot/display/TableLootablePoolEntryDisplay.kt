@@ -18,6 +18,7 @@ import me.fzzyhmstrs.lootables.loot.LootablePoolEntryType
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryTypes
 import net.minecraft.client.MinecraftClient
 import net.minecraft.item.ItemStack
+import net.minecraft.network.codec.PacketCodecs
 
 class TableLootablePoolEntryDisplay(private val itemStacks: List<ItemStack>): LootablePoolEntryDisplay {
 
@@ -25,12 +26,12 @@ class TableLootablePoolEntryDisplay(private val itemStacks: List<ItemStack>): Lo
         return LootablePoolEntryTypes.TABLE
     }
 
-    override fun provideIcons(): List<TileIcon> {
+    private val icons: List<TileIcon> by lazy {
         val stackListList: MutableList<MutableList<ItemStack>> = mutableListOf(mutableListOf(), mutableListOf(), mutableListOf(), mutableListOf(), mutableListOf())
         for ((i, stack) in itemStacks.withIndex()) {
             stackListList[i % 5].add(stack)
         }
-        return stackListList.mapNotNull {
+        stackListList.mapNotNull {
             if(it.isEmpty()) {
                 null
             } else if (it.size == 1) {
@@ -42,7 +43,7 @@ class TableLootablePoolEntryDisplay(private val itemStacks: List<ItemStack>): Lo
                 TileIcon { context, x, y ->
                     val time = System.currentTimeMillis() / 1000L
                     val index = time % it.size
-                    val itemStack = it[index]
+                    val itemStack = it[index.toInt()]
                     context.drawItem(itemStack, x, y)
                     context.drawItemInSlot(MinecraftClient.getInstance().textRenderer, itemStack, x, y)
                 }
@@ -50,10 +51,14 @@ class TableLootablePoolEntryDisplay(private val itemStacks: List<ItemStack>): Lo
         }
     }
 
+    override fun provideIcons(): List<TileIcon> {
+        return icons
+    }
+
     companion object {
         val PACKET_CODEC = ItemStack.PACKET_CODEC.collect(PacketCodecs.toList()).xmap(
-            ::ItemLootablePoolEntryDisplay,
-            ItemLootablePoolEntryDisplay::itemStacks
+            ::TableLootablePoolEntryDisplay,
+            TableLootablePoolEntryDisplay::itemStacks
         )
     }
 }

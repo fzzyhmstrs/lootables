@@ -18,24 +18,25 @@ import me.fzzyhmstrs.lootables.loot.LootablePoolEntryType
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryTypes
 import net.minecraft.client.MinecraftClient
 import net.minecraft.entity.effect.StatusEffect
-import net.minecraft.item.ItemStack
 import net.minecraft.network.RegistryByteBuf
 import net.minecraft.network.codec.PacketCodec
-import net.minecraft.network.codec.PacketCodecs
-import net.minecraft.registry.RegistryKeys
 import net.minecraft.registry.entry.RegistryEntry
 
 class StatusEffectLootablePoolEntryDisplay(private val effect: RegistryEntry<StatusEffect>): LootablePoolEntryDisplay {
 
     override fun type(): LootablePoolEntryType {
-        return LootablePoolEntryTypes.ITEM
+        return LootablePoolEntryTypes.STATUS
     }
 
-    override fun provideIcons(): List<TileIcon> {
-        return listOf(TileIcon { context, x, y ->
+    private val icons by lazy {
+        listOf(TileIcon { context, x, y ->
             val sprite = MinecraftClient.getInstance().statusEffectSpriteManager.getSprite(effect)
             context.drawSprite(x, y, 0, 18, 18, sprite)
         })
+    }
+
+    override fun provideIcons(): List<TileIcon> {
+        return icons
     }
 
     companion object {

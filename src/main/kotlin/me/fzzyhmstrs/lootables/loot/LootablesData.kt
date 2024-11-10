@@ -12,11 +12,7 @@
 
 package me.fzzyhmstrs.lootables.loot
 
-import com.google.gson.GsonBuilder
-import com.google.gson.JsonArray
-import com.google.gson.JsonObject
-import com.google.gson.JsonParser
-import com.google.gson.JsonPrimitive
+import com.google.gson.*
 import com.mojang.serialization.JsonOps
 import me.fzzyhmstrs.fzzy_config.api.ConfigApi
 import me.fzzyhmstrs.lootables.Lootables
@@ -28,14 +24,15 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener
+import net.fabricmc.loader.api.FabricLoader
+import net.minecraft.network.packet.CustomPayload.Id
 import net.minecraft.resource.ResourceManager
 import net.minecraft.resource.ResourceType
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.Vec3d
 import java.io.File
-
-import java.util.UUID
+import java.util.*
 import java.util.function.BiConsumer
 import kotlin.math.max
 import kotlin.math.min
@@ -55,15 +52,27 @@ internal object LootablesData: SimpleSynchronousResourceReloadListener {
         loadUsageData()
     }
 
-    fun getSyncData(playerEntity: ServerPlayerEntity): Map<Identifier, List<LootablePoolData>> {
+    private fun getSyncData(playerEntity: ServerPlayerEntity): Map<Identifier, List<LootablePoolData>> {
         if (dataInvalid) {
             lootableSyncData = lootableTables.mapValues { (_, table) -> table.prepareForSync(playerEntity) }
+        }
+        if (FabricLoader.getInstance().isDevelopmentEnvironment) {
+            println("Syncing to $playerEntity")
+            println(lootableSyncData)
         }
         return lootableSyncData
     }
 
+    fun hasTable(id: Identifier): Boolean {
+        return lootableTables.containsKey(id)
+    }
+
     fun getTable(id: Identifier): LootableTable? {
         return lootableTables[id]
+    }
+
+    fun getTableIds(): Set<Identifier> {
+        return lootableTables.keys
     }
 
     private val gson = GsonBuilder().setPrettyPrinting().create()
@@ -96,7 +105,7 @@ internal object LootablesData: SimpleSynchronousResourceReloadListener {
 
     fun applyChosen(payload: ChosenC2SCustomPayload, playerEntity: ServerPlayerEntity) {
         val pending = pendingChoicesMap[payload.choiceKey]
-        pending?.succeed()
+        pending?.succeed(playerEntity)
         getTable(payload.table)?.applyPoolsById(payload.chosen, playerEntity, pending?.pos ?: Vec3d.ZERO)
         pendingChoicesMap.remove(payload.choiceKey)
     }
@@ -104,7 +113,7 @@ internal object LootablesData: SimpleSynchronousResourceReloadListener {
     fun applyAbort(payload: AbortChoicesC2SCustomPayload, playerEntity: ServerPlayerEntity) {
         if (abortedChoices.contains(payload.choiceKey)) return
         val pending = pendingChoicesMap[payload.choiceKey] ?: return
-        pending.abort()
+        pending.abort(playerEntity)
         if (pending.key != null) {
             retractKey(pending.key, playerEntity.uuid)
         }
@@ -112,7 +121,7 @@ internal object LootablesData: SimpleSynchronousResourceReloadListener {
     }
 
     fun setPending(choiceKey: UUID, playerEntity: ServerPlayerEntity, pos: Vec3d, poolChoices: List<Identifier>, key: IdKey?, onSuccess: BiConsumer<ServerPlayerEntity, Vec3d>, onAbort: BiConsumer<ServerPlayerEntity, Vec3d>) {
-        pendingChoicesMap[choiceKey] = PendingChoices(playerEntity, pos, poolChoices, key, onSuccess, onAbort)
+        pendingChoicesMap[choiceKey] = PendingChoices(playerEntity.uuid, pos, poolChoices, key, onSuccess, onAbort)
     }
 
     fun getPendingPools(choiceKey: UUID): List<Identifier>? {
@@ -203,6 +212,8 @@ internal object LootablesData: SimpleSynchronousResourceReloadListener {
 
     private fun saveUsageData() {
         if (usageData.isEmpty()) return
+        if (FabricLoader.getInstance().isDevelopmentEnvironment)
+            println(usageData)
         try {
             val dir = ConfigApi.platform().gameDir()
             val f = File(dir, "lootables_uses.json")
@@ -285,6 +296,8 @@ internal object LootablesData: SimpleSynchronousResourceReloadListener {
 
     private fun saveStoredChoices() {
         if (storedChoices.isEmpty()) return
+        if (FabricLoader.getInstance().isDevelopmentEnvironment)
+            println(storedChoices)
         try {
             val dir = ConfigApi.platform().gameDir()
             val f = File(dir, "lootables_choices.json")
@@ -327,6 +340,9 @@ internal object LootablesData: SimpleSynchronousResourceReloadListener {
                 }
             }
         lootableTables = map
+        if (FabricLoader.getInstance().isDevelopmentEnvironment) {
+            println(lootableTables)
+        }
     }
 
     override fun getFabricId(): Identifier {
@@ -352,34 +368,35 @@ internal object LootablesData: SimpleSynchronousResourceReloadListener {
 
         ServerPlayConnectionEvents.DISCONNECT.register { handler, _ ->
             for ((uuid, pendingChoices) in pendingChoicesMap) {
-                if (pendingChoices.playerEntity == handler.getPlayer()) {
-                    pendingChoices.abort()
+                if (pendingChoices.playerUuid == handler.getPlayer().uuid) {
+                    pendingChoices.abort(handler.getPlayer())
                     storedChoices[uuid] = pendingChoices.poolChoices
                 }
             }
         }
 
-        ServerLifecycleEvents.SERVER_STOPPING.register { _ ->
+        ServerLifecycleEvents.SERVER_STOPPING.register { server ->
             for ((uuid, pendingChoices) in pendingChoicesMap) {
-                pendingChoices.abort()
+                val player = server.playerManager.getPlayer(pendingChoices.playerUuid) ?: continue
+                pendingChoices.abort(player)
                 storedChoices[uuid] = pendingChoices.poolChoices
             }
             saveStoredChoices()
         }
     }
 
-    private class UsageData(val usesMap: MutableMap<Identifier, MutableMap<UUID, Int>>, val keyMap: MutableMap<Identifier, MutableMap<UUID, Int>>) {
+    private data class UsageData(val usesMap: MutableMap<Identifier, MutableMap<UUID, Int>>, val keyMap: MutableMap<Identifier, MutableMap<UUID, Int>>) {
         fun isEmpty(): Boolean {
             return usesMap.isEmpty() && keyMap.isEmpty()
         }
     }
 
-    internal data class PendingChoices(val playerEntity: ServerPlayerEntity, val pos: Vec3d, val poolChoices: List<Identifier>, val key: IdKey?, val onSuccess: BiConsumer<ServerPlayerEntity, Vec3d>, val onAbort: BiConsumer<ServerPlayerEntity, Vec3d>) {
-        fun succeed() {
+    private data class PendingChoices(val playerUuid: UUID, val pos: Vec3d, val poolChoices: List<Identifier>, val key: IdKey?, val onSuccess: BiConsumer<ServerPlayerEntity, Vec3d>, val onAbort: BiConsumer<ServerPlayerEntity, Vec3d>) {
+        fun succeed(playerEntity: ServerPlayerEntity) {
             onSuccess.accept(playerEntity, pos)
         }
 
-        fun abort() {
+        fun abort(playerEntity: ServerPlayerEntity) {
             onAbort.accept(playerEntity, pos)
         }
     }
