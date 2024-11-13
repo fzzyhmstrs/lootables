@@ -49,7 +49,7 @@ class ChoiceTileWidget(
     private val choiceCallback: Consumer<Boolean>,
     private val canClick: Supplier<Boolean>,
     description: Text,
-    delay: Float = 0f): ClickableWidget(x, y, if(width < 62) 62 else width, if (height < 39) 39 else height, FcText.empty())
+    delay: Float = 0f): ClickableWidget(x, y, if(width < 62) 62 else width, if (height < 39) 39 else height, rarity.translation())
 {
 
     private val descriptions: List<OrderedText> = client.textRenderer.wrapLines(description, width - 6)
