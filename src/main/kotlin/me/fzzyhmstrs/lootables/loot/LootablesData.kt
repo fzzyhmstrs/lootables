@@ -332,7 +332,7 @@ internal object LootablesData: SimpleSynchronousResourceReloadListener {
                     val json = JsonParser.parseReader(reader)
                     val result = LootableTable.CODEC.parse(JsonOps.INSTANCE, json)
                     val tableId = Identifier.of(id.namespace, id.path.removePrefix("lootable_tables/").removeSuffix(".json"))
-                    result.ifError { error -> Lootables.LOGGER.error(error.messageSupplier.get()) }.ifSuccess { table -> map[tableId] = table }
+                    result.ifSuccess { table -> map[tableId] = table }.ifError { error -> Lootables.LOGGER.error(error.messageSupplier.get()) }
                 } catch (e: Throwable) {
                     Lootables.LOGGER.error("Error parsing lootable table $id")
                     e.printStackTrace()
