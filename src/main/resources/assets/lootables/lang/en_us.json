@@ -21,5 +21,12 @@
 	"lootables.screen.choices_ready": "Confirm Choices",
 	"lootables.screen.no_more_choices": "§4Already selected all choices§r",
 
-	"lootables.command.error.no_table": "No lootable table with id %s"
+	"lootables.command.error.no_table": "No lootable table with id %s",
+	
+	"lootables.rarity.common": "Common Choice",
+	"lootables.rarity.uncommon": "Uncommon Choice",
+	"lootables.rarity.rare": "Rare Choice",
+	"lootables.rarity.epic": "Epic Choice",
+	"lootables.rarity.legendary": "Legendary Choice",
+	"lootables.rarity.rainbow": "Special Choice"
 }
