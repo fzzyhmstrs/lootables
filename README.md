@@ -1,7 +1,10 @@
 # Lootables
 
 ### What is it?
-A straightforward API for adding more featureful loot drops, as well as Fortnite/TFT/etc. style "loot box" choices.
+Lootables aims to provide more featureful and flavorful loot drops for players.
+* Random Loot, like vanilla loot tables
+* Choice Tiles, loot box style, where the player gets to pick the specific loot pools they want with a GUI.
+* More flexible reward types, like XP, attributes, even advancements.
 
 ### Features Include
 * Custom loot system that includes the vanilla loot system, but expands on it.
