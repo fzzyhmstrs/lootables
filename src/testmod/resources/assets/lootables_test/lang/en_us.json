@@ -1,5 +1,8 @@
 {
-  "lootables_test.test_screen.desc1": "Get a Diamond Helmet",
-  "lootables_test.test_screen.desc2": "Heal 1 heart",
-  "lootables_test.test_screen.desc3": "Gain 3 XP levels"
+  "lootables_test.test_screen.desc1": "Get an enchanted Diamond Helmet",
+  "lootables_test.test_screen.desc2": "Permanently gain 1 attack damage",
+  "lootables_test.test_screen.desc3": "Roll a dungeon loot table",
+  "lootables_test.test_screen.desc4": "Testing a really really long description. Like absurdly long; just one and on, you know what I mean? Is it over yet? Nope! Still going. Blah blahblah blah. blah.\n\nBlah.",
+  "lootables_test.test_screen.desc5": "Gain 5 XP levels",
+  "lootables_test.test_screen.desc6": "Heal 3 hearts"
 }

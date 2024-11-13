@@ -19,6 +19,7 @@
 	"lootables.screen.choices_multiple": "%s Choices Left",
 	"lootables.screen.choices_single": "1 Choice Left",
 	"lootables.screen.choices_ready": "Confirm Choices",
+	"lootables.screen.no_more_choices": "§4Already selected all choices§r",
 
-	"lootables.command.error.no_table": ""
+	"lootables.command.error.no_table": "No lootable table with id %s"
 }

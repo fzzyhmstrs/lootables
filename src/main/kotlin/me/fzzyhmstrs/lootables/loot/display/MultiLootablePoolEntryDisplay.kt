@@ -20,6 +20,8 @@ import net.minecraft.network.codec.PacketCodecs
 
 class MultiLootablePoolEntryDisplay(private val children: List<LootablePoolEntryDisplay>): LootablePoolEntryDisplay {
 
+    constructor(vararg child: LootablePoolEntryDisplay): this(child.toList())
+
     override fun type(): LootablePoolEntryType {
         return LootablePoolEntryTypes.MULTI
     }

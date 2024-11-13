@@ -18,6 +18,8 @@ import me.fzzyhmstrs.lootables.client.screen.TileIcon
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryDisplay
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryType
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryTypes
+import net.minecraft.client.MinecraftClient
+import net.minecraft.client.texture.MissingSprite
 import net.minecraft.entity.attribute.EntityAttribute
 import net.minecraft.network.RegistryByteBuf
 import net.minecraft.network.codec.PacketCodec
@@ -26,13 +28,23 @@ import net.minecraft.registry.entry.RegistryEntry
 
 class AttributeLootablePoolEntryDisplay(private val effect: RegistryEntry<EntityAttribute>): LootablePoolEntryDisplay {
 
+    private var errorThrown = false
+
     override fun type(): LootablePoolEntryType {
         return LootablePoolEntryTypes.ATTRIBUTE
     }
 
     override fun provideIcons(): List<TileIcon> {
         return listOf(TileIcon { context, x, y ->
-            val id = Registries.ATTRIBUTE.getId(effect.value())?.withPath{ path -> "attribute/$path" } ?: Lootables.identity("attribute/unknown")
+            var id = Registries.ATTRIBUTE.getId(effect.value())?.withPath{ path -> "attribute/$path" } ?: Lootables.identity("attribute/unknown")
+            val sprite = MinecraftClient.getInstance().guiAtlasManager.getSprite(id)
+            if (sprite.contents.id == MissingSprite.getMissingSpriteId()) {
+                if (!errorThrown) {
+                    Lootables.LOGGER.error("Sprite for attribute ${Registries.ATTRIBUTE.getId(effect.value())} couldn't be found; using fallback")
+                    errorThrown = true
+                }
+                id = Lootables.identity("attribute/unknown")
+            }
             context.drawTex(id, x, y, 18, 18)
         })
     }

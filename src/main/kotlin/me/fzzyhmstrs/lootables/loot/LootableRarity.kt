@@ -23,13 +23,13 @@ import java.awt.Color
 import java.util.function.IntFunction
 import java.util.function.Supplier
 
-enum class LootableRarity(private val id: String, val weight: Int, val bgColor: Supplier<Int>, val startColor: Supplier<Int>, val endColor: Supplier<Int>, val bgHoveredColor: Supplier<Int>, val startHoveredColor: Supplier<Int>, val endHoveredColor: Supplier<Int>, val dividerId: Identifier): StringIdentifiable {
-    COMMON("common",       12, { Colors.bgDark }, { 0xE0E0E0 },                 { 0xC4C4C4 },                { Colors.bgLight }, { 0xFFFFFF },              { 0xFFFFFF },              Lootables.identity("divider/common")),
-    UNCOMMON("uncommon",   7,  { Colors.bgDark }, { 0x00A500 },                 { 0x007F00 },                { Colors.bgLight }, { 0x20D820 },              { 0x20D820 },              Lootables.identity("divider/uncommon")),
-    RARE("rare",           4,  { Colors.bgDark }, { 0x4CFFFF },                 { 0x29A5A5 },                { Colors.bgLight }, { 0xB2FFFF },              { 0xB2FFFF },              Lootables.identity("divider/rare")),
-    EPIC("epic",           2,  { Colors.bgDark }, { 0xFF55FF },                 { 0xBF39BF },                { Colors.bgLight }, { 0xFF99FF },              { 0xFF99FF },              Lootables.identity("divider/epic")),
-    LEGENDARY("legendary", 1,  { Colors.bgDark }, { 0xFFAA00 },                 { 0xBF7900 },                { Colors.bgLight }, { 0xFFC34C },              { 0xFFC34C },              Lootables.identity("divider/legendary")),
-    RAINBOW("rainbow",     1,  { Colors.bgDark }, { Colors.rainbow(0.85f) }, { Colors.rainbow(0.7f) }, { Colors.bgLight }, { Colors.rainbow(1f) }, { Colors.rainbow(1f) }, Lootables.identity("divider/rainbow"));
+enum class LootableRarity(private val id: String, val weight: Int, val bgColor: Supplier<Int>, val startColor: Supplier<Int>, val endColor: Supplier<Int>, val bgHoveredColor: Supplier<Int>, val startHoveredColor: Supplier<Int>, val endHoveredColor: Supplier<Int>, val dividerId: Identifier, val gradientOpacity: Float, val drawDecoration: Boolean): StringIdentifiable {
+    COMMON("common",       12, { Colors.bgDark }, { Colors.color(0xA0A0A0) },   { Colors.color(0x646464) },  { Colors.bgLight }, { Colors.color(0xFFFFFF) }, { Colors.color(0xFFFFFF) }, Lootables.identity("divider/common"),    0f,     false),
+    UNCOMMON("uncommon",   7,  { Colors.bgDark }, { Colors.color(0x00A500) },   { Colors.color(0x004F00) },  { Colors.bgLight }, { Colors.color(0x20D820) }, { Colors.color(0x20D820) }, Lootables.identity("divider/uncommon"),  0f,     false),
+    RARE("rare",           4,  { Colors.bgDark }, { Colors.color(0x4CFFFF) },   { Colors.color(0x097575) },  { Colors.bgLight }, { Colors.color(0xA2EFEF) }, { Colors.color(0xA2EFEF) }, Lootables.identity("divider/rare"),      0.075f, false),
+    EPIC("epic",           2,  { Colors.bgDark }, { Colors.color(0xFF55FF) },   { Colors.color(0x7F197F) },  { Colors.bgLight }, { Colors.color(0xFF99FF) }, { Colors.color(0xFF99FF) }, Lootables.identity("divider/epic"),      0.15f,  false),
+    LEGENDARY("legendary", 1,  { Colors.bgDark }, { Colors.color(0xFFAA00) },   { Colors.color(0x9F5900) },  { Colors.bgLight }, { Colors.color(0xFFC34C) }, { Colors.color(0xFFC34C) }, Lootables.identity("divider/legendary"), 0.25f,  true),
+    RAINBOW("rainbow",     1,  { Colors.bgDark }, { Colors.rainbow(0.8f) }, { Colors.rainbow(0.55f) }, { Colors.bgLight }, { Colors.rainbow(1f) },  { Colors.rainbow(1f) },  Lootables.identity("divider/rainbow"),   0.25f,  true);
 
 
     override fun asString(): String {
@@ -38,11 +38,15 @@ enum class LootableRarity(private val id: String, val weight: Int, val bgColor: 
 
     object Colors {
         val bgDark = ColorHelper.Argb.getArgb(0xF0, 0x10, 0x00, 0x10)
-        val bgLight = ColorHelper.Argb.getArgb(0xF0, 0x20, 0x00, 0x20)
+        val bgLight = ColorHelper.Argb.getArgb(0xF0, 0x19, 0x00, 0x19)
 
         internal fun rainbow(b: Float): Int {
             val hue = (Util.getMeasuringTimeMs() % 2000L).toFloat() / 2000f
-            return Color.HSBtoRGB(hue, 1f, b)
+            return Color.HSBtoRGB(hue, (b + 2f) / 3f, b)
+        }
+
+        internal fun color(color: Int): Int {
+            return color or (0xFF shl 24)
         }
     }
 

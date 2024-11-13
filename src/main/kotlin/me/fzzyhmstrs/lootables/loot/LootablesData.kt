@@ -250,7 +250,6 @@ internal object LootablesData: SimpleSynchronousResourceReloadListener {
     }
 
     private fun loadStoredChoices(): MutableMap<UUID, List<Identifier>> {
-        if (storedChoices.isEmpty()) return mutableMapOf()
         try {
             val dir = ConfigApi.platform().gameDir()
             val f = File(dir, "lootables_choices.json")

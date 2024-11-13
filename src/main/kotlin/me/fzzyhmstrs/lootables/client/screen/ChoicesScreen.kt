@@ -54,11 +54,13 @@ class ChoicesScreen(private val choiceData: ChoicesS2CCustomPayload, private var
             val data = LootablesClientData.getData(choiceData.table, choiceData.choices)
             // stacked widget building
             val list: MutableList<ChoiceTileWidget> = mutableListOf()
-            if (LootablesConfig.INSTANCE.tileStackingStyle.get() == ChoiceStyle.STACKED && data.size > 2) {
+            if (LootablesConfig.INSTANCE.tileStackingStyle.get() == ChoiceStyle.STACKED && data.size > 2
+                || ((data.size * LootablesConfig.INSTANCE.tileWidth.get()) + ((data.size - 1) * 10)) > (this.width - 10))
+            {
                 val topRowCount = ceil(data.size.toFloat() / 2f).toInt()
                 val bottomRowCount = data.size - topRowCount
-                var widgetX = (width / 2) - (((topRowCount * LootablesConfig.INSTANCE.tileWidth) + ((topRowCount - 1) * 12)) / 2)
-                var widgetY = (height / 2) - (((2 * LootablesConfig.INSTANCE.tileHeight) + 12 + 12 + 20) / 2)
+                var widgetX = (width / 2) - (((topRowCount * LootablesConfig.INSTANCE.tileWidth.get()) + ((topRowCount - 1) * 12)) / 2)
+                var widgetY = (height / 2) - (((2 * LootablesConfig.INSTANCE.tileHeight.get()) + 12 + 12 + 20) / 2)
                 var dataIndex = 0
                 for (i in 1..topRowCount) {
                     list.add(ChoiceTileWidget(
@@ -66,71 +68,71 @@ class ChoicesScreen(private val choiceData: ChoicesS2CCustomPayload, private var
                         data[dataIndex].id,
                         widgetX,
                         widgetY,
-                        LootablesConfig.INSTANCE.tileWidth,
-                        LootablesConfig.INSTANCE.tileHeight,
+                        LootablesConfig.INSTANCE.tileWidth.get(),
+                        LootablesConfig.INSTANCE.tileHeight.get(),
                         data[dataIndex].rarity,
                         { data[dataIndex].display.provideIcons() },
                         { choice -> MathHelper.clamp(if(choice) choicesLeft-- else choicesLeft++, 0, maxChoices) },
                         canClick,
                         data[dataIndex].description,
-                        dataIndex
+                        dataIndex * 1.5f
                     ))
-                    widgetX += LootablesConfig.INSTANCE.tileWidth
-                    widgetX += 12
+                    widgetX += LootablesConfig.INSTANCE.tileWidth.get()
+                    widgetX += 10
                     dataIndex++
                 }
-                widgetX = (width / 2) - (((bottomRowCount * LootablesConfig.INSTANCE.tileWidth) + ((bottomRowCount - 1) * 12)) / 2)
-                widgetY += LootablesConfig.INSTANCE.tileHeight
-                widgetY += 12
+                widgetX = (width / 2) - (((bottomRowCount * LootablesConfig.INSTANCE.tileWidth.get()) + ((bottomRowCount - 1) * 12)) / 2)
+                widgetY += LootablesConfig.INSTANCE.tileHeight.get()
+                widgetY += 10
                 for (i in 1.. bottomRowCount) {
                     list.add(ChoiceTileWidget(
                         MinecraftClient.getInstance(),
                         data[dataIndex].id,
                         widgetX,
                         widgetY,
-                        LootablesConfig.INSTANCE.tileWidth,
-                        LootablesConfig.INSTANCE.tileHeight,
+                        LootablesConfig.INSTANCE.tileWidth.get(),
+                        LootablesConfig.INSTANCE.tileHeight.get(),
                         data[dataIndex].rarity,
                         { data[dataIndex].display.provideIcons() },
                         { choice -> MathHelper.clamp(if(choice) choicesLeft-- else choicesLeft++, 0, maxChoices) },
                         canClick,
                         data[dataIndex].description,
-                        dataIndex
+                        dataIndex * 1.5f
                     ))
-                    widgetX += LootablesConfig.INSTANCE.tileWidth
-                    widgetX += 12
+                    widgetX += LootablesConfig.INSTANCE.tileWidth.get()
+                    widgetX += 10
                     dataIndex++
                 }
                 widgetX = (width / 2) - 55
-                widgetY += LootablesConfig.INSTANCE.tileHeight
-                widgetY += 12
+                widgetY += LootablesConfig.INSTANCE.tileHeight.get()
+                widgetY += 10
                 confirmWidget.setPosition(widgetX, widgetY)
                 // end stacked widget building
             } else {
                 // linear widget building
-                var widgetX = (width / 2) - (((data.size * LootablesConfig.INSTANCE.tileWidth) + ((data.size - 1) * 12)) / 2)
-                var widgetY = (height / 2) - ((LootablesConfig.INSTANCE.tileHeight + 12 + 20) / 2)
+                var widgetX = (width / 2) - (((data.size * LootablesConfig.INSTANCE.tileWidth.get()) + ((data.size - 1) * 12)) / 2)
+                var widgetY = (height / 2) - ((LootablesConfig.INSTANCE.tileHeight.get() + 12 + 20) / 2)
                 for (i in data.indices) {
                     list.add(ChoiceTileWidget(
                         MinecraftClient.getInstance(),
                         data[i].id,
                         widgetX,
                         widgetY,
-                        LootablesConfig.INSTANCE.tileWidth,
-                        LootablesConfig.INSTANCE.tileHeight,
+                        LootablesConfig.INSTANCE.tileWidth.get(),
+                        LootablesConfig.INSTANCE.tileHeight.get(),
                         data[i].rarity,
                         { data[i].display.provideIcons() },
                         { choice -> MathHelper.clamp(if(choice) choicesLeft-- else choicesLeft++, 0, maxChoices) },
                         canClick,
                         data[i].description,
-                        i
+                        i * 1.5f
                     ))
-                    widgetX += LootablesConfig.INSTANCE.tileWidth
-                    widgetX += 12
+                    widgetX += LootablesConfig.INSTANCE.tileWidth.get()
+                    widgetX += 10
                 }
                 widgetX = (width / 2) - 55
-                widgetY += LootablesConfig.INSTANCE.tileHeight
-                widgetY += 12
+                widgetY += LootablesConfig.INSTANCE.tileHeight.get()
+                widgetY += 10
                 confirmWidget.setPosition(widgetX, widgetY)
                 // end linear widget building
             }
@@ -139,39 +141,39 @@ class ChoicesScreen(private val choiceData: ChoicesS2CCustomPayload, private var
             if (LootablesConfig.INSTANCE.tileStackingStyle.get() == ChoiceStyle.STACKED && widgets.size > 2) {
                 val topRowCount = ceil(widgets.size.toFloat() / 2f).toInt()
                 val bottomRowCount = widgets.size - topRowCount
-                var widgetX = (width / 2) - (((topRowCount * LootablesConfig.INSTANCE.tileWidth) + ((topRowCount - 1) * 12)) / 2)
-                var widgetY = (height / 2) - (((2 * LootablesConfig.INSTANCE.tileHeight) + 12 + 12 + 20) / 2)
+                var widgetX = (width / 2) - (((topRowCount * LootablesConfig.INSTANCE.tileWidth.get()) + ((topRowCount - 1) * 12)) / 2)
+                var widgetY = (height / 2) - (((2 * LootablesConfig.INSTANCE.tileHeight.get()) + 12 + 12 + 20) / 2)
                 var listIndex = 0
                 for (i in 1..topRowCount) {
                     widgets[listIndex].setPosition(widgetX, widgetY)
-                    widgetX += LootablesConfig.INSTANCE.tileWidth
-                    widgetX += 12
+                    widgetX += LootablesConfig.INSTANCE.tileWidth.get()
+                    widgetX += 10
                     listIndex++
                 }
-                widgetX = (width / 2) - (((bottomRowCount * LootablesConfig.INSTANCE.tileWidth) + ((bottomRowCount - 1) * 12)) / 2)
-                widgetY += LootablesConfig.INSTANCE.tileHeight
+                widgetX = (width / 2) - (((bottomRowCount * LootablesConfig.INSTANCE.tileWidth.get()) + ((bottomRowCount - 1) * 12)) / 2)
+                widgetY += LootablesConfig.INSTANCE.tileHeight.get()
                 widgetY += 12
                 for (i in 1.. bottomRowCount) {
                     widgets[listIndex].setPosition(widgetX, widgetY)
-                    widgetX += LootablesConfig.INSTANCE.tileWidth
-                    widgetX += 12
+                    widgetX += LootablesConfig.INSTANCE.tileWidth.get()
+                    widgetX += 10
                     listIndex++
                 }
                 widgetX = (width / 2) - 55
-                widgetY += LootablesConfig.INSTANCE.tileHeight
-                widgetY += 12
+                widgetY += LootablesConfig.INSTANCE.tileHeight.get()
+                widgetY += 10
                 confirmWidget.setPosition(widgetX, widgetY)
             } else {
-                var widgetX = (width / 2) - (((widgets.size * LootablesConfig.INSTANCE.tileWidth) + ((widgets.size - 1) * 12)) / 2)
-                var widgetY = (height / 2) - ((LootablesConfig.INSTANCE.tileHeight + 12 + 20) / 2)
+                var widgetX = (width / 2) - (((widgets.size * LootablesConfig.INSTANCE.tileWidth.get()) + ((widgets.size - 1) * 12)) / 2)
+                var widgetY = (height / 2) - ((LootablesConfig.INSTANCE.tileHeight.get() + 12 + 20) / 2)
                 for (i in widgets.indices) {
                     widgets[i].setPosition(widgetX, widgetY)
-                    widgetX += LootablesConfig.INSTANCE.tileWidth
-                    widgetX += 12
+                    widgetX += LootablesConfig.INSTANCE.tileWidth.get()
+                    widgetX += 10
                 }
                 widgetX = (width / 2) - 55
-                widgetY += LootablesConfig.INSTANCE.tileHeight
-                widgetY += 12
+                widgetY += LootablesConfig.INSTANCE.tileHeight.get()
+                widgetY += 10
                 confirmWidget.setPosition(widgetX, widgetY)
             }
         }
@@ -179,6 +181,10 @@ class ChoicesScreen(private val choiceData: ChoicesS2CCustomPayload, private var
         for (widget in widgets) {
             addDrawableChild(widget)
         }
+    }
+
+    override fun shouldPause(): Boolean {
+        return false
     }
 
     override fun close() {
