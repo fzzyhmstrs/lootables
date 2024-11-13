@@ -261,7 +261,7 @@ class ChoiceTileWidget(
         context.fillGradient(x, y, x + width, y + height, 0, startColor, endColor)
     }
 
-    private fun renderCorners(context: DrawContext, x: Int, y: Int, width: Int, height: Int, startColor: Int, endColor: Int, backgroundColor: Int) {
+    private fun renderCorners(context: DrawContext, x: Int, y: Int, width: Int, height: Int, startColor: Int, endColor: Int, backgroundColor: Int, length: Int = 10) {
         val x1 = x + width - 1
         val x2 = x + width - 10
         val h1 = 10
@@ -269,32 +269,38 @@ class ChoiceTileWidget(
         val y1 = y + height - 11
         val y2 = y - 1
         val y3 = y - 1 + height - 1
+        
         val startColor1 = ColorHelper.Argb.lerp((height - 10)/height.toFloat(), startColor, endColor)
         val endColor1 = ColorHelper.Argb.lerp(10/height.toFloat(), startColor, endColor)
 
-        context.fill(x - 1, y2, x + 2, y + 10, 0, backgroundColor)
-        context.fill(x, y + 10, x + 1, y + 11, 0, backgroundColor)
-        context.fill(x, y2 - 1, x + 10, y2, 0, backgroundColor)
-        context.fill(x + 2, y, x + 10, y + 1, 0, backgroundColor)
-        context.fill(x + 10, y2, x + 11, y2 + 1, 0, backgroundColor)
+        val o1 = length
+        val o2 = length + 1
+        val o3 = length - 1
+        val o4 = length - 2
+        
+        context.fill(x - 1,  y2,     x + 2,  y + o1, 0, backgroundColor)
+        context.fill(x,      y + o1, x + 1,  y + o2, 0, backgroundColor)
+        context.fill(x,      y2 - 1, x + o1, y2,     0, backgroundColor)
+        context.fill(x + 2,  y,      x + o1, y + 1,  0, backgroundColor)
+        context.fill(x + o1, y2,     x + o2, y2 + 1, 0, backgroundColor)
 
-        context.fill(x - 1, y1, x + 2, y1 + 10, 0, backgroundColor)
-        context.fill(x, y1 - 1, x + 1, y1, 0, backgroundColor)
-        context.fill(x, y3 + 1, x + 10, y3 + 2, 0, backgroundColor)
-        context.fill(x + 2, y3 - 1, x + 10, y3, 0, backgroundColor)
-        context.fill(x + 10, y3, x + 11, y3 + 1, 0, backgroundColor)
+        context.fill(x - 1,  y1,     x + 2,  y1 + o1, 0, backgroundColor)
+        context.fill(x,      y1 - 1, x + 1,  y1,      0, backgroundColor)
+        context.fill(x,      y3 + 1, x + o1, y3 + 2,  0, backgroundColor)
+        context.fill(x + 2,  y3 - 1, x + o1, y3,      0, backgroundColor)
+        context.fill(x + o1, y3,     x + o2, y3 + 1,  0, backgroundColor)
 
-        context.fill(x1 - 1, y2, x1 + 2, y + 10, 0, backgroundColor)
-        context.fill(x1, y + 10, x1 + 1, y + 11, 0, backgroundColor)
-        context.fill(x1 - 9, y2 - 1, x1 + 1, y2, 0, backgroundColor)
-        context.fill(x1 - 9, y, x1 - 1, y + 1, 0, backgroundColor)
-        context.fill(x1 - 10, y2, x1 - 9, y2 + 1, 0, backgroundColor)
+        context.fill(x1 - 1,  y2,     x1 + 2,  y + o1, 0, backgroundColor)
+        context.fill(x1,      y + o1, x1 + 1,  y + o2, 0, backgroundColor)
+        context.fill(x1 - o3, y2 - 1, x1 + 1,  y2,     0, backgroundColor)
+        context.fill(x1 - o3, y,      x1 - 1,  y + 1,  0, backgroundColor)
+        context.fill(x1 - o1, y2,     x1 - o3, y2 + 1, 0, backgroundColor)
 
-        context.fill(x1 - 1, y1, x1 + 2, y1 + 10, 0, backgroundColor)
-        context.fill(x1, y1 - 1, x1 + 1, y1, 0, backgroundColor)
-        context.fill(x1 - 9, y1 + 10, x1 + 1, y1 + 11, 0, backgroundColor)
-        context.fill(x1 - 9, y1 + 8, x1 - 1, y1 + 9, 0, backgroundColor)
-        context.fill(x1 - 10, y1 + 9, x1 - 9, y1 + 10, 0, backgroundColor)
+        context.fill(x1 - 1,  y1,      x1 + 2,  y1 + o1, 0, backgroundColor)
+        context.fill(x1,      y1 - 1,  x1 + 1,  y1,      0, backgroundColor)
+        context.fill(x1 - o3, y1 + o1, x1 + 1,  y1 + o2, 0, backgroundColor)
+        context.fill(x1 - o3, y1 + o4, x1 - 1,  y1 + o3, 0, backgroundColor)
+        context.fill(x1 - o1, y1 + o3, x1 - o3, y1 + o1, 0, backgroundColor)
 
 
         renderVerticalLine(context,   x,    y,  h1, startColor,  endColor1)
