@@ -2,9 +2,9 @@
 
 ### What is it?
 Lootables aims to provide more featureful and flavorful loot drops for players.
-* Random Loot, like vanilla loot tables
-* Choice Tiles, loot box style, where the player gets to pick the specific loot pools they want with a GUI.
-* More flexible reward types, like XP, attributes, even advancements.
+* Random Loot; the same style as vanilla loot tables.
+* Choice Tiles; loot box style, where the player gets to pick the specific loot pools they want with a GUI.
+* More flexible reward types; XP, attributes, even advancements.
 
 ### Features Include
 * Custom loot system that includes the vanilla loot system, but expands on it.
