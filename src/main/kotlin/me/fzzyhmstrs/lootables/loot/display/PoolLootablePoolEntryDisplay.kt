@@ -29,9 +29,9 @@ class PoolLootablePoolEntryDisplay(private val itemStacks: List<ItemStack>): Loo
     }
 
     private val icons: List<TileIcon> by lazy {
-        val stackListList: MutableList<MutableList<ItemStack>> = mutableListOf(mutableListOf(), mutableListOf(), mutableListOf(), mutableListOf(), mutableListOf())
+        val stackListList: MutableList<MutableList<ItemStack>> = mutableListOf(mutableListOf(), mutableListOf(), mutableListOf(), mutableListOf())
         for ((i, stack) in itemStacks.withIndex()) {
-            stackListList[i % 5].add(stack)
+            stackListList[i % 4].add(stack)
         }
         stackListList.mapNotNull {
             if(it.isEmpty()) {
