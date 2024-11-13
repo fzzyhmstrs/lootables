@@ -331,6 +331,25 @@ class ChoiceTileWidget(
         this.height = max(height, 39)
     }
 
+    private fun createTooltipString(tooltip: List<OrderedText>?): String {
+        val tt = tooltip ?: return ""
+        val builder = StringBuilder()
+        for (tip in tt) {
+            tip.accept { _, _, codepoint ->
+                builder.appendCodePoint(codepoint)
+                true
+            }
+        }
+        return builder.toString()
+    }
+
+    override fun appendClickableNarrations(builder: NarrationMessageBuilder) {
+        appendDefaultNarrations(builder)
+        val str = createTooltipString(descriptions)
+        if (str.isEmpty()) return
+        builder.put(NarrationPart.HINT, str)
+    }
+
     private interface Animator {
         fun offsetY(time: Long): Float
         fun lerpInternal(time: Long, color: Int, hovered: Boolean): Int
@@ -444,9 +463,5 @@ class ChoiceTileWidget(
         override fun shouldRender(time: Long): Boolean {
             return true
         }
-    }
-
-    override fun appendClickableNarrations(builder: NarrationMessageBuilder) {
-        appendDefaultNarrations(builder)
     }
 }
