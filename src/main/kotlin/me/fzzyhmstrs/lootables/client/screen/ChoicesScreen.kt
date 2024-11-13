@@ -52,6 +52,7 @@ class ChoicesScreen(private val choiceData: ChoicesS2CCustomPayload, private var
         super.init()
         if (widgets.isEmpty()) {
             val data = LootablesClientData.getData(choiceData.table, choiceData.choices)
+            val delayMultiplier = 1.2f
             // stacked widget building
             val list: MutableList<ChoiceTileWidget> = mutableListOf()
             if (LootablesConfig.INSTANCE.tileStackingStyle.get() == ChoiceStyle.STACKED && data.size > 2
@@ -75,7 +76,7 @@ class ChoicesScreen(private val choiceData: ChoicesS2CCustomPayload, private var
                         { choice -> MathHelper.clamp(if(choice) choicesLeft-- else choicesLeft++, 0, maxChoices) },
                         canClick,
                         data[dataIndex].description,
-                        dataIndex * 1.5f
+                        dataIndex * delayMultiplier
                     ))
                     widgetX += LootablesConfig.INSTANCE.tileWidth.get()
                     widgetX += 10
@@ -97,7 +98,7 @@ class ChoicesScreen(private val choiceData: ChoicesS2CCustomPayload, private var
                         { choice -> MathHelper.clamp(if(choice) choicesLeft-- else choicesLeft++, 0, maxChoices) },
                         canClick,
                         data[dataIndex].description,
-                        dataIndex * 1.5f
+                        dataIndex * delayMultiplier
                     ))
                     widgetX += LootablesConfig.INSTANCE.tileWidth.get()
                     widgetX += 10
@@ -125,7 +126,7 @@ class ChoicesScreen(private val choiceData: ChoicesS2CCustomPayload, private var
                         { choice -> MathHelper.clamp(if(choice) choicesLeft-- else choicesLeft++, 0, maxChoices) },
                         canClick,
                         data[i].description,
-                        i * 1.5f
+                        i * delayMultiplier
                     ))
                     widgetX += LootablesConfig.INSTANCE.tileWidth.get()
                     widgetX += 10
