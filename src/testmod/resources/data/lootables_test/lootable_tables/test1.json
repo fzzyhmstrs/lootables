@@ -1,0 +1,50 @@
+{
+  "pools": [
+    {
+      "id": "lootables_test:iron_sword",
+      "rarity": "rare",
+      "entry": {
+        "type": "lootables:item",
+        "item": "minecraft:iron_sword"
+      }
+    },
+    {
+      "id": "lootables_test:iron_ingot",
+      "rarity": "common",
+      "entry": {
+        "type": "lootables:item",
+        "item": "minecraft:iron_ingot"
+      }
+    },
+    {
+      "id": "lootables_test:planks",
+      "rarity": "common",
+      "entry": {
+        "type": "lootables:item",
+        "item": {
+          "item": "minecraft:oak_planks",
+          "count": 16
+        }
+      }
+    },
+    {
+      "id": "lootables_test:torches",
+      "rarity": "common",
+      "entry": {
+        "type": "lootables:item",
+        "item": {
+          "item": "minecraft:torch",
+          "count": 12
+        }
+      }
+    },
+    {
+      "id": "lootables_test:atk_dmg",
+      "rarity": "legendary",
+      "entry": {
+        "type": "lootables:item",
+        "item": "minecraft:iron_sword"
+      }
+    }
+  ]
+}
