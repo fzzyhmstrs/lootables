@@ -36,6 +36,10 @@ enum class LootableRarity(private val id: String, val weight: Int, val bgColor: 
         return id
     }
 
+    fun translation(): Text {
+        return FcText.translatable("lootables.rarity.$id")
+    }
+
     object Colors {
         val bgDark = ColorHelper.Argb.getArgb(0xF0, 0x10, 0x00, 0x10)
         val bgLight = ColorHelper.Argb.getArgb(0xF0, 0x19, 0x00, 0x19)
