@@ -44,7 +44,7 @@ class TestScreen(private var choicesLeft: Int = 1): Screen(FcText.empty()) {
         StatusEffectLootablePoolEntryDisplay(StatusEffects.STRENGTH),
         StatusEffectLootablePoolEntryDisplay(StatusEffects.LUCK)
     )
-    private val display5 = ExperienceLootablePoolEntryDisplay(true)
+    private val display5 = ExperienceLootablePoolEntryDisplay(false)
     private val display6 =  HealLootablePoolEntryDisplay
 
 

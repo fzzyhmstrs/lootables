@@ -18,6 +18,8 @@ import me.fzzyhmstrs.lootables.loot.LootablePoolEntryType
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryTypes
 import net.minecraft.client.MinecraftClient
 import net.minecraft.item.ItemStack
+import net.minecraft.network.RegistryByteBuf
+import net.minecraft.network.codec.PacketCodec
 import net.minecraft.network.codec.PacketCodecs
 
 class TableLootablePoolEntryDisplay(private val itemStacks: List<ItemStack>): LootablePoolEntryDisplay {
@@ -56,7 +58,7 @@ class TableLootablePoolEntryDisplay(private val itemStacks: List<ItemStack>): Lo
     }
 
     companion object {
-        val PACKET_CODEC = ItemStack.PACKET_CODEC.collect(PacketCodecs.toList()).xmap(
+        val PACKET_CODEC: PacketCodec<RegistryByteBuf, TableLootablePoolEntryDisplay> = ItemStack.PACKET_CODEC.collect(PacketCodecs.toList()).xmap(
             ::TableLootablePoolEntryDisplay,
             TableLootablePoolEntryDisplay::itemStacks
         )

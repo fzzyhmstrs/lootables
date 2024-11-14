@@ -16,6 +16,8 @@ import me.fzzyhmstrs.lootables.client.screen.TileIcon
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryDisplay
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryType
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryTypes
+import net.minecraft.network.RegistryByteBuf
+import net.minecraft.network.codec.PacketCodec
 import net.minecraft.network.codec.PacketCodecs
 
 class RandomLootablePoolEntryDisplay(private val children: List<LootablePoolEntryDisplay>): LootablePoolEntryDisplay {
@@ -24,18 +26,14 @@ class RandomLootablePoolEntryDisplay(private val children: List<LootablePoolEntr
         return LootablePoolEntryTypes.RANDOM
     }
 
-    private val iconChoices by lazy {
-        children.map { it.provideIcons() }
-    }
-
     override fun provideIcons(): List<TileIcon> {
         val time = System.currentTimeMillis() / 1000L
-        val index = time % iconChoices.size
-        return iconChoices[index.toInt()]
+        val index = time % children.size
+        return children[index.toInt()].provideIcons()
     }
 
     companion object {
-        val PACKET_CODEC = LootablePoolEntryDisplay.PACKET_CODEC.collect(PacketCodecs.toList()).xmap(
+        val PACKET_CODEC: PacketCodec<RegistryByteBuf, RandomLootablePoolEntryDisplay> = LootablePoolEntryDisplay.PACKET_CODEC.collect(PacketCodecs.toList()).xmap(
             ::RandomLootablePoolEntryDisplay,
             RandomLootablePoolEntryDisplay::children
         )

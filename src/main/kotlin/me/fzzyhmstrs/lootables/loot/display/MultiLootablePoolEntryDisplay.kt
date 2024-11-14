@@ -16,6 +16,8 @@ import me.fzzyhmstrs.lootables.client.screen.TileIcon
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryDisplay
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryType
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryTypes
+import net.minecraft.network.RegistryByteBuf
+import net.minecraft.network.codec.PacketCodec
 import net.minecraft.network.codec.PacketCodecs
 
 class MultiLootablePoolEntryDisplay(private val children: List<LootablePoolEntryDisplay>): LootablePoolEntryDisplay {
@@ -35,7 +37,7 @@ class MultiLootablePoolEntryDisplay(private val children: List<LootablePoolEntry
     }
 
     companion object {
-        val PACKET_CODEC = LootablePoolEntryDisplay.PACKET_CODEC.collect(PacketCodecs.toList()).xmap(
+        val PACKET_CODEC: PacketCodec<RegistryByteBuf, MultiLootablePoolEntryDisplay> = LootablePoolEntryDisplay.PACKET_CODEC.collect(PacketCodecs.toList()).xmap(
             ::MultiLootablePoolEntryDisplay,
             MultiLootablePoolEntryDisplay::children
         )

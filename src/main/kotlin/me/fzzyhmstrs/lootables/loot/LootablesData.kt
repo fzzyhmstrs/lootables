@@ -79,8 +79,6 @@ internal object LootablesData: SimpleSynchronousResourceReloadListener {
         return lootableTables.keys
     }
 
-    private val gson = GsonBuilder().setPrettyPrinting().create()
-
     fun getUses(id: Identifier, uuid: UUID): Int {
         return usageData.usesMap[id]?.get(uuid) ?: 0
     }
@@ -139,6 +137,10 @@ internal object LootablesData: SimpleSynchronousResourceReloadListener {
         storedChoices.remove(choiceKey)
         return stored
     }
+
+    //region LOADING & SAVING
+
+    private val gson = GsonBuilder().setPrettyPrinting().create()
 
     private fun loadUsageData(): UsageData {
         try {
@@ -317,7 +319,7 @@ internal object LootablesData: SimpleSynchronousResourceReloadListener {
             } else if (f.createNewFile()) {
                 f.writeText(gson.toJson(json))
             } else {
-                Lootables.LOGGER.error("Couldn't create new lootables_uses json; data wasn't saved.")
+                Lootables.LOGGER.error("Couldn't create new lootables_choices json; data wasn't saved.")
             }
         } catch(e: Throwable) {
             Lootables.LOGGER.error("Critical exception encountered while saving lootables stored choice data. Not saved.")
@@ -325,9 +327,12 @@ internal object LootablesData: SimpleSynchronousResourceReloadListener {
         }
     }
 
+    //endregion
+
     override fun reload(manager: ResourceManager) {
         dataInvalid = true
         lootableSyncData = mapOf()
+        LootablePool.reset()
         val poolMap: MutableMap<Identifier, LootablePool> = mutableMapOf()
         manager.findResources("lootable_pools") { path -> path.path.endsWith(".json") }
             .forEach { (id, resource) ->
@@ -361,6 +366,7 @@ internal object LootablesData: SimpleSynchronousResourceReloadListener {
         if (FabricLoader.getInstance().isDevelopmentEnvironment) {
             println(lootableTables)
         }
+        LootablePool.reset()
     }
 
     override fun getFabricId(): Identifier {

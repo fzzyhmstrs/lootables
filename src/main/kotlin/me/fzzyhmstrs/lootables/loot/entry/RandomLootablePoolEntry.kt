@@ -20,7 +20,7 @@ import me.fzzyhmstrs.lootables.loot.LootablePoolEntry
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryDisplay
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryType
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryTypes
-import me.fzzyhmstrs.lootables.loot.display.MultiLootablePoolEntryDisplay
+import me.fzzyhmstrs.lootables.loot.display.RandomLootablePoolEntryDisplay
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.Text
@@ -50,7 +50,7 @@ class RandomLootablePoolEntry(private val children: List<LootablePoolEntry>): Lo
     }
 
     override fun createDisplay(playerEntity: ServerPlayerEntity): LootablePoolEntryDisplay {
-        return MultiLootablePoolEntryDisplay(children.map { it.createDisplay(playerEntity) })
+        return RandomLootablePoolEntryDisplay(children.map { it.createDisplay(playerEntity) })
     }
 
     companion object {

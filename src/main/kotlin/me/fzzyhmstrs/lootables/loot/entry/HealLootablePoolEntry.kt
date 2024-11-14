@@ -22,23 +22,24 @@ import me.fzzyhmstrs.lootables.loot.LootablePoolEntryDisplay
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryType
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryTypes
 import me.fzzyhmstrs.lootables.loot.display.HealLootablePoolEntryDisplay
+import me.fzzyhmstrs.lootables.loot.number.LootableNumber
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.Text
 import net.minecraft.util.math.Vec3d
 
-class HealLootablePoolEntry(private val amount: Float): LootablePoolEntry {
+class HealLootablePoolEntry(private val amount: LootableNumber): LootablePoolEntry {
 
     override fun type(): LootablePoolEntryType {
         return LootablePoolEntryTypes.HEAL
     }
 
     override fun apply(player: PlayerEntity, origin: Vec3d) {
-        player.heal(amount)
+        player.heal(amount.nextFloat())
     }
 
     override fun defaultDescription(playerEntity: ServerPlayerEntity): Text {
-        return "lootables.entry.heal".translate(Lootables.DECIMAL_FORMAT.format(amount / 2f))
+        return "lootables.entry.heal".translate(Lootables.DECIMAL_FORMAT.format(amount.descFloat() / 2f))
     }
 
     override fun createDisplay(playerEntity: ServerPlayerEntity): LootablePoolEntryDisplay {
@@ -49,7 +50,7 @@ class HealLootablePoolEntry(private val amount: Float): LootablePoolEntry {
 
         val CODEC: MapCodec<HealLootablePoolEntry> = RecordCodecBuilder.mapCodec { instance: RecordCodecBuilder.Instance<HealLootablePoolEntry> ->
             instance.group(
-                Codec.FLOAT.fieldOf("amount").forGetter(HealLootablePoolEntry::amount)
+                LootableNumber.CODEC.fieldOf("amount").forGetter(HealLootablePoolEntry::amount)
             ).apply(instance, ::HealLootablePoolEntry)
         }
     }

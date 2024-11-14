@@ -21,12 +21,13 @@ import me.fzzyhmstrs.lootables.loot.LootablePoolEntryDisplay
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryType
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryTypes
 import me.fzzyhmstrs.lootables.loot.display.ExperienceLootablePoolEntryDisplay
+import me.fzzyhmstrs.lootables.loot.number.LootableNumber
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.Text
 import net.minecraft.util.math.Vec3d
 
-class ExperienceLootablePoolEntry(private val xp: Int, private val levels: Boolean = true): LootablePoolEntry {
+class ExperienceLootablePoolEntry(private val xp: LootableNumber, private val levels: Boolean = true): LootablePoolEntry {
 
     override fun type(): LootablePoolEntryType {
         return LootablePoolEntryTypes.XP
@@ -34,14 +35,14 @@ class ExperienceLootablePoolEntry(private val xp: Int, private val levels: Boole
 
     override fun apply(player: PlayerEntity, origin: Vec3d) {
         if (levels) {
-            player.addExperienceLevels(xp)
+            player.addExperienceLevels(xp.nextInt())
         } else {
-            player.addExperience(xp)
+            player.addExperience(xp.nextInt())
         }
     }
 
     override fun defaultDescription(playerEntity: ServerPlayerEntity): Text {
-        return if(levels) "lootables.entry.xp.levels".translate(xp) else "lootables.entry.xp.points".translate(xp)
+        return if(levels) "lootables.entry.xp.levels".translate(xp.desc(true)) else "lootables.entry.xp.points".translate(xp.desc(true))
     }
 
     override fun createDisplay(playerEntity: ServerPlayerEntity): LootablePoolEntryDisplay {
@@ -52,7 +53,7 @@ class ExperienceLootablePoolEntry(private val xp: Int, private val levels: Boole
 
         val CODEC: MapCodec<ExperienceLootablePoolEntry> = RecordCodecBuilder.mapCodec { instance: RecordCodecBuilder.Instance<ExperienceLootablePoolEntry> ->
             instance.group(
-                Codec.INT.fieldOf("xp").forGetter(ExperienceLootablePoolEntry::xp),
+                LootableNumber.CODEC.fieldOf("xp").forGetter(ExperienceLootablePoolEntry::xp),
                 Codec.BOOL.optionalFieldOf("levels", true).forGetter(ExperienceLootablePoolEntry::levels)
             ).apply(instance, ::ExperienceLootablePoolEntry)
         }

@@ -23,7 +23,7 @@ import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.Vec3d
 
-class LootableTable private constructor(private val pools: List<LootablePool>, private val poolMap: Map<Identifier, LootablePool>) {
+class LootableTable private constructor(private val pools: List<LootablePool>, private val poolMap: Map<Identifier, LootablePool>, private val overrides: Map<LootableRarity, Int>) {
 
     fun supplyPools(context: LootContext, rolls: Int): List<LootablePool> {
         if (rolls <= 0) return listOf()
@@ -40,7 +40,7 @@ class LootableTable private constructor(private val pools: List<LootablePool>, p
                 continue
             }
             val previousWeight = totalWeight
-            totalWeight += pool.getWeight()
+            totalWeight += getWeight(pool)
             entryList.add(PoolEntry(previousWeight, totalWeight, pool))
         }
         if (entryList.size <= rolls) {
@@ -59,6 +59,10 @@ class LootableTable private constructor(private val pools: List<LootablePool>, p
             results.add(binary(entryList, 0, entryList.lastIndex, rand).pool)
         }
         return results
+    }
+
+    private fun getWeight(pool: LootablePool): Int {
+        return pool.getWeight() ?: overrides[pool.rarity] ?: pool.rarity.weight
     }
 
     fun supplyPoolsById(context: LootContext, rolls: Int): List<Identifier> {
@@ -106,19 +110,38 @@ class LootableTable private constructor(private val pools: List<LootablePool>, p
         return binary(list, l2, r2, target)
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as LootableTable
+
+        return poolMap == other.poolMap
+    }
+
+    override fun hashCode(): Int {
+        return poolMap.hashCode()
+    }
+
     private data class PoolEntry(val previousIndex: Int, val weightIndex: Int, val pool: LootablePool)
 
     companion object {
-        fun of(pools: List<LootablePool>): LootableTable {
-            return LootableTable(pools.sortedWith { p1, p2 -> p1.getWeight().compareTo(p2.getWeight()) }, pools.associateBy { pool -> pool.id })
+        fun of(pools: List<LootablePool>, overrides: Map<LootableRarity, Int> = mapOf()): LootableTable {
+            fun getWeight(pool: LootablePool): Int {
+                return pool.getWeight() ?: overrides[pool.rarity] ?: pool.rarity.weight
+            }
+            return LootableTable(pools.sortedWith { p1, p2 -> getWeight(p1).compareTo(getWeight(p2)) }, pools.associateBy { pool -> pool.id }, overrides)
         }
+
+        private val OVERRIDES_CODEC = Codec.simpleMap(LootableRarity.CODEC, Codec.intRange(1, Int.MAX_VALUE), LootableRarity.KEYS)
 
         private val POOL_CODEC = Codec.withAlternative(LootablePool.CODEC, LootablePool.REFERENCE_CODEC)
 
         val CODEC = RecordCodecBuilder.create { instance: RecordCodecBuilder.Instance<LootableTable> ->
             instance.group(
-                POOL_CODEC.listOf().fieldOf("pools").forGetter(LootableTable::pools)
-            ).apply(instance, LootableTable::of)
+                POOL_CODEC.listOf().fieldOf("pools").forGetter(LootableTable::pools),
+                OVERRIDES_CODEC.codec().optionalFieldOf("weights", mapOf()).forGetter(LootableTable::overrides)
+            ).apply(instance) { p, o -> of(p, o) }
         }
     }
 

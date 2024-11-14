@@ -64,6 +64,7 @@ enum class LootableRarity(private val id: String, val weight: Int, val bgColor: 
 
     internal companion object {
         internal val CODEC = StringIdentifiable.createCodec { entries.toTypedArray() }
+        internal val KEYS = StringIdentifiable.toKeyable(entries.toTypedArray())
 
         private val INDEX_TO_VALUE: IntFunction<LootableRarity> = ValueLists.createIdToValueFunction(
             LootableRarity::ordinal, entries.toTypedArray(), ValueLists.OutOfBoundsHandling.ZERO

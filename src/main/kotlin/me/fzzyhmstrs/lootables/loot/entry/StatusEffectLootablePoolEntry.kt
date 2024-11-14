@@ -21,6 +21,7 @@ import me.fzzyhmstrs.lootables.loot.LootablePoolEntryDisplay
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryType
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryTypes
 import me.fzzyhmstrs.lootables.loot.display.HealLootablePoolEntryDisplay
+import me.fzzyhmstrs.lootables.loot.display.StatusEffectLootablePoolEntryDisplay
 import net.minecraft.entity.effect.StatusEffectInstance
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.screen.ScreenTexts
@@ -51,7 +52,7 @@ class StatusEffectLootablePoolEntry(private val instance: StatusEffectInstance):
     }
 
     override fun createDisplay(playerEntity: ServerPlayerEntity): LootablePoolEntryDisplay {
-        return HealLootablePoolEntryDisplay
+        return StatusEffectLootablePoolEntryDisplay(instance.effectType)
     }
 
     companion object {

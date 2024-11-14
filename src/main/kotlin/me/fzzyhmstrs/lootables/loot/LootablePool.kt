@@ -42,6 +42,12 @@ class LootablePool private constructor(
 {
     internal constructor(id: Identifier, d: PoolData): this(id, d.rarity, d.entry, d.guaranteed, d.description, d.weight, d.maxUses, d.conditions)
 
+    init {
+        if (seenIds.contains(id))
+            throw IllegalStateException("LootablePool with ID $id already created!")
+        seenIds.add(id)
+    }
+
     fun canApply(context: LootContext): Boolean {
         val entity = context.get(LootContextParameters.THIS_ENTITY) ?: return false
         val uses = LootablesData.getUses(id, entity.uuid)
@@ -58,8 +64,8 @@ class LootablePool private constructor(
         this.entry.apply(player, origin)
     }
 
-    fun getWeight(): Int {
-        return weight.orElse(rarity.weight)
+    fun getWeight(): Int? {
+        return weight.orElse(null)
     }
 
     fun createData(playerEntity: ServerPlayerEntity): LootablePoolData {
@@ -67,6 +73,13 @@ class LootablePool private constructor(
     }
 
     companion object {
+
+        private var seenIds: MutableSet<Identifier> = mutableSetOf()
+
+        internal fun reset() {
+            seenIds = mutableSetOf()
+        }
+
         private val CONDITION_CODEC: MapCodec<List<LootCondition>> = EitherMapCodec(LootCondition.CODEC.listOf().optionalFieldOf("conditions", listOf()), LootCondition.CODEC.optionalFieldOf("condition")).xmap(
             {e -> e.map(Function.identity()) { c -> c.map { listOf(it) }.orElse(listOf()) } },
             {l -> if(l.size != 1) Either.left(l) else Either.right(Optional.of(l[0])) }
