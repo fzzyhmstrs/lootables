@@ -20,11 +20,13 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.gui.ScreenRect
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder
+import net.minecraft.client.gui.screen.narration.NarrationPart
 import net.minecraft.client.gui.tooltip.FocusedTooltipPositioner
 import net.minecraft.client.gui.tooltip.HoveredTooltipPositioner
 import net.minecraft.client.gui.tooltip.Tooltip
 import net.minecraft.client.gui.widget.ClickableWidget
 import net.minecraft.client.input.KeyCodes
+import net.minecraft.text.MutableText
 import net.minecraft.text.OrderedText
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
@@ -93,6 +95,10 @@ class ChoiceTileWidget(
 
     fun id(): Identifier? {
         return if(clicked) id else null
+    }
+
+    override fun getNarrationMessage(): MutableText {
+        return message.copy()
     }
 
     private fun onPress(): Boolean {
@@ -238,8 +244,13 @@ class ChoiceTileWidget(
         }
 
         //decorations
-        if (rarity.drawDecoration) {
-            renderCorners(context, x + 2, y + 3, width - 4, height - 4, startColor, endColor, backgroundColor)
+        if (rarity.decoration.hasDeco) {
+            if (rarity.decoration == LootableRarity.DecorationType.SMALL) {
+                renderCorners(context, x + 2, y + 3, width - 4, height - 4, startColor, endColor, backgroundColor, 5)
+            } else {
+                renderCorners(context, x + 2, y + 3, width - 4, height - 4, startColor, endColor, backgroundColor, 10)
+                renderCorners(context, x + 4, y + 5, width - 8, height - 8, startColor, endColor, backgroundColor, 4)
+            }
         }
 
         context.matrices.pop()
@@ -263,13 +274,13 @@ class ChoiceTileWidget(
 
     private fun renderCorners(context: DrawContext, x: Int, y: Int, width: Int, height: Int, startColor: Int, endColor: Int, backgroundColor: Int, length: Int = 10) {
         val x1 = x + width - 1
-        val x2 = x + width - 10
-        val h1 = 10
-        val w1 = 10
-        val y1 = y + height - 11
+        val x2 = x + width - length
+        val h1 = length
+        val w1 = length
+        val y1 = y + height - (length + 1)
         val y2 = y - 1
         val y3 = y - 1 + height - 1
-        
+
         val startColor1 = ColorHelper.Argb.lerp((height - 10)/height.toFloat(), startColor, endColor)
         val endColor1 = ColorHelper.Argb.lerp(10/height.toFloat(), startColor, endColor)
 
@@ -277,9 +288,9 @@ class ChoiceTileWidget(
         val o2 = length + 1
         val o3 = length - 1
         val o4 = length - 2
-        
-        context.fill(x - 1,  y2,     x + 2,  y + o1, 0, backgroundColor)
-        context.fill(x,      y + o1, x + 1,  y + o2, 0, backgroundColor)
+
+        context.fill(x - 1,  y2,     x + 2,  y2 + o1, 0, backgroundColor)
+        context.fill(x,      y2 + o1, x + 1,  y2 + o2, 0, backgroundColor)
         context.fill(x,      y2 - 1, x + o1, y2,     0, backgroundColor)
         context.fill(x + 2,  y,      x + o1, y + 1,  0, backgroundColor)
         context.fill(x + o1, y2,     x + o2, y2 + 1, 0, backgroundColor)
@@ -290,8 +301,8 @@ class ChoiceTileWidget(
         context.fill(x + 2,  y3 - 1, x + o1, y3,      0, backgroundColor)
         context.fill(x + o1, y3,     x + o2, y3 + 1,  0, backgroundColor)
 
-        context.fill(x1 - 1,  y2,     x1 + 2,  y + o1, 0, backgroundColor)
-        context.fill(x1,      y + o1, x1 + 1,  y + o2, 0, backgroundColor)
+        context.fill(x1 - 1,  y2,     x1 + 2,  y2 + o1, 0, backgroundColor)
+        context.fill(x1,      y2 + o1, x1 + 1,  y2 + o2, 0, backgroundColor)
         context.fill(x1 - o3, y2 - 1, x1 + 1,  y2,     0, backgroundColor)
         context.fill(x1 - o3, y,      x1 - 1,  y + 1,  0, backgroundColor)
         context.fill(x1 - o1, y2,     x1 - o3, y2 + 1, 0, backgroundColor)
@@ -303,9 +314,9 @@ class ChoiceTileWidget(
         context.fill(x1 - o1, y1 + o3, x1 - o3, y1 + o1, 0, backgroundColor)
 
 
-        renderVerticalLine(context,   x,    y,  h1, startColor,  endColor1)
+        renderVerticalLine(context,   x,    y2, h1, startColor,  endColor1)
         renderVerticalLine(context,   x,    y1, h1, startColor1, endColor)
-        renderVerticalLine(context,   x1,   y,  h1, startColor,  endColor1)
+        renderVerticalLine(context,   x1,   y2, h1, startColor,  endColor1)
         renderVerticalLine(context,   x1,   y1, h1, startColor1, endColor)
         renderHorizontalLine(context, x,    y2, w1, startColor)
         renderHorizontalLine(context, x2,   y2, w1, startColor)

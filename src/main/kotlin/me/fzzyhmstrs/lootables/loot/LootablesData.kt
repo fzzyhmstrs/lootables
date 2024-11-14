@@ -25,7 +25,6 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener
 import net.fabricmc.loader.api.FabricLoader
-import net.minecraft.network.packet.CustomPayload.Id
 import net.minecraft.resource.ResourceManager
 import net.minecraft.resource.ResourceType
 import net.minecraft.server.network.ServerPlayerEntity
@@ -39,6 +38,7 @@ import kotlin.math.min
 
 internal object LootablesData: SimpleSynchronousResourceReloadListener {
 
+    private var lootablePools: Map<Identifier, LootablePool> = mapOf()
     private var lootableTables: Map<Identifier, LootableTable> = mapOf()
     private var dataInvalid = true
     private var lootableSyncData: Map<Identifier, List<LootablePoolData>> = mapOf()
@@ -61,6 +61,10 @@ internal object LootablesData: SimpleSynchronousResourceReloadListener {
             println(lootableSyncData)
         }
         return lootableSyncData
+    }
+
+    fun getPool(id: Identifier): LootablePool? {
+        return lootablePools[id]
     }
 
     fun hasTable(id: Identifier): Boolean {
@@ -324,7 +328,22 @@ internal object LootablesData: SimpleSynchronousResourceReloadListener {
     override fun reload(manager: ResourceManager) {
         dataInvalid = true
         lootableSyncData = mapOf()
-        val map: MutableMap<Identifier, LootableTable> = mutableMapOf()
+        val poolMap: MutableMap<Identifier, LootablePool> = mutableMapOf()
+        manager.findResources("lootable_pools") { path -> path.path.endsWith(".json") }
+            .forEach { (id, resource) ->
+                try {
+                    val reader = resource.reader
+                    val json = JsonParser.parseReader(reader)
+                    val result = LootablePool.DATA_CODEC.parse(JsonOps.INSTANCE, json)
+                    val poolId = Identifier.of(id.namespace, id.path.removePrefix("lootable_pools/").removeSuffix(".json"))
+                    result.ifSuccess { data -> poolMap[poolId] = LootablePool(poolId, data) }.ifError { error -> Lootables.LOGGER.error(error.messageSupplier.get()) }
+                } catch (e: Throwable) {
+                    Lootables.LOGGER.error("Error parsing lootable pool $id")
+                    e.printStackTrace()
+                }
+            }
+        lootablePools = poolMap
+        val tableMap: MutableMap<Identifier, LootableTable> = mutableMapOf()
         manager.findResources("lootable_tables") { path -> path.path.endsWith(".json") }
             .forEach { (id, resource) ->
                 try {
@@ -332,13 +351,13 @@ internal object LootablesData: SimpleSynchronousResourceReloadListener {
                     val json = JsonParser.parseReader(reader)
                     val result = LootableTable.CODEC.parse(JsonOps.INSTANCE, json)
                     val tableId = Identifier.of(id.namespace, id.path.removePrefix("lootable_tables/").removeSuffix(".json"))
-                    result.ifSuccess { table -> map[tableId] = table }.ifError { error -> Lootables.LOGGER.error(error.messageSupplier.get()) }
+                    result.ifSuccess { table -> tableMap[tableId] = table }.ifError { error -> Lootables.LOGGER.error(error.messageSupplier.get()) }
                 } catch (e: Throwable) {
                     Lootables.LOGGER.error("Error parsing lootable table $id")
                     e.printStackTrace()
                 }
             }
-        lootableTables = map
+        lootableTables = tableMap
         if (FabricLoader.getInstance().isDevelopmentEnvironment) {
             println(lootableTables)
         }

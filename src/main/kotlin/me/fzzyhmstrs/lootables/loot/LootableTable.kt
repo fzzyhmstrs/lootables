@@ -12,6 +12,7 @@
 
 package me.fzzyhmstrs.lootables.loot
 
+import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import me.fzzyhmstrs.lootables.Lootables
 import net.fabricmc.loader.api.FabricLoader
@@ -112,9 +113,11 @@ class LootableTable private constructor(private val pools: List<LootablePool>, p
             return LootableTable(pools.sortedWith { p1, p2 -> p1.getWeight().compareTo(p2.getWeight()) }, pools.associateBy { pool -> pool.id })
         }
 
+        private val POOL_CODEC = Codec.withAlternative(LootablePool.CODEC, LootablePool.REFERENCE_CODEC)
+
         val CODEC = RecordCodecBuilder.create { instance: RecordCodecBuilder.Instance<LootableTable> ->
             instance.group(
-                LootablePool.CODEC.listOf().fieldOf("pools").forGetter(LootableTable::pools)
+                POOL_CODEC.listOf().fieldOf("pools").forGetter(LootableTable::pools)
             ).apply(instance, LootableTable::of)
         }
     }

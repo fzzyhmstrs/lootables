@@ -31,4 +31,6 @@ object LootablePoolEntryTypes {
     val FUNCTION = LootablePoolEntryType.create(Lootables.identity("function"), LootFunctionLootablePoolEntry.CODEC, LootFunctionLootablePoolEntryDisplay.PACKET_CODEC)
     val ADVANCEMENT = LootablePoolEntryType.create(Lootables.identity("advancement"), AdvancementLootablePoolEntry.CODEC, AdvancementLootablePoolEntryDisplay.PACKET_CODEC)
 
+    fun init(){}
+
 }

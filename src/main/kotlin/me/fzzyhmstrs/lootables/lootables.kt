@@ -13,6 +13,7 @@
 package me.fzzyhmstrs.lootables
 
 import me.fzzyhmstrs.lootables.config.LootablesConfig
+import me.fzzyhmstrs.lootables.loot.LootablePoolEntryTypes
 import me.fzzyhmstrs.lootables.loot.LootablesData
 import me.fzzyhmstrs.lootables.network.LootablesNetworking
 import net.fabricmc.api.ClientModInitializer
@@ -43,6 +44,7 @@ object Lootables: ModInitializer {
 
     override fun onInitialize() {
         LootablesConfig.init()
+        LootablePoolEntryTypes.init()
         LootablesData.init()
         LootablesNetworking.init()
     }

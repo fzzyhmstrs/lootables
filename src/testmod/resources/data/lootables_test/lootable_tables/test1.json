@@ -22,7 +22,7 @@
       "entry": {
         "type": "lootables:item",
         "item": {
-          "item": "minecraft:oak_planks",
+          "id": "minecraft:oak_planks",
           "count": 16
         }
       }
@@ -33,7 +33,7 @@
       "entry": {
         "type": "lootables:item",
         "item": {
-          "item": "minecraft:torch",
+          "id": "minecraft:torch",
           "count": 12
         }
       }
