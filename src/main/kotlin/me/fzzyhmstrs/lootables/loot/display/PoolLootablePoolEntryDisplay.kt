@@ -22,7 +22,7 @@ import net.minecraft.network.RegistryByteBuf
 import net.minecraft.network.codec.PacketCodec
 import net.minecraft.network.codec.PacketCodecs
 
-class PoolLootablePoolEntryDisplay(private val itemStacks: List<ItemStack>): LootablePoolEntryDisplay {
+data class PoolLootablePoolEntryDisplay(private val itemStacks: List<ItemStack>): LootablePoolEntryDisplay {
 
     override fun type(): LootablePoolEntryType {
         return LootablePoolEntryTypes.POOL

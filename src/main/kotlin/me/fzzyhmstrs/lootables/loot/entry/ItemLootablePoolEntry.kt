@@ -16,6 +16,7 @@ import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import me.fzzyhmstrs.fzzy_config.util.FcText.translate
+import me.fzzyhmstrs.lootables.Lootables
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntry
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryDisplay
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryType
@@ -27,6 +28,7 @@ import net.minecraft.component.ComponentChanges
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
+import net.minecraft.registry.Registries
 import net.minecraft.registry.entry.RegistryEntry
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.Text
@@ -61,8 +63,6 @@ class ItemLootablePoolEntry private constructor(private val itemEntryStack: Item
 
     companion object {
 
-
-
         private val ITEM_CODEC: Codec<ItemEntryStack> = Codec.withAlternative(ItemEntryStack.CODEC, ItemEntryStack.INLINE_CODEC)
 
         val CODEC: MapCodec<ItemLootablePoolEntry> = RecordCodecBuilder.mapCodec { instance: RecordCodecBuilder.Instance<ItemLootablePoolEntry> ->
@@ -71,7 +71,10 @@ class ItemLootablePoolEntry private constructor(private val itemEntryStack: Item
                 Codec.BOOL.optionalFieldOf("drop_items", false).forGetter(ItemLootablePoolEntry::dropItems)
             ).apply(instance, ::ItemLootablePoolEntry)
         }
-    }
+
+        fun createRandomInstance(playerEntity: ServerPlayerEntity): LootablePoolEntry {
+            return ItemLootablePoolEntry(ItemStack(Registries.ITEM.entrySet.random().value, Lootables.random().nextInt(64) + 1), Lootables.random().nextBoolean())
+        }    }
 
     private class ItemEntryStack(private val item: RegistryEntry<Item>, private val count: LootableNumber, private val components: ComponentChanges) {
 

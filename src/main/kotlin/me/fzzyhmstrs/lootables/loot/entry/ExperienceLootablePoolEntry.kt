@@ -16,13 +16,14 @@ import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import me.fzzyhmstrs.fzzy_config.util.FcText.translate
-import me.fzzyhmstrs.lootables.loot.LootablePoolEntry
-import me.fzzyhmstrs.lootables.loot.LootablePoolEntryDisplay
-import me.fzzyhmstrs.lootables.loot.LootablePoolEntryType
-import me.fzzyhmstrs.lootables.loot.LootablePoolEntryTypes
+import me.fzzyhmstrs.lootables.Lootables
+import me.fzzyhmstrs.lootables.loot.*
 import me.fzzyhmstrs.lootables.loot.display.ExperienceLootablePoolEntryDisplay
+import me.fzzyhmstrs.lootables.loot.number.ConstantLootableNumber
 import me.fzzyhmstrs.lootables.loot.number.LootableNumber
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.item.ItemStack
+import net.minecraft.registry.Registries
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.Text
 import net.minecraft.util.math.Vec3d
@@ -56,6 +57,10 @@ class ExperienceLootablePoolEntry(private val xp: LootableNumber, private val le
                 LootableNumber.CODEC.fieldOf("xp").forGetter(ExperienceLootablePoolEntry::xp),
                 Codec.BOOL.optionalFieldOf("levels", true).forGetter(ExperienceLootablePoolEntry::levels)
             ).apply(instance, ::ExperienceLootablePoolEntry)
+        }
+
+        fun createRandomInstance(playerEntity: ServerPlayerEntity): LootablePoolEntry {
+            return ExperienceLootablePoolEntry(ConstantLootableNumber(Lootables.random().nextFloat() * 100f), Lootables.random().nextBoolean())
         }
     }
 

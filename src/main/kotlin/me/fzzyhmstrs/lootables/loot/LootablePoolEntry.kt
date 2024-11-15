@@ -12,6 +12,7 @@
 
 package me.fzzyhmstrs.lootables.loot
 
+import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.server.network.ServerPlayerEntity
@@ -25,6 +26,6 @@ interface LootablePoolEntry {
     fun createDisplay(playerEntity: ServerPlayerEntity): LootablePoolEntryDisplay
 
     companion object {
-        val MAP_CODEC: MapCodec<LootablePoolEntry> = LootablePoolEntryType.CODEC.dispatchMap({ entry -> entry.type() }, { type -> type.codec() })
+        val CODEC: Codec<LootablePoolEntry> = LootablePoolEntryType.CODEC.dispatch({ entry -> entry.type() }, { type -> type.codec() })
     }
 }

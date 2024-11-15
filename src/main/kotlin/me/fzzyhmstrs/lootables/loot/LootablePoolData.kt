@@ -17,10 +17,46 @@ import net.minecraft.network.codec.PacketCodecs
 import net.minecraft.text.Text
 import net.minecraft.text.TextCodecs
 import net.minecraft.util.Identifier
+import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.ConcurrentMap
 
-data class LootablePoolData(val id: Identifier, val description: Text, val rarity: LootableRarity, val display: LootablePoolEntryDisplay) {
+class LootablePoolData private constructor(val id: Identifier, val description: Text, val rarity: LootableRarity, val display: LootablePoolEntryDisplay) {
+
+    override fun toString(): String {
+        return "LootablePoolData@${Integer.toHexString(System.identityHashCode(this))}(id=$id, description=${description.string}, rarity=$rarity, display=$display)"
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as LootablePoolData
+
+        if (id != other.id) return false
+        if (description != other.description) return false
+        if (rarity != other.rarity) return false
+        if (display != other.display) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = id.hashCode()
+        result = 31 * result + description.hashCode()
+        result = 31 * result + rarity.hashCode()
+        result = 31 * result + display.hashCode()
+        return result
+    }
+
 
     companion object {
+
+        private val INSTANCES: ConcurrentMap<Identifier, LootablePoolData> = ConcurrentHashMap(24, 0.8f, 2)
+
+        fun of(id: Identifier, description: Text, rarity: LootableRarity, display: LootablePoolEntryDisplay): LootablePoolData {
+            return INSTANCES.computeIfAbsent(id) { _ -> LootablePoolData(id, description, rarity, display) }
+        }
+
         val PACKET_CODEC = PacketCodec.tuple(
             Identifier.PACKET_CODEC,
             LootablePoolData::id,
@@ -30,7 +66,7 @@ data class LootablePoolData(val id: Identifier, val description: Text, val rarit
             LootablePoolData::rarity,
             LootablePoolEntryDisplay.PACKET_CODEC,
             LootablePoolData::display,
-            ::LootablePoolData
+            ::of
         )
 
         val LIST_PACKET_CODEC = PACKET_CODEC.collect(PacketCodecs.toList())

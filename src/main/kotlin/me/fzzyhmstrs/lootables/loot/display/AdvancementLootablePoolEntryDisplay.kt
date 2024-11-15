@@ -23,7 +23,7 @@ import net.minecraft.item.ItemStack
 import net.minecraft.network.codec.PacketCodecs
 import java.util.Optional
 
-class AdvancementLootablePoolEntryDisplay(private val display: Optional<ItemStack>): SimpleLootablePoolEntryDisplay(Lootables.identity("display/advancement")) {
+data class AdvancementLootablePoolEntryDisplay(private val display: Optional<ItemStack>): SimpleLootablePoolEntryDisplay(Lootables.identity("display/advancement")) {
 
     override fun type(): LootablePoolEntryType {
         return LootablePoolEntryTypes.ADVANCEMENT

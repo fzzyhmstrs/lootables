@@ -18,7 +18,7 @@ import me.fzzyhmstrs.lootables.loot.LootablePoolEntryTypes
 import net.minecraft.network.RegistryByteBuf
 import net.minecraft.network.codec.PacketCodec
 
-object HealLootablePoolEntryDisplay: SimpleLootablePoolEntryDisplay(Lootables.identity("display/heal")) {
+data object HealLootablePoolEntryDisplay: SimpleLootablePoolEntryDisplay(Lootables.identity("display/heal")) {
 
     override fun type(): LootablePoolEntryType {
         return LootablePoolEntryTypes.HEAL

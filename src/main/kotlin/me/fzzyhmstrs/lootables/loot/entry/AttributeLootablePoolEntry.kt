@@ -29,11 +29,13 @@ import net.minecraft.entity.attribute.EntityAttributeModifier
 import net.minecraft.entity.attribute.EntityAttributeModifier.Operation
 import net.minecraft.entity.attribute.EntityAttributes
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.registry.Registries
 import net.minecraft.registry.entry.RegistryEntry
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.Vec3d
+import java.util.UUID
 
 class AttributeLootablePoolEntry(private val attribute: RegistryEntry<EntityAttribute>, private val id: Identifier, private val value: Double, private val operation: Operation, private val persistent: Boolean = false): LootablePoolEntry {
 
@@ -80,6 +82,8 @@ class AttributeLootablePoolEntry(private val attribute: RegistryEntry<EntityAttr
         return AttributeLootablePoolEntryDisplay(attribute)
     }
 
+
+
     companion object {
 
         val CODEC: MapCodec<AttributeLootablePoolEntry> = RecordCodecBuilder.mapCodec { instance: RecordCodecBuilder.Instance<AttributeLootablePoolEntry> ->
@@ -90,6 +94,10 @@ class AttributeLootablePoolEntry(private val attribute: RegistryEntry<EntityAttr
                 Operation.CODEC.optionalFieldOf("operation", Operation.ADD_VALUE).forGetter(AttributeLootablePoolEntry::operation),
                 Codec.BOOL.optionalFieldOf("persistent", false).forGetter(AttributeLootablePoolEntry::persistent)
             ).apply(instance, ::AttributeLootablePoolEntry)
+        }
+
+        fun createRandomInstance(playerEntity: ServerPlayerEntity): LootablePoolEntry {
+            return AttributeLootablePoolEntry(Registries.ATTRIBUTE.getEntry(Lootables.random().nextInt(Registries.ATTRIBUTE.size())).orElseThrow(), Lootables.identity(UUID.randomUUID().toString().lowercase()), Lootables.random().nextDouble() * 10.0, Operation.entries[Lootables.random().nextInt(3)], Lootables.random().nextBoolean())
         }
     }
 

@@ -26,7 +26,7 @@ import net.minecraft.network.codec.PacketCodec
 import net.minecraft.registry.Registries
 import net.minecraft.registry.entry.RegistryEntry
 
-class AttributeLootablePoolEntryDisplay(private val effect: RegistryEntry<EntityAttribute>): LootablePoolEntryDisplay {
+data class AttributeLootablePoolEntryDisplay(private val effect: RegistryEntry<EntityAttribute>): LootablePoolEntryDisplay {
 
     private var errorThrown = false
 

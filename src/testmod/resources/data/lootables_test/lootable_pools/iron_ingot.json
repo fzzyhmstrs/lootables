@@ -1,0 +1,7 @@
+{
+  "rarity": "common",
+  "entry": {
+    "type": "lootables:item",
+    "item": "minecraft:iron_ingot"
+  }
+}

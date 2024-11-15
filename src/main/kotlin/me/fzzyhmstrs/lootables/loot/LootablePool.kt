@@ -18,6 +18,7 @@ import com.mojang.serialization.DataResult
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.EitherMapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
+import me.fzzyhmstrs.lootables.Lootables
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.loot.condition.LootCondition
 import net.minecraft.loot.context.LootContext
@@ -48,6 +49,8 @@ class LootablePool private constructor(
         seenIds.add(id)
     }
 
+    private var data: LootablePoolData? = null
+
     fun canApply(context: LootContext): Boolean {
         val entity = context.get(LootContextParameters.THIS_ENTITY) ?: return false
         val uses = LootablesData.getUses(id, entity.uuid)
@@ -68,8 +71,14 @@ class LootablePool private constructor(
         return weight.orElse(null)
     }
 
+    private fun initData(playerEntity: ServerPlayerEntity): LootablePoolData {
+        val d = LootablePoolData.of(id, description.orElse(entry.defaultDescription(playerEntity)), rarity, entry.createDisplay(playerEntity)).also { data = it }
+        data = d
+        return d
+    }
+
     fun createData(playerEntity: ServerPlayerEntity): LootablePoolData {
-        return LootablePoolData(id, description.orElse(entry.defaultDescription(playerEntity)), rarity, entry.createDisplay(playerEntity))
+        return data ?: initData(playerEntity)
     }
 
     companion object {
@@ -78,6 +87,22 @@ class LootablePool private constructor(
 
         internal fun reset() {
             seenIds = mutableSetOf()
+        }
+
+        fun createRandomPool(entry: LootablePoolEntry): LootablePool {
+            return LootablePool(
+                Lootables.identity(UUID.randomUUID().toString().lowercase()),
+                LootableRarity.entries[Lootables.random().nextInt(LootableRarity.entries.size)],
+                entry,
+                Lootables.random().nextBoolean(),
+                Optional.empty(),
+                if (Lootables.random().nextBoolean()) Optional.empty() else Optional.of(Lootables.random().nextInt(12) + 1),
+                if (Lootables.random().nextBoolean()) -1 else Lootables.random().nextInt(100) + 1
+            )
+        }
+
+        fun createRandomPools(playerEntity: ServerPlayerEntity, meanSize: Int): List<LootablePool> {
+            return LootablePoolEntryType.randomList(playerEntity, meanSize).map { createRandomPool(it) }
         }
 
         private val CONDITION_CODEC: MapCodec<List<LootCondition>> = EitherMapCodec(LootCondition.CODEC.listOf().optionalFieldOf("conditions", listOf()), LootCondition.CODEC.optionalFieldOf("condition")).xmap(
@@ -93,7 +118,7 @@ class LootablePool private constructor(
             instance.group(
                 Identifier.CODEC.fieldOf("id").forGetter(LootablePool::id),
                 LootableRarity.CODEC.optionalFieldOf("rarity", LootableRarity.COMMON).forGetter(LootablePool::rarity),
-                LootablePoolEntry.MAP_CODEC.codec().fieldOf("entry").forGetter(LootablePool::entry),
+                LootablePoolEntry.CODEC.fieldOf("entry").forGetter(LootablePool::entry),
                 Codec.BOOL.optionalFieldOf("guaranteed", false).forGetter(LootablePool::guaranteed),
                 TextCodecs.CODEC.optionalFieldOf("desc").forGetter(LootablePool::description),
                 Codec.intRange(1, Int.MAX_VALUE).optionalFieldOf("weight").orElse(Optional.empty()).forGetter(LootablePool::weight),
@@ -110,7 +135,7 @@ class LootablePool private constructor(
         internal val DATA_CODEC: Codec<PoolData> = RecordCodecBuilder.create { instance: RecordCodecBuilder.Instance<PoolData> ->
             instance.group(
                 LootableRarity.CODEC.optionalFieldOf("rarity", LootableRarity.COMMON).forGetter(PoolData::rarity),
-                LootablePoolEntry.MAP_CODEC.codec().fieldOf("entry").forGetter(PoolData::entry),
+                LootablePoolEntry.CODEC.fieldOf("entry").forGetter(PoolData::entry),
                 Codec.BOOL.optionalFieldOf("guaranteed", false).forGetter(PoolData::guaranteed),
                 TextCodecs.CODEC.optionalFieldOf("desc").forGetter(PoolData::description),
                 Codec.intRange(1, Int.MAX_VALUE).optionalFieldOf("weight").orElse(Optional.empty()).forGetter(PoolData::weight),

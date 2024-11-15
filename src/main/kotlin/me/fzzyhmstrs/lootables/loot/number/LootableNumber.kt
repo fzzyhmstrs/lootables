@@ -12,7 +12,10 @@
 
 package me.fzzyhmstrs.lootables.loot.number
 
+import com.mojang.datafixers.util.Pair
 import com.mojang.serialization.Codec
+import com.mojang.serialization.DataResult
+import com.mojang.serialization.DynamicOps
 import me.fzzyhmstrs.fzzy_config.cast
 import net.minecraft.text.Text
 
@@ -28,10 +31,52 @@ interface LootableNumber {
     fun descFloat(): Float
 
     companion object {
-        private val CODEC_1: Codec<LootableNumber> = Codec.withAlternative(ConstantLootableNumber.CODEC.cast(), UniformLootableNumber.CODEC)
-        private val CODEC_2: Codec<LootableNumber> = Codec.withAlternative(EitherLootableNumber.CODEC.cast(), BinomialLootableNumber.CODEC)
-        private val CODEC_3: Codec<LootableNumber> = Codec.withAlternative(CODEC_2, TriangularLootableNumber.CODEC)
-        val CODEC: Codec<LootableNumber> = Codec.withAlternative(CODEC_1, CODEC_3)
+
+        val CODEC: Codec<LootableNumber> = NumberCodec()
+
+        private class NumberCodec: Codec<LootableNumber> {
+
+            private val constant = ConstantLootableNumber.CODEC.cast<Codec<LootableNumber>>()
+            private val uniform = UniformLootableNumber.CODEC.cast<Codec<LootableNumber>>()
+            private val binomial = BinomialLootableNumber.CODEC.cast<Codec<LootableNumber>>()
+            private val either = EitherLootableNumber.CODEC.cast<Codec<LootableNumber>>()
+            private val triangular = TriangularLootableNumber.CODEC.cast<Codec<LootableNumber>>()
+
+            override fun <T : Any?> encode(input: LootableNumber, ops: DynamicOps<T>, prefix: T): DataResult<T> {
+                return when (input) {
+                    is ConstantLootableNumber -> constant.encode(input, ops, prefix)
+                    is UniformLootableNumber -> uniform.encode(input, ops, prefix)
+                    is BinomialLootableNumber -> binomial.encode(input, ops, prefix)
+                    is EitherLootableNumber -> either.encode(input, ops, prefix)
+                    is TriangularLootableNumber -> triangular.encode(input, ops, prefix)
+                    else -> DataResult.error { "Failed to encode Lootable Number. ${input::class.java.simpleName} is not a known number type." }
+                }
+            }
+
+            override fun <T : Any?> decode(ops: DynamicOps<T>, input: T): DataResult<Pair<LootableNumber, T>> {
+                val constantResult = constant.decode(ops, input)
+                if (constantResult.isSuccess) {
+                    return constantResult
+                }
+                val uniformResult = uniform.decode(ops, input)
+                if (uniformResult.isSuccess) {
+                    return uniformResult
+                }
+                val binomialResult = binomial.decode(ops, input)
+                if (uniformResult.isSuccess) {
+                    return binomialResult
+                }
+                val eitherResult = either.decode(ops, input)
+                if (eitherResult.isSuccess) {
+                    return eitherResult
+                }
+                val triangularResult = triangular.decode(ops, input)
+                if (triangularResult.isSuccess) {
+                    return triangularResult
+                }
+                return DataResult.error { "Failed to parse Lootable Number. Const: ${constantResult.error().map { it.messageSupplier.get() }.orElse("none")}, Uniform: ${uniformResult.error().map { it.messageSupplier.get() }.orElse("none")}, Binomial: ${binomialResult.error().map { it.messageSupplier.get() }.orElse("none")}, Either: ${eitherResult.error().map { it.messageSupplier.get() }.orElse("none")}, Triangular: ${triangularResult.error().map { it.messageSupplier.get() }.orElse("none")}" }
+            }
+        }
     }
 
 }

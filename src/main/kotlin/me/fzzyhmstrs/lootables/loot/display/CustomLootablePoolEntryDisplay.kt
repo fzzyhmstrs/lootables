@@ -21,7 +21,7 @@ import me.fzzyhmstrs.lootables.loot.LootablePoolEntryTypes
 import net.minecraft.network.codec.PacketCodec
 import net.minecraft.util.Identifier
 
-class CustomLootablePoolEntryDisplay(private val id: Identifier): LootablePoolEntryDisplay {
+data class CustomLootablePoolEntryDisplay(private val id: Identifier): LootablePoolEntryDisplay {
 
     override fun type(): LootablePoolEntryType {
         return LootablePoolEntryTypes.CUSTOM

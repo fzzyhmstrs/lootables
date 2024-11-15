@@ -22,7 +22,7 @@ import net.minecraft.network.RegistryByteBuf
 import net.minecraft.network.codec.PacketCodec
 import net.minecraft.registry.entry.RegistryEntry
 
-class StatusEffectLootablePoolEntryDisplay(private val effect: RegistryEntry<StatusEffect>): LootablePoolEntryDisplay {
+data class StatusEffectLootablePoolEntryDisplay(private val effect: RegistryEntry<StatusEffect>): LootablePoolEntryDisplay {
 
     override fun type(): LootablePoolEntryType {
         return LootablePoolEntryTypes.STATUS

@@ -12,9 +12,13 @@
 
 package me.fzzyhmstrs.lootables_test
 
+import com.google.gson.GsonBuilder
 import com.mojang.brigadier.CommandDispatcher
 import com.mojang.brigadier.arguments.IntegerArgumentType
+import com.mojang.serialization.JsonOps
 import me.fzzyhmstrs.fzzy_config.api.ConfigApi
+import me.fzzyhmstrs.lootables.Lootables
+import me.fzzyhmstrs.lootables.loot.LootableTable
 import me.fzzyhmstrs.lootables_test.screen.TestScreen
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.api.ModInitializer
@@ -22,10 +26,51 @@ import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
+import net.fabricmc.loader.api.FabricLoader
+import net.minecraft.server.command.CommandManager
+import java.io.File
+import java.util.UUID
 
 object LootablesTest: ModInitializer {
 
     override fun onInitialize() {
+        CommandRegistrationCallback.EVENT.register { dispatcher, _, _ ->
+            dispatcher.register(
+                CommandManager.literal("create_random")
+                    .then(CommandManager.argument("count", IntegerArgumentType.integer(1))
+                        .executes { context ->
+                            try {
+                                val count = IntegerArgumentType.getInteger(context, "count")
+                                val ops = context.source.world.registryManager.getOps(JsonOps.INSTANCE)
+                                val gson = GsonBuilder().setPrettyPrinting().setLenient().create()
+                                for (i in 1..count) {
+                                    val table = LootableTable.random(context.source.playerOrThrow, 25)
+                                    val json = LootableTable.CODEC.encodeStart(ops, table)
+                                    json.ifSuccess { jsonEl ->
+                                        val name = UUID.randomUUID().toString().lowercase()
+                                        val configDir = FabricLoader.getInstance().configDir.toFile()
+                                        val configSubDir = File(configDir, "random")
+                                        if (!configSubDir.exists()) {
+                                            configSubDir.mkdirs()
+                                        }
+                                        val configFile = File(configSubDir, "$name.json")
+                                        if (!(!configFile.exists() && !configFile.createNewFile())) {
+                                            val str = gson.toJson(jsonEl)
+                                            configFile.writeText(str)
+                                        }
+                                    }.ifError { error ->
+                                        Lootables.LOGGER.error(error.messageSupplier.get())
+                                    }
+                                }
+                            } catch (e: Throwable) {
+                                Lootables.LOGGER.error("Eror happen :<", e)
+                            }
+                            1
+                        }
+                    )
+            )
+        }
     }
 }
 

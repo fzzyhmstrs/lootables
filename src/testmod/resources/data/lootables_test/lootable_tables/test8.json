@@ -1,0 +1,10 @@
+{
+  "weights": {
+    "common": 1,
+    "rare": 10
+  },
+  "pools": [
+    "lootables_test:iron_sword",
+    "lootables_test:iron_ingot"
+  ]
+}

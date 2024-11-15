@@ -18,7 +18,7 @@ import me.fzzyhmstrs.lootables.loot.LootablePoolEntryTypes
 import net.minecraft.network.RegistryByteBuf
 import net.minecraft.network.codec.PacketCodec
 
-object LootFunctionLootablePoolEntryDisplay: SimpleLootablePoolEntryDisplay(Lootables.identity("display/function")) {
+data object LootFunctionLootablePoolEntryDisplay: SimpleLootablePoolEntryDisplay(Lootables.identity("display/function")) {
 
     override fun type(): LootablePoolEntryType {
         return LootablePoolEntryTypes.FUNCTION

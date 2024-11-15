@@ -19,17 +19,17 @@ import me.fzzyhmstrs.lootables.loot.entry.*
 object LootablePoolEntryTypes {
 
     val CUSTOM = LootablePoolEntryType.create(Lootables.identity("custom"), CustomLootablePoolEntry.CODEC, CustomLootablePoolEntryDisplay.PACKET_CODEC.cast())
-    val ITEM = LootablePoolEntryType.create(Lootables.identity("item"), ItemLootablePoolEntry.CODEC, ItemLootablePoolEntryDisplay.PACKET_CODEC)
+    val ITEM = LootablePoolEntryType.create(Lootables.identity("item"), ItemLootablePoolEntry.CODEC, ItemLootablePoolEntryDisplay.PACKET_CODEC, ItemLootablePoolEntry.Companion::createRandomInstance)
     val POOL = LootablePoolEntryType.create(Lootables.identity("pool"), PoolLootablePoolEntry.CODEC, PoolLootablePoolEntryDisplay.PACKET_CODEC)
     val TABLE = LootablePoolEntryType.create(Lootables.identity("table"), TableLootablePoolEntry.CODEC, TableLootablePoolEntryDisplay.PACKET_CODEC)
-    val XP = LootablePoolEntryType.create(Lootables.identity("xp"), ExperienceLootablePoolEntry.CODEC, ExperienceLootablePoolEntryDisplay.PACKET_CODEC)
-    val HEAL = LootablePoolEntryType.create(Lootables.identity("heal"), HealLootablePoolEntry.CODEC, HealLootablePoolEntryDisplay.PACKET_CODEC)
+    val XP = LootablePoolEntryType.create(Lootables.identity("xp"), ExperienceLootablePoolEntry.CODEC, ExperienceLootablePoolEntryDisplay.PACKET_CODEC, ExperienceLootablePoolEntry.Companion::createRandomInstance)
+    val HEAL = LootablePoolEntryType.create(Lootables.identity("heal"), HealLootablePoolEntry.CODEC, HealLootablePoolEntryDisplay.PACKET_CODEC, HealLootablePoolEntry.Companion::createRandomInstance)
     val STATUS = LootablePoolEntryType.create(Lootables.identity("status"), StatusEffectLootablePoolEntry.CODEC, StatusEffectLootablePoolEntryDisplay.PACKET_CODEC)
-    val ATTRIBUTE = LootablePoolEntryType.create(Lootables.identity("attribute"), AttributeLootablePoolEntry.CODEC, AttributeLootablePoolEntryDisplay.PACKET_CODEC)
-    val MULTI = LootablePoolEntryType.create(Lootables.identity("multi"), MultiLootablePoolEntry.CODEC, MultiLootablePoolEntryDisplay.PACKET_CODEC)
-    val RANDOM = LootablePoolEntryType.create(Lootables.identity("random"), RandomLootablePoolEntry.CODEC, RandomLootablePoolEntryDisplay.PACKET_CODEC)
+    val ATTRIBUTE = LootablePoolEntryType.create(Lootables.identity("attribute"), AttributeLootablePoolEntry.CODEC, AttributeLootablePoolEntryDisplay.PACKET_CODEC, AttributeLootablePoolEntry.Companion::createRandomInstance)
+    val MULTI = LootablePoolEntryType.create(Lootables.identity("multi"), MultiLootablePoolEntry.CODEC, MultiLootablePoolEntryDisplay.PACKET_CODEC, MultiLootablePoolEntry.Companion::createRandomInstance)
+    val RANDOM = LootablePoolEntryType.create(Lootables.identity("random"), RandomLootablePoolEntry.CODEC, RandomLootablePoolEntryDisplay.PACKET_CODEC, RandomLootablePoolEntry.Companion::createRandomInstance)
     val FUNCTION = LootablePoolEntryType.create(Lootables.identity("function"), LootFunctionLootablePoolEntry.CODEC, LootFunctionLootablePoolEntryDisplay.PACKET_CODEC)
-    val ADVANCEMENT = LootablePoolEntryType.create(Lootables.identity("advancement"), AdvancementLootablePoolEntry.CODEC, AdvancementLootablePoolEntryDisplay.PACKET_CODEC)
+    val ADVANCEMENT = LootablePoolEntryType.create(Lootables.identity("advancement"), AdvancementLootablePoolEntry.CODEC, AdvancementLootablePoolEntryDisplay.PACKET_CODEC, AdvancementLootablePoolEntry.Companion::createRandomInstance)
 
     fun init(){}
 

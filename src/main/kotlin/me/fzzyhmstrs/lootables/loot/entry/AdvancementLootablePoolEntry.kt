@@ -61,12 +61,18 @@ class AdvancementLootablePoolEntry(private val advancement: Identifier): Lootabl
         return AdvancementLootablePoolEntryDisplay(adv.value.display.map { it.icon })
     }
 
+    /*override */
+
     companion object {
 
         val CODEC: MapCodec<AdvancementLootablePoolEntry> = RecordCodecBuilder.mapCodec { instance: RecordCodecBuilder.Instance<AdvancementLootablePoolEntry> ->
             instance.group(
                 Identifier.CODEC.fieldOf("advancement").forGetter(AdvancementLootablePoolEntry::advancement)
             ).apply(instance, ::AdvancementLootablePoolEntry)
+        }
+
+        fun createRandomInstance(playerEntity: ServerPlayerEntity): LootablePoolEntry {
+            return AdvancementLootablePoolEntry(playerEntity.serverWorld.server.advancementLoader.advancements.random().id)
         }
     }
 

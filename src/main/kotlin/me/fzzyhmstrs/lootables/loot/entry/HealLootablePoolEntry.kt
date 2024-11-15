@@ -22,8 +22,11 @@ import me.fzzyhmstrs.lootables.loot.LootablePoolEntryDisplay
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryType
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryTypes
 import me.fzzyhmstrs.lootables.loot.display.HealLootablePoolEntryDisplay
+import me.fzzyhmstrs.lootables.loot.number.ConstantLootableNumber
 import me.fzzyhmstrs.lootables.loot.number.LootableNumber
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.item.ItemStack
+import net.minecraft.registry.Registries
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.Text
 import net.minecraft.util.math.Vec3d
@@ -52,6 +55,10 @@ class HealLootablePoolEntry(private val amount: LootableNumber): LootablePoolEnt
             instance.group(
                 LootableNumber.CODEC.fieldOf("amount").forGetter(HealLootablePoolEntry::amount)
             ).apply(instance, ::HealLootablePoolEntry)
+        }
+
+        fun createRandomInstance(playerEntity: ServerPlayerEntity): LootablePoolEntry {
+            return ExperienceLootablePoolEntry(ConstantLootableNumber(Lootables.random().nextFloat() * 100f), Lootables.random().nextBoolean())
         }
     }
 

@@ -57,8 +57,16 @@ class RandomLootablePoolEntry(private val children: List<LootablePoolEntry>): Lo
 
         val CODEC: MapCodec<RandomLootablePoolEntry> = RecordCodecBuilder.mapCodec { instance: RecordCodecBuilder.Instance<RandomLootablePoolEntry> ->
             instance.group(
-                LootablePoolEntry.MAP_CODEC.codec().listOf().fieldOf("children").forGetter(RandomLootablePoolEntry::children)
+                LootablePoolEntry.CODEC.listOf().fieldOf("children").forGetter(RandomLootablePoolEntry::children)
             ).apply(instance, ::RandomLootablePoolEntry)
+        }
+
+        fun createRandomInstance(playerEntity: ServerPlayerEntity): LootablePoolEntry {
+            val list: MutableList<LootablePoolEntry> = mutableListOf()
+            for (i in 0..Lootables.random().nextInt(5)) {
+                LootablePoolEntryType.random(playerEntity)?.let { list.add(it) }
+            }
+            return RandomLootablePoolEntry(list)
         }
     }
 

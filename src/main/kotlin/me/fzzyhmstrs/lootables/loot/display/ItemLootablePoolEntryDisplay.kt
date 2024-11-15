@@ -19,7 +19,7 @@ import me.fzzyhmstrs.lootables.loot.LootablePoolEntryTypes
 import net.minecraft.client.MinecraftClient
 import net.minecraft.item.ItemStack
 
-class ItemLootablePoolEntryDisplay(private val itemStack: ItemStack): LootablePoolEntryDisplay {
+data class ItemLootablePoolEntryDisplay(private val itemStack: ItemStack): LootablePoolEntryDisplay {
 
     override fun type(): LootablePoolEntryType {
         return LootablePoolEntryTypes.ITEM

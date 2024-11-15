@@ -1,21 +1,7 @@
 {
   "pools": [
-    {
-      "id": "lootables_test:iron_sword",
-      "rarity": "rare",
-      "entry": {
-        "type": "lootables:item",
-        "item": "minecraft:iron_sword"
-      }
-    },
-    {
-      "id": "lootables_test:iron_ingot",
-      "rarity": "common",
-      "entry": {
-        "type": "lootables:item",
-        "item": "minecraft:iron_ingot"
-      }
-    },
+    "lootables_test:iron_sword",
+    "lootables_test:iron_ingot",
     {
       "id": "lootables_test:planks",
       "rarity": "common",

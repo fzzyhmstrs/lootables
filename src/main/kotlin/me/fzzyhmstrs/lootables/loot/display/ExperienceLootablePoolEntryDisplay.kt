@@ -19,7 +19,7 @@ import net.minecraft.network.RegistryByteBuf
 import net.minecraft.network.codec.PacketCodec
 import net.minecraft.network.codec.PacketCodecs
 
-class ExperienceLootablePoolEntryDisplay(private val levels: Boolean): SimpleLootablePoolEntryDisplay(if(levels) Lootables.identity("display/experience_levels") else Lootables.identity("display/experience_points")) {
+data class ExperienceLootablePoolEntryDisplay(private val levels: Boolean): SimpleLootablePoolEntryDisplay(if(levels) Lootables.identity("display/experience_levels") else Lootables.identity("display/experience_points")) {
 
     override fun type(): LootablePoolEntryType {
         return LootablePoolEntryTypes.XP

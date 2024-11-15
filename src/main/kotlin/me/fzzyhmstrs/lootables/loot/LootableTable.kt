@@ -23,7 +23,7 @@ import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.Vec3d
 
-class LootableTable private constructor(private val pools: List<LootablePool>, private val poolMap: Map<Identifier, LootablePool>, private val overrides: Map<LootableRarity, Int>) {
+class LootableTable private constructor(private val pools: List<LootablePool>, private val poolMap: Map<Identifier, LootablePool>, private val weightOverrides: Map<LootableRarity, Int>) {
 
     fun supplyPools(context: LootContext, rolls: Int): List<LootablePool> {
         if (rolls <= 0) return listOf()
@@ -62,7 +62,7 @@ class LootableTable private constructor(private val pools: List<LootablePool>, p
     }
 
     private fun getWeight(pool: LootablePool): Int {
-        return pool.getWeight() ?: overrides[pool.rarity] ?: pool.rarity.weight
+        return pool.getWeight() ?: weightOverrides[pool.rarity] ?: pool.rarity.weight
     }
 
     fun supplyPoolsById(context: LootContext, rolls: Int): List<Identifier> {
@@ -123,24 +123,53 @@ class LootableTable private constructor(private val pools: List<LootablePool>, p
         return poolMap.hashCode()
     }
 
+    override fun toString(): String {
+        return "LootableTable$pools"
+    }
+
     private data class PoolEntry(val previousIndex: Int, val weightIndex: Int, val pool: LootablePool)
 
     companion object {
-        fun of(pools: List<LootablePool>, overrides: Map<LootableRarity, Int> = mapOf()): LootableTable {
+        fun of(pools: List<LootablePool>, weightOverrides: Map<LootableRarity, Int> = mapOf()): LootableTable {
             fun getWeight(pool: LootablePool): Int {
-                return pool.getWeight() ?: overrides[pool.rarity] ?: pool.rarity.weight
+                return pool.getWeight() ?: weightOverrides[pool.rarity] ?: pool.rarity.weight
             }
-            return LootableTable(pools.sortedWith { p1, p2 -> getWeight(p1).compareTo(getWeight(p2)) }, pools.associateBy { pool -> pool.id }, overrides)
+            return LootableTable(pools.sortedWith { p1, p2 -> getWeight(p1).compareTo(getWeight(p2)) }, pools.associateBy { pool -> pool.id }, weightOverrides)
+        }
+
+        fun random(playerEntity: ServerPlayerEntity, meanPoolSize: Int): LootableTable {
+            val overrides: MutableMap<LootableRarity, Int> = mutableMapOf()
+            if (Lootables.random().nextFloat() < 0.05f) {
+                overrides[LootableRarity.COMMON] = Lootables.random().nextInt(12) + 1
+            }
+            if (Lootables.random().nextFloat() < 0.05f) {
+                overrides[LootableRarity.UNCOMMON] = Lootables.random().nextInt(12) + 1
+            }
+            if (Lootables.random().nextFloat() < 0.05f) {
+                overrides[LootableRarity.RARE] = Lootables.random().nextInt(12) + 1
+            }
+            if (Lootables.random().nextFloat() < 0.05f) {
+                overrides[LootableRarity.EPIC] = Lootables.random().nextInt(12) + 1
+            }
+            if (Lootables.random().nextFloat() < 0.05f) {
+                overrides[LootableRarity.LEGENDARY] = Lootables.random().nextInt(12) + 1
+            }
+            if (Lootables.random().nextFloat() < 0.05f) {
+                overrides[LootableRarity.RAINBOW] = Lootables.random().nextInt(12) + 1
+            }
+            return of(LootablePool.createRandomPools(playerEntity, meanPoolSize), overrides)
         }
 
         private val OVERRIDES_CODEC = Codec.simpleMap(LootableRarity.CODEC, Codec.intRange(1, Int.MAX_VALUE), LootableRarity.KEYS)
 
         private val POOL_CODEC = Codec.withAlternative(LootablePool.CODEC, LootablePool.REFERENCE_CODEC)
 
+        private val EMPTY_OVERRIDES = mapOf<LootableRarity, Int>()
+
         val CODEC = RecordCodecBuilder.create { instance: RecordCodecBuilder.Instance<LootableTable> ->
             instance.group(
                 POOL_CODEC.listOf().fieldOf("pools").forGetter(LootableTable::pools),
-                OVERRIDES_CODEC.codec().optionalFieldOf("weights", mapOf()).forGetter(LootableTable::overrides)
+                OVERRIDES_CODEC.codec().optionalFieldOf("weights", EMPTY_OVERRIDES).forGetter(LootableTable::weightOverrides)
             ).apply(instance) { p, o -> of(p, o) }
         }
     }

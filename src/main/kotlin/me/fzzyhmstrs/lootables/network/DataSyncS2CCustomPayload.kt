@@ -28,7 +28,7 @@ class DataSyncS2CCustomPayload(val tables: Map<Identifier, List<LootablePoolData
     companion object {
         val TYPE: Id<DataSyncS2CCustomPayload> = Id(Lootables.identity("sync_s2c"))
 
-        val CODEC = PacketCodecs.map({ mutableMapOf() }, Identifier.PACKET_CODEC, LootablePoolData.LIST_PACKET_CODEC)
-            .xmap(::DataSyncS2CCustomPayload) { payload -> payload.tables.toMutableMap() }
+        val CODEC = PacketCodecs.map({ println("Decode start: ${System.currentTimeMillis()}"); mutableMapOf() }, Identifier.PACKET_CODEC, LootablePoolData.LIST_PACKET_CODEC)
+            .xmap({ tables -> println("Decode end: ${System.currentTimeMillis()}"); DataSyncS2CCustomPayload(tables) } ) { payload -> payload.tables.toMutableMap() }
     }
 }
