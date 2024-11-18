@@ -1,0 +1,133 @@
+{
+  "pools": [
+    {
+      "max_uses": 95,
+      "id": "lootables:a9bc8773-bcae-4aec-96c5-e0513fb5eec2",
+      "rarity": "legendary",
+      "entry": {
+        "children": [],
+        "type": "lootables:multi"
+      },
+      "guaranteed": true
+    },
+    {
+      "weight": 1,
+      "id": "lootables:80b4bb98-ff6e-4c1e-8fa9-855d46725be1",
+      "rarity": "rainbow",
+      "entry": {
+        "children": [
+          {
+            "children": [],
+            "type": "lootables:random"
+          },
+          {
+            "item": {
+              "id": "minecraft:black_carpet",
+              "count": 54.0
+            },
+            "type": "lootables:item"
+          }
+        ],
+        "type": "lootables:random"
+      }
+    },
+    {
+      "weight": 3,
+      "id": "lootables:c73cc976-1eb8-461e-be10-c66056957602",
+      "rarity": "legendary",
+      "entry": {
+        "advancement": "minecraft:recipes/building_blocks/dye_white_bed",
+        "type": "lootables:advancement"
+      }
+    },
+    {
+      "id": "lootables:8e94b2e6-274f-4d47-a8a1-95d04d8aaad4",
+      "rarity": "uncommon",
+      "entry": {
+        "xp": 36.1097,
+        "type": "lootables:xp"
+      },
+      "guaranteed": true
+    },
+    {
+      "max_uses": 86,
+      "id": "lootables:75e0dc67-8118-4386-8391-aa059c286af2",
+      "rarity": "uncommon",
+      "entry": {
+        "advancement": "minecraft:recipes/decorations/acacia_fence",
+        "type": "lootables:advancement"
+      },
+      "guaranteed": true
+    },
+    {
+      "max_uses": 36,
+      "id": "lootables:b100e47e-0406-405c-a58d-5fc19f80b85f",
+      "rarity": "uncommon",
+      "entry": {
+        "item": {
+          "id": "minecraft:creeper_banner_pattern",
+          "count": 16.0
+        },
+        "drop_items": true,
+        "type": "lootables:item"
+      },
+      "guaranteed": true
+    },
+    {
+      "id": "lootables:0ee10378-f703-4534-a8ee-16c42fb86190",
+      "rarity": "uncommon",
+      "entry": {
+        "children": [],
+        "type": "lootables:multi"
+      },
+      "guaranteed": true
+    },
+    {
+      "weight": 7,
+      "id": "lootables:6da77f4d-7320-47f3-8ce0-1caaf221cbd6",
+      "rarity": "legendary",
+      "entry": {
+        "xp": 92.66819,
+        "type": "lootables:xp"
+      },
+      "guaranteed": true
+    },
+    {
+      "weight": 8,
+      "id": "lootables:d7d9e446-b4c2-4d48-873a-e44ab9b4c9c9",
+      "rarity": "rainbow",
+      "entry": {
+        "item": {
+          "id": "minecraft:chorus_fruit",
+          "count": 19.0
+        },
+        "type": "lootables:item"
+      },
+      "guaranteed": true
+    },
+    {
+      "weight": 9,
+      "max_uses": 13,
+      "id": "lootables:c3ad667e-55f8-46ab-959e-2e1fb6a05f44",
+      "rarity": "rainbow",
+      "entry": {
+        "advancement": "minecraft:husbandry/wax_on",
+        "type": "lootables:advancement"
+      }
+    },
+    {
+      "weight": 11,
+      "max_uses": 68,
+      "id": "lootables:f7dbde5b-5423-48df-9939-dd43f980b245",
+      "rarity": "rare",
+      "entry": {
+        "value": 1.0593114355719735,
+        "operation": "add_multiplied_base",
+        "persistent": true,
+        "attribute": "minecraft:player.submerged_mining_speed",
+        "id": "lootables:8309c32e-860a-4a71-a5e2-1eedcca8b1ba",
+        "type": "lootables:attribute"
+      }
+    }
+  ]
+}

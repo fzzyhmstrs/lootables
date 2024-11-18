@@ -15,7 +15,6 @@ package me.fzzyhmstrs.lootables.loot.entry
 import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
-import me.fzzyhmstrs.fzzy_config.util.FcText.translate
 import me.fzzyhmstrs.lootables.Lootables
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntry
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryDisplay
@@ -25,15 +24,16 @@ import me.fzzyhmstrs.lootables.loot.display.ItemLootablePoolEntryDisplay
 import me.fzzyhmstrs.lootables.loot.number.ConstantLootableNumber
 import me.fzzyhmstrs.lootables.loot.number.LootableNumber
 import net.minecraft.component.ComponentChanges
-import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
+import net.minecraft.item.Items
 import net.minecraft.registry.Registries
 import net.minecraft.registry.entry.RegistryEntry
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.Text
 import net.minecraft.util.ItemScatterer
 import net.minecraft.util.math.Vec3d
+import kotlin.math.min
 
 class ItemLootablePoolEntry private constructor(private val itemEntryStack: ItemEntryStack, private val dropItems: Boolean = false): LootablePoolEntry {
 
@@ -45,7 +45,7 @@ class ItemLootablePoolEntry private constructor(private val itemEntryStack: Item
         return LootablePoolEntryTypes.ITEM
     }
 
-    override fun apply(player: PlayerEntity, origin: Vec3d) {
+    override fun apply(player: ServerPlayerEntity, origin: Vec3d) {
         if (dropItems) {
             ItemScatterer.spawn(player.world, origin.x, origin.y, origin.z, itemEntryStack.getStack())
         } else {
@@ -53,12 +53,8 @@ class ItemLootablePoolEntry private constructor(private val itemEntryStack: Item
         }
     }
 
-    override fun defaultDescription(playerEntity: ServerPlayerEntity): Text {
-        return if(dropItems) "lootables.entry.item.drop".translate(itemEntryStack.desc(), itemEntryStack.name()) else "lootables.entry.item.give".translate(itemEntryStack.desc(), itemEntryStack.name())
-    }
-
     override fun createDisplay(playerEntity: ServerPlayerEntity): LootablePoolEntryDisplay {
-        return ItemLootablePoolEntryDisplay(itemEntryStack.displayStack())
+        return ItemLootablePoolEntryDisplay(itemEntryStack.item, itemEntryStack.desc().string, itemEntryStack.avg().toByte(), itemEntryStack.hasGlint(), dropItems)
     }
 
     companion object {
@@ -73,10 +69,15 @@ class ItemLootablePoolEntry private constructor(private val itemEntryStack: Item
         }
 
         fun createRandomInstance(playerEntity: ServerPlayerEntity): LootablePoolEntry {
-            return ItemLootablePoolEntry(ItemStack(Registries.ITEM.entrySet.random().value, Lootables.random().nextInt(64) + 1), Lootables.random().nextBoolean())
-        }    }
+            var item = Registries.ITEM.entrySet.random().value
+            while (item == Items.AIR) {
+                item = Registries.ITEM.entrySet.random().value
+            }
+            return ItemLootablePoolEntry(ItemStack(item, Lootables.random().nextInt(min(64, item.maxCount)) + 1), Lootables.random().nextBoolean())
+        }
+    }
 
-    private class ItemEntryStack(private val item: RegistryEntry<Item>, private val count: LootableNumber, private val components: ComponentChanges) {
+    private class ItemEntryStack(val item: RegistryEntry<Item>, private val count: LootableNumber, private val components: ComponentChanges) {
 
         fun getStack(): ItemStack {
             return ItemStack(item, count.nextInt(), components)
@@ -86,12 +87,20 @@ class ItemLootablePoolEntry private constructor(private val itemEntryStack: Item
             return ItemStack(item, count.descInt(), components)
         }
 
+        fun hasGlint(): Boolean {
+            return getStack().hasGlint()
+        }
+
         fun desc(): Text {
             return count.desc(true)
         }
 
         fun name(): Text {
             return item.value().name
+        }
+
+        fun avg(): Int {
+            return count.descInt()
         }
 
         companion object {

@@ -1,0 +1,310 @@
+{
+  "pools": [
+    {
+      "id": "lootables:ca83955a-1a5a-409a-9fbf-bd73aa653262",
+      "rarity": "rainbow",
+      "entry": {
+        "advancement": "minecraft:recipes/misc/iron_nugget_from_smelting",
+        "type": "lootables:advancement"
+      }
+    },
+    {
+      "id": "lootables:24392526-1933-43e0-844b-ac24e5bdc684",
+      "rarity": "rainbow",
+      "entry": {
+        "advancement": "minecraft:recipes/transportation/oak_chest_boat",
+        "type": "lootables:advancement"
+      },
+      "guaranteed": true
+    },
+    {
+      "max_uses": 54,
+      "id": "lootables:63f6708b-4734-4ccf-9c29-d8b5a314afde",
+      "rarity": "rainbow",
+      "entry": {
+        "xp": 67.26361,
+        "levels": false,
+        "type": "lootables:xp"
+      }
+    },
+    {
+      "max_uses": 74,
+      "id": "lootables:51a71eab-76f4-4a7c-82b8-53e2553ba47d",
+      "rarity": "epic",
+      "entry": {
+        "xp": 49.864857,
+        "type": "lootables:xp"
+      }
+    },
+    {
+      "max_uses": 91,
+      "id": "lootables:8ed5331c-e17e-4646-b9dc-cb2d16a0b615",
+      "rarity": "epic",
+      "entry": {
+        "children": [
+          {
+            "item": {
+              "id": "minecraft:trident",
+              "count": 25.0
+            },
+            "drop_items": true,
+            "type": "lootables:item"
+          },
+          {
+            "children": [
+              {
+                "children": [
+                  {
+                    "children": [
+                      {
+                        "xp": 91.35755,
+                        "type": "lootables:xp"
+                      },
+                      {
+                        "children": [
+                          {
+                            "children": [
+                              {
+                                "item": {
+                                  "id": "minecraft:netherite_scrap",
+                                  "count": 34.0
+                                },
+                                "drop_items": true,
+                                "type": "lootables:item"
+                              },
+                              {
+                                "item": {
+                                  "id": "minecraft:torchflower",
+                                  "count": 53.0
+                                },
+                                "type": "lootables:item"
+                              },
+                              {
+                                "children": [
+                                  {
+                                    "children": [
+                                      {
+                                        "children": [
+                                          {
+                                            "value": 8.745943155267009,
+                                            "operation": "add_multiplied_base",
+                                            "attribute": "minecraft:player.mining_efficiency",
+                                            "id": "lootables:a9348a05-3f77-415d-b915-d2937e902bde",
+                                            "type": "lootables:attribute"
+                                          },
+                                          {
+                                            "item": {
+                                              "id": "minecraft:breeze_rod",
+                                              "count": 34.0
+                                            },
+                                            "drop_items": true,
+                                            "type": "lootables:item"
+                                          },
+                                          {
+                                            "children": [
+                                              {
+                                                "children": [],
+                                                "type": "lootables:random"
+                                              }
+                                            ],
+                                            "type": "lootables:multi"
+                                          },
+                                          {
+                                            "value": 8.47139692000897,
+                                            "operation": "add_multiplied_total",
+                                            "persistent": true,
+                                            "attribute": "minecraft:player.submerged_mining_speed",
+                                            "id": "lootables:3fd4a27f-477e-4f10-b1bd-ef14ddff09fd",
+                                            "type": "lootables:attribute"
+                                          },
+                                          {
+                                            "advancement": "minecraft:recipes/building_blocks/sandstone_stairs_from_sandstone_stonecutting",
+                                            "type": "lootables:advancement"
+                                          }
+                                        ],
+                                        "type": "lootables:random"
+                                      }
+                                    ],
+                                    "type": "lootables:random"
+                                  },
+                                  {
+                                    "xp": 24.717354,
+                                    "type": "lootables:xp"
+                                  },
+                                  {
+                                    "item": {
+                                      "id": "minecraft:spruce_wood",
+                                      "count": 28.0
+                                    },
+                                    "drop_items": true,
+                                    "type": "lootables:item"
+                                  }
+                                ],
+                                "type": "lootables:multi"
+                              },
+                              {
+                                "xp": 55.340862,
+                                "levels": false,
+                                "type": "lootables:xp"
+                              }
+                            ],
+                            "type": "lootables:random"
+                          },
+                          {
+                            "value": 4.0491873776931575,
+                            "operation": "add_multiplied_total",
+                            "attribute": "minecraft:generic.fall_damage_multiplier",
+                            "id": "lootables:12411948-4c52-446b-857a-5180fd56f8ea",
+                            "type": "lootables:attribute"
+                          }
+                        ],
+                        "type": "lootables:random"
+                      }
+                    ],
+                    "type": "lootables:multi"
+                  }
+                ],
+                "type": "lootables:multi"
+              },
+              {
+                "xp": 86.64125,
+                "levels": false,
+                "type": "lootables:xp"
+              },
+              {
+                "value": 7.034577616493484,
+                "attribute": "minecraft:generic.luck",
+                "id": "lootables:71a12e01-96e3-42a1-a280-0083fea95db2",
+                "type": "lootables:attribute"
+              }
+            ],
+            "type": "lootables:multi"
+          }
+        ],
+        "type": "lootables:multi"
+      }
+    },
+    {
+      "weight": 3,
+      "max_uses": 25,
+      "id": "lootables:c910a604-d932-4100-a7e7-0593d113ed8f",
+      "rarity": "uncommon",
+      "entry": {
+        "item": {
+          "id": "minecraft:stone_axe",
+          "count": 36.0
+        },
+        "drop_items": true,
+        "type": "lootables:item"
+      }
+    },
+    {
+      "weight": 5,
+      "max_uses": 27,
+      "id": "lootables:fe4fd176-686b-4e29-94d8-b11929a4dd17",
+      "rarity": "rainbow",
+      "entry": {
+        "xp": 72.75303,
+        "levels": false,
+        "type": "lootables:xp"
+      }
+    },
+    {
+      "weight": 7,
+      "id": "lootables:fa7e724f-2d88-4450-a3ee-65995fd2933a",
+      "rarity": "epic",
+      "entry": {
+        "item": {
+          "id": "minecraft:water_bucket",
+          "count": 11.0
+        },
+        "type": "lootables:item"
+      }
+    },
+    {
+      "weight": 9,
+      "id": "lootables:dc1a7a85-bc15-43f8-ab2d-dcdc118e29e2",
+      "rarity": "legendary",
+      "entry": {
+        "children": [
+          {
+            "value": 9.90979961769904,
+            "persistent": true,
+            "attribute": "minecraft:player.sneaking_speed",
+            "id": "lootables:be585817-239e-415e-9051-5388b01272b5",
+            "type": "lootables:attribute"
+          },
+          {
+            "xp": 14.366346,
+            "type": "lootables:xp"
+          }
+        ],
+        "type": "lootables:multi"
+      }
+    },
+    {
+      "weight": 10,
+      "max_uses": 8,
+      "id": "lootables:f8d71a21-7fcb-4395-99b7-63751d378d3d",
+      "rarity": "rainbow",
+      "entry": {
+        "item": {
+          "id": "minecraft:mangrove_stairs",
+          "count": 39.0
+        },
+        "drop_items": true,
+        "type": "lootables:item"
+      },
+      "guaranteed": true
+    },
+    {
+      "weight": 10,
+      "id": "lootables:b72de7a3-af88-4474-a7df-e71256203d85",
+      "rarity": "uncommon",
+      "entry": {
+        "xp": 80.18008,
+        "type": "lootables:xp"
+      }
+    },
+    {
+      "id": "lootables:08cdc965-1ca2-421a-897a-d9893c7f9973",
+      "entry": {
+        "children": [
+          {
+            "children": [
+              {
+                "value": 8.616155667678292,
+                "operation": "add_multiplied_base",
+                "persistent": true,
+                "attribute": "minecraft:generic.flying_speed",
+                "id": "lootables:8553e4b6-1dfd-4ba6-a141-037acfea75c2",
+                "type": "lootables:attribute"
+              },
+              {
+                "xp": 77.98204,
+                "type": "lootables:xp"
+              }
+            ],
+            "type": "lootables:random"
+          },
+          {
+            "item": {
+              "id": "minecraft:jack_o_lantern",
+              "count": 46.0
+            },
+            "type": "lootables:item"
+          },
+          {
+            "item": {
+              "id": "minecraft:sunflower",
+              "count": 49.0
+            },
+            "drop_items": true,
+            "type": "lootables:item"
+          }
+        ],
+        "type": "lootables:multi"
+      }
+    }
+  ]
+}

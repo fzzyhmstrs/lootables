@@ -12,6 +12,7 @@
 
 package me.fzzyhmstrs.lootables.loot.display
 
+import me.fzzyhmstrs.fzzy_config.util.FcText
 import me.fzzyhmstrs.lootables.client.screen.TileIcon
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryDisplay
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryType
@@ -19,21 +20,34 @@ import me.fzzyhmstrs.lootables.loot.LootablePoolEntryTypes
 import net.minecraft.network.RegistryByteBuf
 import net.minecraft.network.codec.PacketCodec
 import net.minecraft.network.codec.PacketCodecs
+import net.minecraft.text.Text
 
-data class RandomLootablePoolEntryDisplay(private val children: List<LootablePoolEntryDisplay>): LootablePoolEntryDisplay {
+data class RandomLootablePoolEntryDisplay(private val children: List<LootablePoolEntryDisplay.DisplayWithDesc>): LootablePoolEntryDisplay {
 
     override fun type(): LootablePoolEntryType {
         return LootablePoolEntryTypes.RANDOM
     }
 
+    override fun clientDescription(): Text {
+        val text = FcText.translatable("lootables.entry.random")
+        text.append(FcText.literal("\n"))
+        for ((i, child) in children.withIndex()) {
+            text.append(child.provideDescription())
+            if (i != children.lastIndex) {
+                text.append(FcText.literal("\n"))
+            }
+        }
+        return text
+    }
+
     override fun provideIcons(): List<TileIcon> {
         val time = System.currentTimeMillis() / 1000L
         val index = time % children.size
-        return children[index.toInt()].provideIcons()
+        return children[index.toInt()].display.provideIcons()
     }
 
     companion object {
-        val PACKET_CODEC: PacketCodec<RegistryByteBuf, RandomLootablePoolEntryDisplay> = LootablePoolEntryDisplay.PACKET_CODEC.collect(PacketCodecs.toList()).xmap(
+        val PACKET_CODEC: PacketCodec<RegistryByteBuf, RandomLootablePoolEntryDisplay> = LootablePoolEntryDisplay.DisplayWithDesc.PACKET_CODEC.collect(PacketCodecs.toList()).xmap(
             ::RandomLootablePoolEntryDisplay,
             RandomLootablePoolEntryDisplay::children
         )

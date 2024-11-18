@@ -1,0 +1,189 @@
+{
+  "pools": [
+    {
+      "id": "lootables:c43424ce-fbe2-44bd-9996-c8bd34bdeb2e",
+      "rarity": "legendary",
+      "entry": {
+        "children": [
+          {
+            "xp": 41.923893,
+            "levels": false,
+            "type": "lootables:xp"
+          },
+          {
+            "children": [],
+            "type": "lootables:random"
+          },
+          {
+            "value": 1.4654047928765068,
+            "operation": "add_multiplied_total",
+            "attribute": "minecraft:generic.oxygen_bonus",
+            "id": "lootables:9d59469d-56bf-41e0-9534-4fe8afc4871e",
+            "type": "lootables:attribute"
+          }
+        ],
+        "type": "lootables:multi"
+      }
+    },
+    {
+      "max_uses": 21,
+      "id": "lootables:cbe33ec4-1c49-49f9-90b2-d93e5e3f061e",
+      "rarity": "rainbow",
+      "entry": {
+        "xp": 2.5995672,
+        "type": "lootables:xp"
+      }
+    },
+    {
+      "weight": 2,
+      "id": "lootables:6555bde5-626f-45c8-869f-a4c9c0bf2658",
+      "entry": {
+        "children": [],
+        "type": "lootables:random"
+      }
+    },
+    {
+      "weight": 3,
+      "id": "lootables:7e318e23-8719-42b8-8b87-62d4a7914ee4",
+      "rarity": "legendary",
+      "entry": {
+        "children": [
+          {
+            "advancement": "minecraft:recipes/building_blocks/blue_stained_glass",
+            "type": "lootables:advancement"
+          },
+          {
+            "xp": 31.11673,
+            "levels": false,
+            "type": "lootables:xp"
+          }
+        ],
+        "type": "lootables:random"
+      }
+    },
+    {
+      "weight": 4,
+      "id": "lootables:43831927-3ed7-4875-b61a-68e66584fa35",
+      "rarity": "rare",
+      "entry": {
+        "xp": 77.51409,
+        "levels": false,
+        "type": "lootables:xp"
+      }
+    },
+    {
+      "weight": 5,
+      "max_uses": 49,
+      "id": "lootables:cb56c4d3-9278-4756-90a3-111e6788482b",
+      "rarity": "epic",
+      "entry": {
+        "children": [
+          {
+            "xp": 92.96764,
+            "type": "lootables:xp"
+          },
+          {
+            "xp": 55.924625,
+            "levels": false,
+            "type": "lootables:xp"
+          },
+          {
+            "xp": 30.713594,
+            "levels": false,
+            "type": "lootables:xp"
+          }
+        ],
+        "type": "lootables:multi"
+      }
+    },
+    {
+      "max_uses": 83,
+      "id": "lootables:b3adf6c2-3530-4719-b670-4325154858cf",
+      "rarity": "uncommon",
+      "entry": {
+        "xp": 12.5243845,
+        "levels": false,
+        "type": "lootables:xp"
+      }
+    },
+    {
+      "max_uses": 28,
+      "id": "lootables:1c1217eb-e159-4899-9996-0a9f8cd14541",
+      "rarity": "uncommon",
+      "entry": {
+        "children": [
+          {
+            "children": [
+              {
+                "item": {
+                  "id": "minecraft:mossy_stone_bricks",
+                  "count": 26.0
+                },
+                "drop_items": true,
+                "type": "lootables:item"
+              },
+              {
+                "children": [
+                  {
+                    "xp": 88.33647,
+                    "type": "lootables:xp"
+                  },
+                  {
+                    "xp": 69.17636,
+                    "levels": false,
+                    "type": "lootables:xp"
+                  }
+                ],
+                "type": "lootables:random"
+              }
+            ],
+            "type": "lootables:random"
+          }
+        ],
+        "type": "lootables:random"
+      }
+    },
+    {
+      "id": "lootables:f78d768f-015d-46ac-bfaa-1c046ab510ee",
+      "entry": {
+        "children": [
+          {
+            "xp": 55.56313,
+            "levels": false,
+            "type": "lootables:xp"
+          },
+          {
+            "value": 1.3485849555056728,
+            "operation": "add_multiplied_base",
+            "attribute": "minecraft:player.mining_efficiency",
+            "id": "lootables:745e46ba-542f-4731-9b78-c1285686f222",
+            "type": "lootables:attribute"
+          }
+        ],
+        "type": "lootables:multi"
+      }
+    },
+    {
+      "id": "lootables:66173c5c-c765-45bd-b7d7-340101b79697",
+      "entry": {
+        "xp": 28.545326,
+        "levels": false,
+        "type": "lootables:xp"
+      },
+      "guaranteed": true
+    },
+    {
+      "weight": 12,
+      "id": "lootables:9ca1b4b2-3380-4ca2-9614-03c290f1b48f",
+      "entry": {
+        "advancement": "minecraft:recipes/building_blocks/bamboo_stairs",
+        "type": "lootables:advancement"
+      },
+      "guaranteed": true
+    }
+  ],
+  "weights": {
+    "rare": 12,
+    "epic": 7
+  }
+}

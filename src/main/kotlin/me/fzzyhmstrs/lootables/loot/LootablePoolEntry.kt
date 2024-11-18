@@ -13,16 +13,17 @@
 package me.fzzyhmstrs.lootables.loot
 
 import com.mojang.serialization.Codec
-import com.mojang.serialization.MapCodec
-import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.Text
 import net.minecraft.util.math.Vec3d
 
+@JvmDefaultWithCompatibility
 interface LootablePoolEntry {
     fun type(): LootablePoolEntryType
-    fun apply(player: PlayerEntity, origin: Vec3d)
-    fun defaultDescription(playerEntity: ServerPlayerEntity): Text
+    fun apply(player: ServerPlayerEntity, origin: Vec3d)
+    fun serverDescription(playerEntity: ServerPlayerEntity): Text? {
+        return null
+    }
     fun createDisplay(playerEntity: ServerPlayerEntity): LootablePoolEntryDisplay
 
     companion object {

@@ -1,0 +1,128 @@
+{
+  "pools": [
+    {
+      "weight": 2,
+      "id": "lootables:80a16171-9d92-4a3f-8e82-aeae7cf4af04",
+      "rarity": "legendary",
+      "entry": {
+        "xp": 13.886065,
+        "levels": false,
+        "type": "lootables:xp"
+      },
+      "guaranteed": true
+    },
+    {
+      "max_uses": 44,
+      "id": "lootables:b797eb1d-8e3a-48d4-8457-0609a6baaa8f",
+      "rarity": "epic",
+      "entry": {
+        "children": [],
+        "type": "lootables:multi"
+      },
+      "guaranteed": true
+    },
+    {
+      "max_uses": 53,
+      "id": "lootables:238646cd-3dbe-4acd-9676-24e5c4ff96ef",
+      "rarity": "rare",
+      "entry": {
+        "xp": 63.20195,
+        "levels": false,
+        "type": "lootables:xp"
+      }
+    },
+    {
+      "id": "lootables:772b6f12-b579-423b-99a9-19c4d766e016",
+      "rarity": "uncommon",
+      "entry": {
+        "advancement": "minecraft:recipes/decorations/polished_blackstone_brick_wall_from_polished_blackstone_bricks_stonecutting",
+        "type": "lootables:advancement"
+      }
+    },
+    {
+      "weight": 8,
+      "max_uses": 72,
+      "id": "lootables:2ce29e51-f765-49a4-bffe-b7a50bb5cfdb",
+      "rarity": "uncommon",
+      "entry": {
+        "value": 3.58683751803732,
+        "operation": "add_multiplied_base",
+        "persistent": true,
+        "attribute": "minecraft:generic.armor_toughness",
+        "id": "lootables:e3fd0626-c6d2-4872-aaa6-731648a36fe2",
+        "type": "lootables:attribute"
+      }
+    },
+    {
+      "weight": 9,
+      "id": "lootables:98112676-3756-4931-9378-fb667efc88bf",
+      "rarity": "uncommon",
+      "entry": {
+        "children": [
+          {
+            "item": {
+              "id": "minecraft:nether_wart_block",
+              "count": 15.0
+            },
+            "type": "lootables:item"
+          },
+          {
+            "children": [
+              {
+                "advancement": "minecraft:recipes/decorations/mud_brick_wall_from_mud_bricks_stonecutting",
+                "type": "lootables:advancement"
+              },
+              {
+                "xp": 36.999725,
+                "type": "lootables:xp"
+              },
+              {
+                "xp": 77.334496,
+                "levels": false,
+                "type": "lootables:xp"
+              },
+              {
+                "value": 3.915542911758295,
+                "persistent": true,
+                "attribute": "minecraft:generic.explosion_knockback_resistance",
+                "id": "lootables:b900e433-d67a-4c8f-92ab-14cc9ed86f78",
+                "type": "lootables:attribute"
+              },
+              {
+                "children": [],
+                "type": "lootables:random"
+              }
+            ],
+            "type": "lootables:multi"
+          }
+        ],
+        "type": "lootables:multi"
+      },
+      "guaranteed": true
+    },
+    {
+      "max_uses": 18,
+      "id": "lootables:ac5f4fc2-a9ea-4304-ba76-abb330dd1615",
+      "entry": {
+        "item": {
+          "id": "minecraft:lapis_ore",
+          "count": 23.0
+        },
+        "type": "lootables:item"
+      },
+      "guaranteed": true
+    },
+    {
+      "id": "lootables:f5c573e9-3000-41a7-b659-798b82281296",
+      "entry": {
+        "item": {
+          "id": "minecraft:feather",
+          "count": 61.0
+        },
+        "drop_items": true,
+        "type": "lootables:item"
+      },
+      "guaranteed": true
+    }
+  ]
+}

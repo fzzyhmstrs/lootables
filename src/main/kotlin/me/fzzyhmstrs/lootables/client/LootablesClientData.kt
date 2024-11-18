@@ -27,13 +27,8 @@ object LootablesClientData {
     }
 
     fun receiveSync(data: Map<Identifier, List<LootablePoolData>>) {
-        val start = System.currentTimeMillis()
-        if (FabricLoader.getInstance().isDevelopmentEnvironment)
-            println("Starting client data build")
         tableData = ConcurrentHashMap(data.mapValues { (_, data) -> ConcurrentHashMap(data.associateBy { it.id }) })
-        if (FabricLoader.getInstance().isDevelopmentEnvironment)
-            println("Finishing client data build in: ${System.currentTimeMillis()-start}ms")
-        /*if (FabricLoader.getInstance().isDevelopmentEnvironment) {
+        if (FabricLoader.getInstance().isDevelopmentEnvironment) {
             println("Receiving Sync for player ${MinecraftClient.getInstance().player}")
             for ((id, d) in tableData) {
                 println(id)
@@ -42,6 +37,6 @@ object LootablesClientData {
                     println("  $d2")
                 }
             }
-        }*/
+        }
     }
 }

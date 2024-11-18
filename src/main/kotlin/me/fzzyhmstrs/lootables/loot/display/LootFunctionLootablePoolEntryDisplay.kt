@@ -12,18 +12,30 @@
 
 package me.fzzyhmstrs.lootables.loot.display
 
+import me.fzzyhmstrs.fzzy_config.util.FcText.translate
 import me.fzzyhmstrs.lootables.Lootables
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryType
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryTypes
+import net.minecraft.component.type.AttributeModifierSlot
 import net.minecraft.network.RegistryByteBuf
 import net.minecraft.network.codec.PacketCodec
+import net.minecraft.text.Text
 
-data object LootFunctionLootablePoolEntryDisplay: SimpleLootablePoolEntryDisplay(Lootables.identity("display/function")) {
+data class LootFunctionLootablePoolEntryDisplay(private val slots: AttributeModifierSlot): SimpleLootablePoolEntryDisplay(Lootables.identity("display/function")) {
 
     override fun type(): LootablePoolEntryType {
         return LootablePoolEntryTypes.FUNCTION
     }
 
-    val PACKET_CODEC: PacketCodec<RegistryByteBuf, LootFunctionLootablePoolEntryDisplay> = PacketCodec.unit(this)
+    override fun clientDescription(): Text? {
+        return "lootables.entry.function".translate(slots.asString())
+    }
+
+    companion object {
+        val PACKET_CODEC: PacketCodec<RegistryByteBuf, LootFunctionLootablePoolEntryDisplay> = AttributeModifierSlot.PACKET_CODEC.xmap(
+            ::LootFunctionLootablePoolEntryDisplay,
+            LootFunctionLootablePoolEntryDisplay::slots
+        ).cast()
+    }
 
 }

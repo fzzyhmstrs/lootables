@@ -1,0 +1,162 @@
+{
+  "pools": [
+    {
+      "max_uses": 38,
+      "id": "lootables:eec4816f-241f-42bb-8949-eca90fec0bcf",
+      "rarity": "rainbow",
+      "entry": {
+        "value": 7.557467411956589,
+        "attribute": "minecraft:player.sweeping_damage_ratio",
+        "id": "lootables:76f713db-0c6d-49f5-b9f3-64775b51ce15",
+        "type": "lootables:attribute"
+      }
+    },
+    {
+      "id": "lootables:fb4f6151-4927-413b-8fe9-f3e359395f88",
+      "rarity": "rainbow",
+      "entry": {
+        "xp": 62.3976,
+        "levels": false,
+        "type": "lootables:xp"
+      }
+    },
+    {
+      "weight": 2,
+      "id": "lootables:964c42dd-6431-4512-a7f5-4e1fb36a1312",
+      "entry": {
+        "item": {
+          "id": "minecraft:spider_spawn_egg",
+          "count": 34.0
+        },
+        "drop_items": true,
+        "type": "lootables:item"
+      }
+    },
+    {
+      "max_uses": 71,
+      "id": "lootables:9bf6b9e0-976e-4285-8f79-081cd3bb2a11",
+      "rarity": "rare",
+      "entry": {
+        "advancement": "minecraft:recipes/decorations/purple_candle",
+        "type": "lootables:advancement"
+      },
+      "guaranteed": true
+    },
+    {
+      "weight": 4,
+      "id": "lootables:85baeb25-65fb-4706-8bd3-ab025ac4018e",
+      "rarity": "rainbow",
+      "entry": {
+        "children": [
+          {
+            "advancement": "minecraft:recipes/building_blocks/tuff_brick_stairs_from_tuff_bricks_stonecutting",
+            "type": "lootables:advancement"
+          },
+          {
+            "xp": 54.096596,
+            "levels": false,
+            "type": "lootables:xp"
+          },
+          {
+            "children": [
+              {
+                "item": {
+                  "id": "minecraft:cyan_bed",
+                  "count": 10.0
+                },
+                "drop_items": true,
+                "type": "lootables:item"
+              },
+              {
+                "value": 8.799059085178783,
+                "attribute": "minecraft:generic.armor_toughness",
+                "id": "lootables:e3dcbd6f-6210-4a78-9616-08d29118ce0b",
+                "type": "lootables:attribute"
+              },
+              {
+                "advancement": "minecraft:recipes/building_blocks/waxed_oxidized_cut_copper_from_waxed_oxidized_copper_stonecutting",
+                "type": "lootables:advancement"
+              }
+            ],
+            "type": "lootables:random"
+          }
+        ],
+        "type": "lootables:random"
+      }
+    },
+    {
+      "weight": 9,
+      "max_uses": 13,
+      "id": "lootables:4840c686-cd7c-428b-a43c-ff729dd31db7",
+      "entry": {
+        "item": {
+          "id": "minecraft:fox_spawn_egg",
+          "count": 62.0
+        },
+        "type": "lootables:item"
+      }
+    },
+    {
+      "weight": 11,
+      "id": "lootables:9a65827b-6cac-47a4-ae89-b0c2d27e7f1d",
+      "rarity": "rare",
+      "entry": {
+        "xp": 70.07507,
+        "levels": false,
+        "type": "lootables:xp"
+      },
+      "guaranteed": true
+    },
+    {
+      "weight": 11,
+      "max_uses": 74,
+      "id": "lootables:fdcabf41-736f-4481-842a-1a9f51be8787",
+      "rarity": "rainbow",
+      "entry": {
+        "value": 7.065959083520664,
+        "operation": "add_multiplied_base",
+        "attribute": "minecraft:generic.step_height",
+        "id": "lootables:91db96fe-fcbf-45a9-ad5d-6fd14d15e05b",
+        "type": "lootables:attribute"
+      },
+      "guaranteed": true
+    },
+    {
+      "id": "lootables:7e70ad3f-2e82-4085-9e61-7570cb5269b7",
+      "entry": {
+        "xp": 47.638153,
+        "levels": false,
+        "type": "lootables:xp"
+      },
+      "guaranteed": true
+    },
+    {
+      "id": "lootables:16c7a83d-a41b-4bfb-982e-ea21efdc5d12",
+      "entry": {
+        "children": [
+          {
+            "children": [
+              {
+                "xp": 35.127068,
+                "type": "lootables:xp"
+              },
+              {
+                "xp": 35.065716,
+                "type": "lootables:xp"
+              },
+              {
+                "xp": 11.490541,
+                "type": "lootables:xp"
+              }
+            ],
+            "type": "lootables:random"
+          }
+        ],
+        "type": "lootables:multi"
+      }
+    }
+  ],
+  "weights": {
+    "legendary": 1
+  }
+}

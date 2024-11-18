@@ -12,23 +12,33 @@
 
 package me.fzzyhmstrs.lootables.loot.display
 
+import me.fzzyhmstrs.fzzy_config.util.FcText.translate
 import me.fzzyhmstrs.lootables.Lootables
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryType
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryTypes
 import net.minecraft.network.RegistryByteBuf
 import net.minecraft.network.codec.PacketCodec
 import net.minecraft.network.codec.PacketCodecs
+import net.minecraft.text.Text
+import net.minecraft.text.TextCodecs
 
-data class ExperienceLootablePoolEntryDisplay(private val levels: Boolean): SimpleLootablePoolEntryDisplay(if(levels) Lootables.identity("display/experience_levels") else Lootables.identity("display/experience_points")) {
+data class ExperienceLootablePoolEntryDisplay(private val xp: String, private val levels: Boolean): SimpleLootablePoolEntryDisplay(if(levels) Lootables.identity("display/experience_levels") else Lootables.identity("display/experience_points")) {
 
     override fun type(): LootablePoolEntryType {
         return LootablePoolEntryTypes.XP
     }
 
+    override fun clientDescription(): Text {
+        return if(levels) "lootables.entry.xp.levels".translate(xp) else "lootables.entry.xp.points".translate(xp)
+    }
+
     companion object {
-        val PACKET_CODEC: PacketCodec<RegistryByteBuf, ExperienceLootablePoolEntryDisplay> = PacketCodecs.BOOL.xmap(
-            ::ExperienceLootablePoolEntryDisplay,
-            ExperienceLootablePoolEntryDisplay::levels
-        ).cast()
+        val PACKET_CODEC: PacketCodec<RegistryByteBuf, ExperienceLootablePoolEntryDisplay> = PacketCodec.tuple(
+            PacketCodecs.STRING,
+            ExperienceLootablePoolEntryDisplay::xp,
+            PacketCodecs.BOOL,
+            ExperienceLootablePoolEntryDisplay::levels,
+            ::ExperienceLootablePoolEntryDisplay
+        )
     }
 }

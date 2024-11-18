@@ -1,0 +1,446 @@
+{
+  "pools": [
+    {
+      "id": "lootables:872dbb05-aa55-47af-aa7e-94fad98352ea",
+      "rarity": "rainbow",
+      "entry": {
+        "xp": 72.06526,
+        "levels": false,
+        "type": "lootables:xp"
+      }
+    },
+    {
+      "weight": 1,
+      "id": "lootables:653d6040-1be8-4c57-b3de-29d5e4e57aec",
+      "entry": {
+        "xp": 25.538313,
+        "levels": false,
+        "type": "lootables:xp"
+      },
+      "guaranteed": true
+    },
+    {
+      "max_uses": 70,
+      "id": "lootables:2622a8f4-e6e7-481d-bfa4-367760b50607",
+      "rarity": "rainbow",
+      "entry": {
+        "xp": 87.37135,
+        "levels": false,
+        "type": "lootables:xp"
+      }
+    },
+    {
+      "id": "lootables:5eea17aa-5b64-4f7c-b1b3-ca857f382785",
+      "rarity": "epic",
+      "entry": {
+        "xp": 62.94812,
+        "levels": false,
+        "type": "lootables:xp"
+      },
+      "guaranteed": true
+    },
+    {
+      "max_uses": 8,
+      "id": "lootables:1432f625-8691-4e94-a6c4-883dc2fe0b66",
+      "rarity": "epic",
+      "entry": {
+        "value": 6.7535356280382395,
+        "operation": "add_multiplied_total",
+        "attribute": "minecraft:generic.scale",
+        "id": "lootables:3d3edc44-1aae-4cad-87a0-f5eb50d9a3a8",
+        "type": "lootables:attribute"
+      }
+    },
+    {
+      "weight": 2,
+      "max_uses": 6,
+      "id": "lootables:1eda4106-d5a5-471e-8fbc-2a563b8675b0",
+      "rarity": "uncommon",
+      "entry": {
+        "children": [],
+        "type": "lootables:random"
+      },
+      "guaranteed": true
+    },
+    {
+      "id": "lootables:f22bdf2e-ce1c-49c7-9a33-f89f56cf370d",
+      "rarity": "epic",
+      "entry": {
+        "children": [
+          {
+            "children": [
+              {
+                "children": [
+                  {
+                    "xp": 41.57468,
+                    "type": "lootables:xp"
+                  },
+                  {
+                    "children": [
+                      {
+                        "item": {
+                          "id": "minecraft:music_disc_creator",
+                          "count": 16.0
+                        },
+                        "type": "lootables:item"
+                      },
+                      {
+                        "xp": 36.524082,
+                        "levels": false,
+                        "type": "lootables:xp"
+                      },
+                      {
+                        "children": [],
+                        "type": "lootables:multi"
+                      },
+                      {
+                        "xp": 53.42672,
+                        "type": "lootables:xp"
+                      }
+                    ],
+                    "type": "lootables:random"
+                  },
+                  {
+                    "value": 6.841367078983728,
+                    "operation": "add_multiplied_total",
+                    "attribute": "minecraft:generic.explosion_knockback_resistance",
+                    "id": "lootables:246afe22-f557-4c38-b909-1a7454978785",
+                    "type": "lootables:attribute"
+                  }
+                ],
+                "type": "lootables:multi"
+              },
+              {
+                "xp": 82.70875,
+                "type": "lootables:xp"
+              }
+            ],
+            "type": "lootables:random"
+          }
+        ],
+        "type": "lootables:random"
+      },
+      "guaranteed": true
+    },
+    {
+      "max_uses": 12,
+      "id": "lootables:3be36802-de7d-4ff2-b880-a965c9e34a99",
+      "rarity": "epic",
+      "entry": {
+        "children": [
+          {
+            "children": [
+              {
+                "children": [
+                  {
+                    "xp": 89.22022,
+                    "type": "lootables:xp"
+                  },
+                  {
+                    "children": [
+                      {
+                        "value": 1.8499174883296665,
+                        "operation": "add_multiplied_total",
+                        "persistent": true,
+                        "attribute": "minecraft:generic.water_movement_efficiency",
+                        "id": "lootables:e65870f8-062e-4093-9694-6ebd3df4df33",
+                        "type": "lootables:attribute"
+                      },
+                      {
+                        "children": [],
+                        "type": "lootables:multi"
+                      }
+                    ],
+                    "type": "lootables:multi"
+                  },
+                  {
+                    "children": [
+                      {
+                        "xp": 3.775394,
+                        "type": "lootables:xp"
+                      }
+                    ],
+                    "type": "lootables:random"
+                  }
+                ],
+                "type": "lootables:random"
+              },
+              {
+                "xp": 38.24451,
+                "type": "lootables:xp"
+              }
+            ],
+            "type": "lootables:random"
+          },
+          {
+            "children": [
+              {
+                "advancement": "minecraft:recipes/building_blocks/birch_slab",
+                "type": "lootables:advancement"
+              },
+              {
+                "value": 5.217295452146597,
+                "operation": "add_multiplied_total",
+                "attribute": "minecraft:generic.attack_knockback",
+                "id": "lootables:1cc38057-1778-4a1a-8dd0-8f012cdd1e04",
+                "type": "lootables:attribute"
+              },
+              {
+                "children": [
+                  {
+                    "children": [
+                      {
+                        "children": [
+                          {
+                            "value": 7.641224028171988,
+                            "operation": "add_multiplied_total",
+                            "persistent": true,
+                            "attribute": "minecraft:generic.fall_damage_multiplier",
+                            "id": "lootables:9e437348-8610-437f-946d-2428327411dc",
+                            "type": "lootables:attribute"
+                          },
+                          {
+                            "children": [
+                              {
+                                "item": {
+                                  "id": "minecraft:polished_diorite_slab",
+                                  "count": 62.0
+                                },
+                                "type": "lootables:item"
+                              },
+                              {
+                                "item": {
+                                  "id": "minecraft:warped_fungus_on_a_stick",
+                                  "count": 22.0
+                                },
+                                "drop_items": true,
+                                "type": "lootables:item"
+                              },
+                              {
+                                "item": {
+                                  "id": "minecraft:golden_axe",
+                                  "count": 50.0
+                                },
+                                "type": "lootables:item"
+                              }
+                            ],
+                            "type": "lootables:multi"
+                          },
+                          {
+                            "item": {
+                              "id": "minecraft:lead",
+                              "count": 8.0
+                            },
+                            "drop_items": true,
+                            "type": "lootables:item"
+                          }
+                        ],
+                        "type": "lootables:random"
+                      }
+                    ],
+                    "type": "lootables:random"
+                  },
+                  {
+                    "children": [
+                      {
+                        "item": {
+                          "id": "minecraft:yellow_dye",
+                          "count": 8.0
+                        },
+                        "drop_items": true,
+                        "type": "lootables:item"
+                      }
+                    ],
+                    "type": "lootables:random"
+                  },
+                  {
+                    "value": 7.064680609900993,
+                    "persistent": true,
+                    "attribute": "minecraft:generic.movement_efficiency",
+                    "id": "lootables:910ec637-1d88-4e62-8ed4-e2a302d6eed0",
+                    "type": "lootables:attribute"
+                  },
+                  {
+                    "value": 6.666308152174281,
+                    "attribute": "minecraft:generic.luck",
+                    "id": "lootables:10fb8608-6752-47c1-9b20-2d0364621f8f",
+                    "type": "lootables:attribute"
+                  }
+                ],
+                "type": "lootables:multi"
+              }
+            ],
+            "type": "lootables:random"
+          }
+        ],
+        "type": "lootables:multi"
+      }
+    },
+    {
+      "id": "lootables:ec817210-e15c-46ae-8213-0a022bd8997f",
+      "rarity": "epic",
+      "entry": {
+        "item": {
+          "id": "minecraft:endermite_spawn_egg",
+          "count": 4.0
+        },
+        "drop_items": true,
+        "type": "lootables:item"
+      },
+      "guaranteed": true
+    },
+    {
+      "weight": 3,
+      "max_uses": 15,
+      "id": "lootables:6b531a72-b035-42cb-b864-7f052eb7df58",
+      "rarity": "uncommon",
+      "entry": {
+        "advancement": "minecraft:recipes/decorations/crimson_hanging_sign",
+        "type": "lootables:advancement"
+      },
+      "guaranteed": true
+    },
+    {
+      "weight": 3,
+      "id": "lootables:a31003fe-cdb1-4c14-9552-fc5afa450891",
+      "rarity": "legendary",
+      "entry": {
+        "children": [
+          {
+            "children": [
+              {
+                "value": 7.466010175623826,
+                "operation": "add_multiplied_total",
+                "attribute": "minecraft:player.mining_efficiency",
+                "id": "lootables:3514e480-8d5b-49b0-a2a7-2f50d88c11c6",
+                "type": "lootables:attribute"
+              },
+              {
+                "advancement": "minecraft:recipes/misc/ward_armor_trim_smithing_template_smithing_trim",
+                "type": "lootables:advancement"
+              }
+            ],
+            "type": "lootables:multi"
+          }
+        ],
+        "type": "lootables:random"
+      },
+      "guaranteed": true
+    },
+    {
+      "weight": 4,
+      "id": "lootables:f55b7dbd-75c9-4917-b743-f010ae0ed7d9",
+      "rarity": "uncommon",
+      "entry": {
+        "children": [
+          {
+            "children": [
+              {
+                "xp": 48.70981,
+                "levels": false,
+                "type": "lootables:xp"
+              },
+              {
+                "advancement": "minecraft:recipes/combat/spectral_arrow",
+                "type": "lootables:advancement"
+              },
+              {
+                "value": 9.321705879587908,
+                "operation": "add_multiplied_base",
+                "attribute": "minecraft:zombie.spawn_reinforcements",
+                "id": "lootables:0d99bbd8-8ab7-44ec-99a7-9579a8d484c3",
+                "type": "lootables:attribute"
+              }
+            ],
+            "type": "lootables:multi"
+          },
+          {
+            "item": {
+              "id": "minecraft:warden_spawn_egg",
+              "count": 50.0
+            },
+            "type": "lootables:item"
+          },
+          {
+            "item": {
+              "id": "minecraft:copper_trapdoor",
+              "count": 45.0
+            },
+            "drop_items": true,
+            "type": "lootables:item"
+          }
+        ],
+        "type": "lootables:multi"
+      }
+    },
+    {
+      "max_uses": 56,
+      "id": "lootables:93eb2e0d-9211-4c0d-8a53-2981768bebe8",
+      "rarity": "uncommon",
+      "entry": {
+        "advancement": "minecraft:recipes/decorations/blast_furnace",
+        "type": "lootables:advancement"
+      }
+    },
+    {
+      "id": "lootables:e5907a7d-e17c-4af3-adf8-288559d10f84",
+      "rarity": "uncommon",
+      "entry": {
+        "advancement": "minecraft:recipes/decorations/bamboo_sign",
+        "type": "lootables:advancement"
+      }
+    },
+    {
+      "weight": 8,
+      "id": "lootables:b3f1f6b8-c179-4294-b9c1-b609b4ecc6f6",
+      "entry": {
+        "children": [],
+        "type": "lootables:multi"
+      },
+      "guaranteed": true
+    },
+    {
+      "id": "lootables:0d25a42b-4521-49cc-adfb-18dc0ab0ff79",
+      "entry": {
+        "children": [
+          {
+            "item": {
+              "id": "minecraft:stripped_warped_stem",
+              "count": 40.0
+            },
+            "drop_items": true,
+            "type": "lootables:item"
+          },
+          {
+            "advancement": "minecraft:recipes/building_blocks/bamboo_mosaic_stairs",
+            "type": "lootables:advancement"
+          },
+          {
+            "advancement": "minecraft:recipes/decorations/light_blue_stained_glass_pane_from_glass_pane",
+            "type": "lootables:advancement"
+          },
+          {
+            "item": {
+              "id": "minecraft:stone",
+              "count": 42.0
+            },
+            "type": "lootables:item"
+          }
+        ],
+        "type": "lootables:multi"
+      },
+      "guaranteed": true
+    },
+    {
+      "weight": 12,
+      "max_uses": 53,
+      "id": "lootables:1455ddba-d577-4837-83ee-55c1d94e177a",
+      "rarity": "epic",
+      "entry": {
+        "advancement": "minecraft:recipes/food/mushroom_stew",
+        "type": "lootables:advancement"
+      },
+      "guaranteed": true
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "pools": [
+    "lootables_test:iron_sword",
+    "lootables_test:iron_ingot",
+    "lootables_test:sponge",
+    {
+      "id": "lootables_test:planks2",
+      "rarity": "uncommon",
+      "entry": {
+        "type": "lootables:item",
+        "item": {
+          "id": "minecraft:oak_planks",
+          "count": 32
+        }
+      }
+    },
+    {
+      "id": "lootables_test:torches2",
+      "rarity": "uncommon",
+      "entry": {
+        "type": "lootables:item",
+        "item": {
+          "id": "minecraft:torch",
+          "count": {
+            "n": 24,
+            "p": 0.5
+          }
+        }
+      }
+    },
+    {
+      "id": "lootables_test:saturation_cloud",
+      "rarity": "rare",
+      "entry": {
+        "type": "lootables:custom",
+        "id": "lootables:test_custom_entry"
+      }
+    },
+    {
+      "id": "lootables_test:adv",
+      "rarity": "uncommon",
+      "entry": {
+        "advancement": "minecraft:husbandry/breed_an_animal",
+        "type": "lootables:advancement"
+      }
+    },
+    {
+      "id": "lootables_test:atk_dmg2",
+      "rarity": "legendary",
+      "entry": {
+        "type": "lootables:attribute",
+        "value": 1.0,
+        "operation": "add_value",
+        "persistent": true,
+        "attribute": "minecraft:generic.attack_damage",
+        "id": "lootables:7ec4724a-a640-44ba-adc9-c1e3de6cb4af"
+      },
+      "max_uses": 1
+    }
+  ]
+}

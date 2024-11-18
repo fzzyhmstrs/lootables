@@ -1,0 +1,88 @@
+{
+  "pools": [
+    {
+      "weight": 2,
+      "max_uses": 56,
+      "id": "lootables:f890972d-e819-44af-b702-f0dd10243c8d",
+      "rarity": "legendary",
+      "entry": {
+        "value": 6.976801003609854,
+        "operation": "add_multiplied_total",
+        "persistent": true,
+        "attribute": "minecraft:generic.max_absorption",
+        "id": "lootables:84f4761d-9d52-44ad-bdcd-8737e0d35903",
+        "type": "lootables:attribute"
+      },
+      "guaranteed": true
+    },
+    {
+      "weight": 2,
+      "max_uses": 42,
+      "id": "lootables:c66153f3-d9b9-4bc6-ba8f-1f19e348704e",
+      "rarity": "epic",
+      "entry": {
+        "advancement": "minecraft:recipes/building_blocks/dark_oak_stairs",
+        "type": "lootables:advancement"
+      }
+    },
+    {
+      "max_uses": 24,
+      "id": "lootables:15eb7268-eeb0-4ac6-8d8d-25595daaaea1",
+      "rarity": "epic",
+      "entry": {
+        "xp": 80.16808,
+        "type": "lootables:xp"
+      }
+    },
+    {
+      "weight": 5,
+      "id": "lootables:b07bc657-5169-4b77-81b2-013c1c3cc746",
+      "rarity": "uncommon",
+      "entry": {
+        "item": {
+          "id": "minecraft:light_blue_banner",
+          "count": 3.0
+        },
+        "drop_items": true,
+        "type": "lootables:item"
+      },
+      "guaranteed": true
+    },
+    {
+      "id": "lootables:e5aa8b76-a13c-412a-8f1e-8aae0d114981",
+      "rarity": "uncommon",
+      "entry": {
+        "children": [
+          {
+            "children": [],
+            "type": "lootables:random"
+          }
+        ],
+        "type": "lootables:multi"
+      }
+    },
+    {
+      "weight": 7,
+      "max_uses": 51,
+      "id": "lootables:d1609faa-d64e-4dde-82cb-3d7f259afe21",
+      "rarity": "legendary",
+      "entry": {
+        "advancement": "minecraft:recipes/building_blocks/polished_blackstone_stairs_from_blackstone_stonecutting",
+        "type": "lootables:advancement"
+      }
+    },
+    {
+      "weight": 10,
+      "id": "lootables:fd01168a-f686-4e12-b01f-9db798736106",
+      "rarity": "uncommon",
+      "entry": {
+        "advancement": "minecraft:recipes/building_blocks/dye_cyan_bed",
+        "type": "lootables:advancement"
+      },
+      "guaranteed": true
+    }
+  ],
+  "weights": {
+    "rainbow": 8
+  }
+}

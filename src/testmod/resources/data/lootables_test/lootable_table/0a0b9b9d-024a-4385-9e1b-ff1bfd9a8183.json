@@ -1,0 +1,219 @@
+{
+  "pools": [
+    {
+      "weight": 1,
+      "max_uses": 69,
+      "id": "lootables:97146711-0bdc-4b56-9a23-57b405f09d35",
+      "rarity": "rainbow",
+      "entry": {
+        "children": [
+          {
+            "item": {
+              "id": "minecraft:chainmail_leggings",
+              "count": 1.0
+            },
+            "type": "lootables:item"
+          }
+        ],
+        "type": "lootables:multi"
+      },
+      "guaranteed": true
+    },
+    {
+      "max_uses": 4,
+      "id": "lootables:8bfb2124-4736-4923-9d51-91e23dcd8c27",
+      "rarity": "rainbow",
+      "entry": {
+        "item": {
+          "id": "minecraft:copper_trapdoor",
+          "count": 46.0
+        },
+        "drop_items": true,
+        "type": "lootables:item"
+      }
+    },
+    {
+      "id": "lootables:9a44509e-1b15-44ad-bdfe-e14aa9601730",
+      "rarity": "rainbow",
+      "entry": {
+        "item": {
+          "id": "minecraft:quartz_bricks",
+          "count": 31.0
+        },
+        "type": "lootables:item"
+      }
+    },
+    {
+      "weight": 1,
+      "max_uses": 42,
+      "id": "lootables:2aaee8e9-4f25-409e-ac95-b692eff1e74d",
+      "rarity": "rare",
+      "entry": {
+        "xp": 10.304624,
+        "type": "lootables:xp"
+      },
+      "guaranteed": true
+    },
+    {
+      "max_uses": 73,
+      "id": "lootables:e92c4712-ee44-46b0-ae95-d9bd827c3deb",
+      "rarity": "legendary",
+      "entry": {
+        "xp": 74.61748,
+        "type": "lootables:xp"
+      }
+    },
+    {
+      "id": "lootables:12ca27fc-99d4-43fb-a9f9-516ee1fe7250",
+      "rarity": "legendary",
+      "entry": {
+        "children": [
+          {
+            "advancement": "minecraft:husbandry/breed_an_animal",
+            "type": "lootables:advancement"
+          },
+          {
+            "item": {
+              "id": "minecraft:cyan_stained_glass_pane",
+              "count": 7.0
+            },
+            "type": "lootables:item"
+          },
+          {
+            "item": {
+              "id": "minecraft:coast_armor_trim_smithing_template",
+              "count": 10.0
+            },
+            "drop_items": true,
+            "type": "lootables:item"
+          },
+          {
+            "value": 9.74761171797015,
+            "operation": "add_multiplied_total",
+            "attribute": "minecraft:generic.water_movement_efficiency",
+            "id": "lootables:ea116720-9269-459f-be0c-d3564b7fafc1",
+            "type": "lootables:attribute"
+          }
+        ],
+        "type": "lootables:multi"
+      }
+    },
+    {
+      "id": "lootables:57dd6313-bb83-4da0-9e41-5aabd719ccc3",
+      "rarity": "epic",
+      "entry": {
+        "children": [
+          {
+            "xp": 44.65139,
+            "levels": false,
+            "type": "lootables:xp"
+          },
+          {
+            "xp": 89.784744,
+            "type": "lootables:xp"
+          },
+          {
+            "children": [
+              {
+                "advancement": "minecraft:recipes/tools/wooden_axe",
+                "type": "lootables:advancement"
+              },
+              {
+                "xp": 49.479824,
+                "levels": false,
+                "type": "lootables:xp"
+              }
+            ],
+            "type": "lootables:multi"
+          }
+        ],
+        "type": "lootables:multi"
+      },
+      "guaranteed": true
+    },
+    {
+      "weight": 3,
+      "max_uses": 93,
+      "id": "lootables:5e0a54e2-ba81-4c4f-a0f3-7c721a1bbb65",
+      "rarity": "rare",
+      "entry": {
+        "xp": 66.81868,
+        "type": "lootables:xp"
+      }
+    },
+    {
+      "weight": 9,
+      "id": "lootables:792c79a4-bffa-41f4-9b36-71c5927089b0",
+      "entry": {
+        "children": [
+          {
+            "xp": 18.861568,
+            "type": "lootables:xp"
+          },
+          {
+            "children": [
+              {
+                "item": {
+                  "id": "minecraft:waxed_oxidized_chiseled_copper",
+                  "count": 54.0
+                },
+                "drop_items": true,
+                "type": "lootables:item"
+              }
+            ],
+            "type": "lootables:random"
+          }
+        ],
+        "type": "lootables:multi"
+      }
+    },
+    {
+      "weight": 11,
+      "id": "lootables:fccc1d20-a593-44ce-bd66-c1dc3edcf539",
+      "rarity": "rainbow",
+      "entry": {
+        "value": 2.555730332168099,
+        "operation": "add_multiplied_base",
+        "persistent": true,
+        "attribute": "minecraft:generic.jump_strength",
+        "id": "lootables:7ec4724a-a640-44ba-adc9-c1e3de6cb4af",
+        "type": "lootables:attribute"
+      }
+    },
+    {
+      "weight": 12,
+      "id": "lootables:f0e4ff9a-c785-4813-a20a-6309ec2f061e",
+      "entry": {
+        "xp": 56.546066,
+        "type": "lootables:xp"
+      }
+    },
+    {
+      "weight": 12,
+      "id": "lootables:832b5afe-1e47-46ca-804d-266b385f9ad5",
+      "entry": {
+        "children": [
+          {
+            "item": {
+              "id": "minecraft:jungle_hanging_sign",
+              "count": 13.0
+            },
+            "drop_items": true,
+            "type": "lootables:item"
+          }
+        ],
+        "type": "lootables:multi"
+      }
+    },
+    {
+      "id": "lootables:56ca27d1-020c-4036-a13c-29440e07e96b",
+      "entry": {
+        "item": {
+          "id": "minecraft:smooth_quartz_slab",
+          "count": 18.0
+        },
+        "type": "lootables:item"
+      }
+    }
+  ]
+}

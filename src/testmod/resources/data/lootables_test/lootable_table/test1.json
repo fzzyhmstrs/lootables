@@ -28,9 +28,14 @@
       "id": "lootables_test:atk_dmg",
       "rarity": "legendary",
       "entry": {
-        "type": "lootables:item",
-        "item": "minecraft:iron_sword"
-      }
+        "type": "lootables:attribute",
+        "value": 1.0,
+        "operation": "add_value",
+        "persistent": true,
+        "attribute": "minecraft:generic.attack_damage",
+        "id": "lootables:7ec4724a-a640-44ba-adc9-c1e3de6cb4af"
+      },
+      "max_uses": 3
     }
   ]
 }

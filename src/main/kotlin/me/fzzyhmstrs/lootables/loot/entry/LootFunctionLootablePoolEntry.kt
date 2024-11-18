@@ -17,7 +17,6 @@ import com.mojang.serialization.DataResult
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.EitherMapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
-import me.fzzyhmstrs.fzzy_config.util.FcText.translate
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntry
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryDisplay
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryType
@@ -25,7 +24,6 @@ import me.fzzyhmstrs.lootables.loot.LootablePoolEntryTypes
 import me.fzzyhmstrs.lootables.loot.display.LootFunctionLootablePoolEntryDisplay
 import net.minecraft.component.type.AttributeModifierSlot
 import net.minecraft.entity.EquipmentSlot
-import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.loot.context.LootContext
 import net.minecraft.loot.context.LootContextParameterSet
 import net.minecraft.loot.context.LootContextParameters
@@ -33,7 +31,6 @@ import net.minecraft.loot.context.LootContextTypes
 import net.minecraft.loot.function.LootFunction
 import net.minecraft.loot.function.LootFunctionTypes
 import net.minecraft.server.network.ServerPlayerEntity
-import net.minecraft.text.Text
 import net.minecraft.util.math.Vec3d
 import java.util.*
 import java.util.function.Function
@@ -44,8 +41,7 @@ class LootFunctionLootablePoolEntry(private val functions: List<LootFunction>, p
         return LootablePoolEntryTypes.FUNCTION
     }
 
-    override fun apply(player: PlayerEntity, origin: Vec3d) {
-        if (player !is ServerPlayerEntity) return
+    override fun apply(player: ServerPlayerEntity, origin: Vec3d) {
         val params = LootContextParameterSet.Builder(player.serverWorld).add(LootContextParameters.THIS_ENTITY, player).add(LootContextParameters.ORIGIN, origin).luck(player.luck)
         val context = LootContext.Builder(params.build(LootContextTypes.CHEST)).build(Optional.empty())
         for (slot in EquipmentSlot.entries) {
@@ -58,12 +54,8 @@ class LootFunctionLootablePoolEntry(private val functions: List<LootFunction>, p
         }
     }
 
-    override fun defaultDescription(playerEntity: ServerPlayerEntity): Text {
-        return "lootables.entry.function".translate(relevantSlots.asString())
-    }
-
     override fun createDisplay(playerEntity: ServerPlayerEntity): LootablePoolEntryDisplay {
-        return LootFunctionLootablePoolEntryDisplay
+        return LootFunctionLootablePoolEntryDisplay(relevantSlots)
     }
 
     companion object {

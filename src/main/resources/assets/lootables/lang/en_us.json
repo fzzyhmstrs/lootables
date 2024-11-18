@@ -1,7 +1,7 @@
 {
 	"lootables.entry.advancement": "Unlock advancement %s",
 	"lootables.entry.attribute.persistent": "§6Permanently gain:§r\n%s",
-	"lootables.entry.attribute.temporary": "§Temporarily gain:§r\n%s",
+	"lootables.entry.attribute.temporary": "Temporarily gain:\n%s",
 	"lootables.entry.function": "Apply modifiers to items in your %s slot(s)",
 	"lootables.entry.heal": "Heal %s hearts",
 	"lootables.entry.item.drop": "Drops %1$s %2$s",
@@ -15,6 +15,8 @@
 	"lootables.entry.table.give": "Get shown loot table",
 	"lootables.entry.xp.levels": "Gain %s XP Levels",
 	"lootables.entry.xp.points": "Gain %s XP Points",
+
+	"lootables.entry.no.desc": "No Description Provided",
 
 	"lootables.screen.choices_multiple": "%s Choices Left",
 	"lootables.screen.choices_single": "1 Choice Left",

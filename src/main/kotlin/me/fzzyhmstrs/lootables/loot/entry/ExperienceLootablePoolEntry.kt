@@ -15,17 +15,12 @@ package me.fzzyhmstrs.lootables.loot.entry
 import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
-import me.fzzyhmstrs.fzzy_config.util.FcText.translate
 import me.fzzyhmstrs.lootables.Lootables
 import me.fzzyhmstrs.lootables.loot.*
 import me.fzzyhmstrs.lootables.loot.display.ExperienceLootablePoolEntryDisplay
 import me.fzzyhmstrs.lootables.loot.number.ConstantLootableNumber
 import me.fzzyhmstrs.lootables.loot.number.LootableNumber
-import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.item.ItemStack
-import net.minecraft.registry.Registries
 import net.minecraft.server.network.ServerPlayerEntity
-import net.minecraft.text.Text
 import net.minecraft.util.math.Vec3d
 
 class ExperienceLootablePoolEntry(private val xp: LootableNumber, private val levels: Boolean = true): LootablePoolEntry {
@@ -34,7 +29,7 @@ class ExperienceLootablePoolEntry(private val xp: LootableNumber, private val le
         return LootablePoolEntryTypes.XP
     }
 
-    override fun apply(player: PlayerEntity, origin: Vec3d) {
+    override fun apply(player: ServerPlayerEntity, origin: Vec3d) {
         if (levels) {
             player.addExperienceLevels(xp.nextInt())
         } else {
@@ -42,12 +37,8 @@ class ExperienceLootablePoolEntry(private val xp: LootableNumber, private val le
         }
     }
 
-    override fun defaultDescription(playerEntity: ServerPlayerEntity): Text {
-        return if(levels) "lootables.entry.xp.levels".translate(xp.desc(true)) else "lootables.entry.xp.points".translate(xp.desc(true))
-    }
-
     override fun createDisplay(playerEntity: ServerPlayerEntity): LootablePoolEntryDisplay {
-        return ExperienceLootablePoolEntryDisplay(levels)
+        return ExperienceLootablePoolEntryDisplay(xp.desc(true).string, levels)
     }
 
     companion object {

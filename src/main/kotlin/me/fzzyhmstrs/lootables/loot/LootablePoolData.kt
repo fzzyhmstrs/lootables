@@ -12,18 +12,24 @@
 
 package me.fzzyhmstrs.lootables.loot
 
+import me.fzzyhmstrs.fzzy_config.util.FcText
 import net.minecraft.network.codec.PacketCodec
 import net.minecraft.network.codec.PacketCodecs
 import net.minecraft.text.Text
 import net.minecraft.text.TextCodecs
 import net.minecraft.util.Identifier
+import java.util.Optional
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentMap
 
-class LootablePoolData private constructor(val id: Identifier, val description: Text, val rarity: LootableRarity, val display: LootablePoolEntryDisplay) {
+class LootablePoolData private constructor(val id: Identifier, val description: Text?, val rarity: LootableRarity, val display: LootablePoolEntryDisplay) {
+
+    fun provideDescription(): Text {
+        return description ?: display.clientDescription() ?: FcText.translatable("lootables.entry.no.desc")
+    }
 
     override fun toString(): String {
-        return "LootablePoolData@${Integer.toHexString(System.identityHashCode(this))}(id=$id, description=${description.string}, rarity=$rarity, display=$display)"
+        return "LootablePoolData@${Integer.toHexString(System.identityHashCode(this))}(id=$id, description=${description}, rarity=$rarity, display=$display)"
     }
 
     override fun equals(other: Any?): Boolean {
@@ -53,15 +59,19 @@ class LootablePoolData private constructor(val id: Identifier, val description: 
 
         private val INSTANCES: ConcurrentMap<Identifier, LootablePoolData> = ConcurrentHashMap(24, 0.8f, 2)
 
-        fun of(id: Identifier, description: Text, rarity: LootableRarity, display: LootablePoolEntryDisplay): LootablePoolData {
+        fun of(id: Identifier, description: Text?, rarity: LootableRarity, display: LootablePoolEntryDisplay): LootablePoolData {
             return INSTANCES.computeIfAbsent(id) { _ -> LootablePoolData(id, description, rarity, display) }
+        }
+
+        private fun of(id: Identifier, description: Optional<Text>, rarity: LootableRarity, display: LootablePoolEntryDisplay): LootablePoolData {
+            return INSTANCES.computeIfAbsent(id) { _ -> LootablePoolData(id, description.orElse(null), rarity, display) }
         }
 
         val PACKET_CODEC = PacketCodec.tuple(
             Identifier.PACKET_CODEC,
             LootablePoolData::id,
-            TextCodecs.PACKET_CODEC,
-            LootablePoolData::description,
+            PacketCodecs.optional(TextCodecs.PACKET_CODEC),
+            { data -> Optional.ofNullable(data.description) },
             LootableRarity.PACKET_CODEC,
             LootablePoolData::rarity,
             LootablePoolEntryDisplay.PACKET_CODEC,

@@ -15,81 +15,45 @@ package me.fzzyhmstrs.lootables.loot.entry
 import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
-import me.fzzyhmstrs.fzzy_config.util.FcText
-import me.fzzyhmstrs.fzzy_config.util.FcText.translate
 import me.fzzyhmstrs.lootables.Lootables
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntry
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryDisplay
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryType
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryTypes
 import me.fzzyhmstrs.lootables.loot.display.AttributeLootablePoolEntryDisplay
-import net.minecraft.component.type.AttributeModifiersComponent
 import net.minecraft.entity.attribute.EntityAttribute
 import net.minecraft.entity.attribute.EntityAttributeModifier
 import net.minecraft.entity.attribute.EntityAttributeModifier.Operation
-import net.minecraft.entity.attribute.EntityAttributes
-import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.registry.Registries
 import net.minecraft.registry.entry.RegistryEntry
 import net.minecraft.server.network.ServerPlayerEntity
-import net.minecraft.text.Text
-import net.minecraft.util.Identifier
 import net.minecraft.util.math.Vec3d
 import java.util.UUID
 
-class AttributeLootablePoolEntry(private val attribute: RegistryEntry<EntityAttribute>, private val id: Identifier, private val value: Double, private val operation: Operation, private val persistent: Boolean = false): LootablePoolEntry {
+class AttributeLootablePoolEntry(private val attribute: RegistryEntry<EntityAttribute>, private val value: Double, private val operation: Operation, private val persistent: Boolean = false): LootablePoolEntry {
 
     override fun type(): LootablePoolEntryType {
         return LootablePoolEntryTypes.ATTRIBUTE
     }
 
-    override fun apply(player: PlayerEntity, origin: Vec3d) {
-        val suffix = Lootables.random().nextLong().toString()
+    override fun apply(player: ServerPlayerEntity, origin: Vec3d) {
+        val suffix = UUID.randomUUID().toString().lowercase()
         if(persistent) {
-            player.getAttributeInstance(attribute)?.addPersistentModifier(EntityAttributeModifier(id.withSuffixedPath(suffix), value, operation))
+            player.getAttributeInstance(attribute)?.addPersistentModifier(EntityAttributeModifier(Lootables.identity(suffix), value, operation))
         } else {
-            player.getAttributeInstance(attribute)?.addTemporaryModifier(EntityAttributeModifier(id.withSuffixedPath(suffix), value, operation))
-        }
-    }
-
-    override fun defaultDescription(playerEntity: ServerPlayerEntity): Text {
-        return if(persistent) "lootables.entry.attribute.persistent".translate(attributeDescription()) else "lootables.entry.attribute.temporary".translate(attributeDescription())
-    }
-
-    private fun attributeDescription(): Text {
-        var d = value
-        if(operation == Operation.ADD_MULTIPLIED_BASE || operation == Operation.ADD_MULTIPLIED_TOTAL) {
-            d *= 100
-        } else if (attribute.matches(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE)) {
-            d *= 10
-        }
-        return if (d > 0.0) {
-            FcText.translatable("attribute.modifier.plus." + operation.id,
-                AttributeModifiersComponent.DECIMAL_FORMAT.format(d),
-                Text.translatable(attribute.value().translationKey)
-            ).formatted(attribute.value().getFormatting(true))
-        } else if (d < 0.0) {
-            FcText.translatable("attribute.modifier.take." + operation.id,
-                AttributeModifiersComponent.DECIMAL_FORMAT.format(-d),
-                Text.translatable(attribute.value().translationKey)
-            ).formatted(attribute.value().getFormatting(false))
-        } else {
-            FcText.empty()
+            player.getAttributeInstance(attribute)?.addTemporaryModifier(EntityAttributeModifier(Lootables.identity(suffix), value, operation))
         }
     }
 
     override fun createDisplay(playerEntity: ServerPlayerEntity): LootablePoolEntryDisplay {
-        return AttributeLootablePoolEntryDisplay(attribute)
+        return AttributeLootablePoolEntryDisplay(attribute, value.toFloat(), operation, persistent)
     }
-
-
 
     companion object {
 
         val CODEC: MapCodec<AttributeLootablePoolEntry> = RecordCodecBuilder.mapCodec { instance: RecordCodecBuilder.Instance<AttributeLootablePoolEntry> ->
             instance.group(
                 EntityAttribute.CODEC.fieldOf("attribute").forGetter(AttributeLootablePoolEntry::attribute),
-                Identifier.CODEC.fieldOf("id").forGetter(AttributeLootablePoolEntry::id),
                 Codec.DOUBLE.fieldOf("value").forGetter(AttributeLootablePoolEntry::value),
                 Operation.CODEC.optionalFieldOf("operation", Operation.ADD_VALUE).forGetter(AttributeLootablePoolEntry::operation),
                 Codec.BOOL.optionalFieldOf("persistent", false).forGetter(AttributeLootablePoolEntry::persistent)
@@ -97,7 +61,7 @@ class AttributeLootablePoolEntry(private val attribute: RegistryEntry<EntityAttr
         }
 
         fun createRandomInstance(playerEntity: ServerPlayerEntity): LootablePoolEntry {
-            return AttributeLootablePoolEntry(Registries.ATTRIBUTE.getEntry(Lootables.random().nextInt(Registries.ATTRIBUTE.size())).orElseThrow(), Lootables.identity(UUID.randomUUID().toString().lowercase()), Lootables.random().nextDouble() * 10.0, Operation.entries[Lootables.random().nextInt(3)], Lootables.random().nextBoolean())
+            return AttributeLootablePoolEntry(Registries.ATTRIBUTE.getEntry(Lootables.random().nextInt(Registries.ATTRIBUTE.size())).orElseThrow(), Lootables.random().nextDouble() * 10.0, Operation.entries[Lootables.random().nextInt(3)], Lootables.random().nextBoolean())
         }
     }
 

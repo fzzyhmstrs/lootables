@@ -1,0 +1,212 @@
+{
+  "pools": [
+    {
+      "max_uses": 92,
+      "id": "lootables:4283416a-17c2-46d3-82d3-c8b89cbf2f15",
+      "rarity": "legendary",
+      "entry": {
+        "children": [
+          {
+            "value": 7.204184160499437,
+            "operation": "add_multiplied_base",
+            "attribute": "minecraft:zombie.spawn_reinforcements",
+            "id": "lootables:d1c81158-d2f9-410d-a5e7-cd33c5d7b0d5",
+            "type": "lootables:attribute"
+          },
+          {
+            "value": 4.214760883962139,
+            "operation": "add_multiplied_base",
+            "persistent": true,
+            "attribute": "minecraft:generic.water_movement_efficiency",
+            "id": "lootables:c21f42f9-3c83-475b-ad6f-12c69d4e3635",
+            "type": "lootables:attribute"
+          },
+          {
+            "children": [
+              {
+                "value": 6.841853248221738,
+                "persistent": true,
+                "attribute": "minecraft:generic.water_movement_efficiency",
+                "id": "lootables:cc400db3-00f9-4646-8f85-b096f390cb0c",
+                "type": "lootables:attribute"
+              },
+              {
+                "value": 9.592483417912037,
+                "operation": "add_multiplied_total",
+                "persistent": true,
+                "attribute": "minecraft:generic.fall_damage_multiplier",
+                "id": "lootables:880cbde1-154d-403a-881c-d9ae285e4ce4",
+                "type": "lootables:attribute"
+              }
+            ],
+            "type": "lootables:random"
+          }
+        ],
+        "type": "lootables:random"
+      }
+    },
+    {
+      "id": "lootables:0b53056d-499a-4de8-8d0e-6a63a6643f9f",
+      "rarity": "legendary",
+      "entry": {
+        "xp": 92.00018,
+        "type": "lootables:xp"
+      }
+    },
+    {
+      "max_uses": 99,
+      "id": "lootables:88b89139-18e6-4af2-a534-74400a84f51f",
+      "rarity": "legendary",
+      "entry": {
+        "value": 9.043677682043658,
+        "operation": "add_multiplied_total",
+        "attribute": "minecraft:player.submerged_mining_speed",
+        "id": "lootables:78774330-ef1f-44bc-a95a-30b3fea37aee",
+        "type": "lootables:attribute"
+      },
+      "guaranteed": true
+    },
+    {
+      "max_uses": 25,
+      "id": "lootables:3bf9afba-db77-4980-aff4-f4c25615344f",
+      "rarity": "epic",
+      "entry": {
+        "children": [
+          {
+            "xp": 87.49956,
+            "type": "lootables:xp"
+          },
+          {
+            "item": {
+              "id": "minecraft:polished_tuff_wall",
+              "count": 28.0
+            },
+            "drop_items": true,
+            "type": "lootables:item"
+          }
+        ],
+        "type": "lootables:multi"
+      },
+      "guaranteed": true
+    },
+    {
+      "max_uses": 23,
+      "id": "lootables:403c998f-6149-405f-aadd-9e0c77c84c3f",
+      "rarity": "rare",
+      "entry": {
+        "children": [
+          {
+            "children": [
+              {
+                "xp": 32.874645,
+                "type": "lootables:xp"
+              },
+              {
+                "xp": 7.3921204,
+                "levels": false,
+                "type": "lootables:xp"
+              },
+              {
+                "advancement": "minecraft:recipes/building_blocks/polished_granite_stairs_from_granite_stonecutting",
+                "type": "lootables:advancement"
+              },
+              {
+                "xp": 22.31723,
+                "levels": false,
+                "type": "lootables:xp"
+              }
+            ],
+            "type": "lootables:random"
+          },
+          {
+            "item": {
+              "id": "minecraft:polished_andesite_stairs",
+              "count": 27.0
+            },
+            "drop_items": true,
+            "type": "lootables:item"
+          }
+        ],
+        "type": "lootables:random"
+      }
+    },
+    {
+      "id": "lootables:5179b45e-2f9a-405f-aadd-92bde104439b",
+      "rarity": "rare",
+      "entry": {
+        "children": [
+          {
+            "xp": 40.374756,
+            "levels": false,
+            "type": "lootables:xp"
+          }
+        ],
+        "type": "lootables:multi"
+      }
+    },
+    {
+      "weight": 4,
+      "max_uses": 77,
+      "id": "lootables:65f6061f-4e5a-4df2-bf1a-33678b37a827",
+      "rarity": "epic",
+      "entry": {
+        "xp": 1.776123,
+        "type": "lootables:xp"
+      },
+      "guaranteed": true
+    },
+    {
+      "weight": 4,
+      "id": "lootables:9ffa0766-b9b2-4132-960a-6c1b52de0b45",
+      "rarity": "rare",
+      "entry": {
+        "children": [],
+        "type": "lootables:multi"
+      }
+    },
+    {
+      "id": "lootables:4954c8ae-e983-456e-8732-672e7fe2271d",
+      "rarity": "uncommon",
+      "entry": {
+        "value": 1.0249348140592285,
+        "operation": "add_multiplied_base",
+        "persistent": true,
+        "attribute": "minecraft:generic.safe_fall_distance",
+        "id": "lootables:4677a40f-1ac8-41cc-976a-e0a0fd0d0200",
+        "type": "lootables:attribute"
+      },
+      "guaranteed": true
+    },
+    {
+      "weight": 9,
+      "id": "lootables:7b8d7f70-25cf-4a32-9ac9-4f58b5ec6530",
+      "rarity": "rainbow",
+      "entry": {
+        "value": 9.872521634751886,
+        "operation": "add_multiplied_total",
+        "attribute": "minecraft:player.mining_efficiency",
+        "id": "lootables:b165a002-f056-4c5e-8fec-241d6991e6e7",
+        "type": "lootables:attribute"
+      }
+    },
+    {
+      "weight": 10,
+      "id": "lootables:ac559cc6-712f-4e40-9846-5e4ef79e4755",
+      "rarity": "rare",
+      "entry": {
+        "xp": 39.24193,
+        "levels": false,
+        "type": "lootables:xp"
+      }
+    },
+    {
+      "id": "lootables:1fe0c6f8-1829-462b-b740-cbf9a355a3a6",
+      "entry": {
+        "xp": 34.314972,
+        "levels": false,
+        "type": "lootables:xp"
+      },
+      "guaranteed": true
+    }
+  ]
+}

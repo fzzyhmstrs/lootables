@@ -1,0 +1,158 @@
+{
+  "pools": [
+    {
+      "max_uses": 90,
+      "id": "lootables:66e1dd72-e866-485d-a523-7791649894e4",
+      "rarity": "rainbow",
+      "entry": {
+        "children": [
+          {
+            "xp": 38.570946,
+            "type": "lootables:xp"
+          },
+          {
+            "item": {
+              "id": "minecraft:music_disc_5",
+              "count": 57.0
+            },
+            "type": "lootables:item"
+          }
+        ],
+        "type": "lootables:multi"
+      }
+    },
+    {
+      "id": "lootables:9787a5b4-ae4a-44b7-8b2c-cce55afc9631",
+      "rarity": "legendary",
+      "entry": {
+        "xp": 41.24618,
+        "levels": false,
+        "type": "lootables:xp"
+      }
+    },
+    {
+      "id": "lootables:3b90bc33-f015-44e4-9cd8-48dad12563a5",
+      "rarity": "rainbow",
+      "entry": {
+        "advancement": "minecraft:recipes/building_blocks/jack_o_lantern",
+        "type": "lootables:advancement"
+      }
+    },
+    {
+      "max_uses": 48,
+      "id": "lootables:4be975ea-eaba-434c-a0ad-c2614892d512",
+      "rarity": "rainbow",
+      "entry": {
+        "advancement": "minecraft:recipes/building_blocks/cut_copper_stairs",
+        "type": "lootables:advancement"
+      },
+      "guaranteed": true
+    },
+    {
+      "max_uses": 14,
+      "id": "lootables:2bc750ed-3dfe-4724-b70f-476701ec9a24",
+      "rarity": "epic",
+      "entry": {
+        "children": [
+          {
+            "children": [],
+            "type": "lootables:random"
+          },
+          {
+            "value": 6.623200002649947,
+            "operation": "add_multiplied_base",
+            "persistent": true,
+            "attribute": "minecraft:generic.max_health",
+            "id": "lootables:8ecd16b0-1c87-49a4-908f-b602bdded343",
+            "type": "lootables:attribute"
+          },
+          {
+            "value": 0.3234987067339168,
+            "persistent": true,
+            "attribute": "minecraft:generic.safe_fall_distance",
+            "id": "lootables:c56e2fba-58f2-42b0-aa88-3444e05ba3a1",
+            "type": "lootables:attribute"
+          }
+        ],
+        "type": "lootables:random"
+      },
+      "guaranteed": true
+    },
+    {
+      "id": "lootables:b493a483-a580-46ab-bfed-7b2fed142b79",
+      "rarity": "rare",
+      "entry": {
+        "children": [
+          {
+            "value": 2.0287070928459805,
+            "persistent": true,
+            "attribute": "minecraft:generic.jump_strength",
+            "id": "lootables:d427fe6f-c903-4950-9199-80287336f595",
+            "type": "lootables:attribute"
+          },
+          {
+            "advancement": "minecraft:recipes/redstone/acacia_door",
+            "type": "lootables:advancement"
+          }
+        ],
+        "type": "lootables:random"
+      }
+    },
+    {
+      "id": "lootables:478a834a-8ef7-423e-aa5a-15f76bf6d1cb",
+      "rarity": "rare",
+      "entry": {
+        "children": [
+          {
+            "advancement": "minecraft:recipes/misc/shaper_armor_trim_smithing_template_smithing_trim",
+            "type": "lootables:advancement"
+          }
+        ],
+        "type": "lootables:random"
+      },
+      "guaranteed": true
+    },
+    {
+      "weight": 5,
+      "id": "lootables:5b669414-b6ee-4e07-a434-46f1c60c3bf3",
+      "rarity": "epic",
+      "entry": {
+        "children": [],
+        "type": "lootables:random"
+      },
+      "guaranteed": true
+    },
+    {
+      "weight": 9,
+      "max_uses": 94,
+      "id": "lootables:9080c323-0bcc-43c8-aaeb-c1d9c27f5212",
+      "rarity": "rainbow",
+      "entry": {
+        "children": [],
+        "type": "lootables:multi"
+      }
+    },
+    {
+      "weight": 12,
+      "id": "lootables:ec75f66f-e7a7-4ce1-ad9a-0662294e9618",
+      "rarity": "rainbow",
+      "entry": {
+        "children": [
+          {
+            "xp": 51.312916,
+            "type": "lootables:xp"
+          },
+          {
+            "item": {
+              "id": "minecraft:enchanting_table",
+              "count": 9.0
+            },
+            "type": "lootables:item"
+          }
+        ],
+        "type": "lootables:random"
+      },
+      "guaranteed": true
+    }
+  ]
+}

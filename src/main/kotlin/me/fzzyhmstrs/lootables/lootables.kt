@@ -12,6 +12,7 @@
 
 package me.fzzyhmstrs.lootables
 
+import me.fzzyhmstrs.lootables.command.LootablesCommands
 import me.fzzyhmstrs.lootables.config.LootablesConfig
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryTypes
 import me.fzzyhmstrs.lootables.loot.LootablesData
@@ -47,6 +48,7 @@ object Lootables: ModInitializer {
         LootablePoolEntryTypes.init()
         LootablesData.init()
         LootablesNetworking.init()
+        LootablesCommands.init()
     }
 
     fun random(): Random {

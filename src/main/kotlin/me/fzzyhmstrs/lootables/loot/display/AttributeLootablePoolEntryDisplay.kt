@@ -12,6 +12,8 @@
 
 package me.fzzyhmstrs.lootables.loot.display
 
+import me.fzzyhmstrs.fzzy_config.util.FcText
+import me.fzzyhmstrs.fzzy_config.util.FcText.translate
 import me.fzzyhmstrs.fzzy_config.util.RenderUtil.drawTex
 import me.fzzyhmstrs.lootables.Lootables
 import me.fzzyhmstrs.lootables.client.screen.TileIcon
@@ -20,18 +22,49 @@ import me.fzzyhmstrs.lootables.loot.LootablePoolEntryType
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryTypes
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.texture.MissingSprite
+import net.minecraft.component.type.AttributeModifiersComponent
 import net.minecraft.entity.attribute.EntityAttribute
+import net.minecraft.entity.attribute.EntityAttributeModifier.Operation
+import net.minecraft.entity.attribute.EntityAttributes
 import net.minecraft.network.RegistryByteBuf
 import net.minecraft.network.codec.PacketCodec
+import net.minecraft.network.codec.PacketCodecs
 import net.minecraft.registry.Registries
 import net.minecraft.registry.entry.RegistryEntry
+import net.minecraft.text.Text
 
-data class AttributeLootablePoolEntryDisplay(private val effect: RegistryEntry<EntityAttribute>): LootablePoolEntryDisplay {
+data class AttributeLootablePoolEntryDisplay(private val effect: RegistryEntry<EntityAttribute>, private val value: Float, private val operation: Operation, private val persistent: Boolean = false): LootablePoolEntryDisplay {
 
     private var errorThrown = false
 
     override fun type(): LootablePoolEntryType {
         return LootablePoolEntryTypes.ATTRIBUTE
+    }
+
+    override fun clientDescription(): Text {
+        return if(persistent) "lootables.entry.attribute.persistent".translate(attributeDescription()) else "lootables.entry.attribute.temporary".translate(attributeDescription())
+    }
+
+    private fun attributeDescription(): Text {
+        var d = value
+        if(operation == Operation.ADD_MULTIPLIED_BASE || operation == Operation.ADD_MULTIPLIED_TOTAL) {
+            d *= 100
+        } else if (effect.matches(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE)) {
+            d *= 10
+        }
+        return if (d > 0.0) {
+            FcText.translatable("attribute.modifier.plus." + operation.id,
+                AttributeModifiersComponent.DECIMAL_FORMAT.format(d),
+                Text.translatable(effect.value().translationKey)
+            ).formatted(effect.value().getFormatting(true))
+        } else if (d < 0.0) {
+            FcText.translatable("attribute.modifier.take." + operation.id,
+                AttributeModifiersComponent.DECIMAL_FORMAT.format(-d),
+                Text.translatable(effect.value().translationKey)
+            ).formatted(effect.value().getFormatting(false))
+        } else {
+            FcText.empty()
+        }
     }
 
     override fun provideIcons(): List<TileIcon> {
@@ -50,9 +83,16 @@ data class AttributeLootablePoolEntryDisplay(private val effect: RegistryEntry<E
     }
 
     companion object {
-        val PACKET_CODEC: PacketCodec<RegistryByteBuf, AttributeLootablePoolEntryDisplay> = EntityAttribute.PACKET_CODEC.xmap(
-            ::AttributeLootablePoolEntryDisplay,
-            AttributeLootablePoolEntryDisplay::effect
+        val PACKET_CODEC: PacketCodec<RegistryByteBuf, AttributeLootablePoolEntryDisplay> = PacketCodec.tuple(
+            EntityAttribute.PACKET_CODEC,
+            AttributeLootablePoolEntryDisplay::effect,
+            PacketCodecs.FLOAT,
+            AttributeLootablePoolEntryDisplay::value,
+            Operation.PACKET_CODEC,
+            AttributeLootablePoolEntryDisplay::operation,
+            PacketCodecs.BOOL,
+            AttributeLootablePoolEntryDisplay::persistent,
+            ::AttributeLootablePoolEntryDisplay
         )
     }
 }

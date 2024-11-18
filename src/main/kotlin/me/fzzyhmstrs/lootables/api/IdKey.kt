@@ -12,6 +12,8 @@
 
 package me.fzzyhmstrs.lootables.api
 
+import com.mojang.serialization.Codec
+import com.mojang.serialization.codecs.RecordCodecBuilder
 import io.netty.buffer.ByteBuf
 import net.minecraft.network.codec.PacketCodec
 import net.minecraft.network.codec.PacketCodecs
@@ -20,6 +22,13 @@ import net.minecraft.util.Identifier
 class IdKey @JvmOverloads constructor(val id: Identifier, val count: Int = 1) {
 
     companion object {
+        val CODEC: Codec<IdKey> = RecordCodecBuilder.create { instance: RecordCodecBuilder.Instance<IdKey> ->
+            instance.group(
+                Identifier.CODEC.fieldOf("id").forGetter(IdKey::id),
+                Codec.INT.optionalFieldOf("count", 1).forGetter(IdKey::count)
+            ).apply(instance, ::IdKey)
+        }
+
         val PACKET_CODEC: PacketCodec<ByteBuf, IdKey> = PacketCodec.tuple(
             Identifier.PACKET_CODEC,
             IdKey::id,

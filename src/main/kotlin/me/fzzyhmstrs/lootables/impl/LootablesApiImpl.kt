@@ -17,6 +17,7 @@ import me.fzzyhmstrs.lootables.Lootables
 import me.fzzyhmstrs.lootables.api.IdKey
 import me.fzzyhmstrs.lootables.loot.LootablesData
 import me.fzzyhmstrs.lootables.loot.custom.CustomLootableEntry
+import me.fzzyhmstrs.lootables.loot.custom.CustomLootableEntryDisplay
 import me.fzzyhmstrs.lootables.network.ChoicesS2CCustomPayload
 import net.minecraft.loot.context.LootContext
 import net.minecraft.loot.context.LootContextParameterSet
@@ -31,6 +32,7 @@ import java.util.function.BiConsumer
 internal object LootablesApiImpl {
 
     private val customEntries: MutableMap<Identifier, CustomLootableEntry> = mutableMapOf()
+    private val customEntryDisplays: MutableMap<Identifier, CustomLootableEntryDisplay> = mutableMapOf()
 
     internal fun supplyLootWithChoices(tableId: Identifier, playerEntity: ServerPlayerEntity, origin: Vec3d, onSuccess: BiConsumer<ServerPlayerEntity, Vec3d> = BiConsumer { _, _ -> }, onAbort: BiConsumer<ServerPlayerEntity, Vec3d> = BiConsumer { _, _ -> }, key: IdKey?, rolls: Int = 3, choices: Int = 1): Boolean {
         if (choices > rolls) throw IllegalArgumentException("Number of choices ($choices) greater than number of rolls ($rolls)")
@@ -86,13 +88,18 @@ internal object LootablesApiImpl {
         return true
     }
 
-    internal fun registerCustomEntry(id: Identifier, entry: CustomLootableEntry) {
+    internal fun registerCustomEntry(id: Identifier, entry: CustomLootableEntry, entryDisplay: CustomLootableEntryDisplay) {
         if (customEntries.containsKey(id)) throw IllegalStateException("Custom lootable pool entry already registered at id: $id")
         customEntries[id] = entry
+        customEntryDisplays[id] = entryDisplay
     }
 
     internal fun getCustomEntry(id: Identifier): CustomLootableEntry? {
         return customEntries[id]
+    }
+
+    internal fun getCustomEntryDisplay(id: Identifier): CustomLootableEntryDisplay? {
+        return customEntryDisplays[id]
     }
 
 }

@@ -13,12 +13,18 @@
 package me.fzzyhmstrs.lootables.loot.display
 
 import io.netty.buffer.ByteBuf
+import me.fzzyhmstrs.fzzy_config.util.RenderUtil.drawTex
+import me.fzzyhmstrs.lootables.Lootables
 import me.fzzyhmstrs.lootables.client.screen.TileIcon
 import me.fzzyhmstrs.lootables.impl.LootablesApiImpl
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryDisplay
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryType
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryTypes
+import net.minecraft.client.MinecraftClient
+import net.minecraft.client.texture.MissingSprite
 import net.minecraft.network.codec.PacketCodec
+import net.minecraft.registry.Registries
+import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 
 data class CustomLootablePoolEntryDisplay(private val id: Identifier): LootablePoolEntryDisplay {
@@ -27,8 +33,19 @@ data class CustomLootablePoolEntryDisplay(private val id: Identifier): LootableP
         return LootablePoolEntryTypes.CUSTOM
     }
 
+    private val display by lazy {
+        LootablesApiImpl.getCustomEntryDisplay(id)
+    }
+
+    override fun clientDescription(): Text? {
+        return display?.clientDescription()
+    }
+
     override fun provideIcons(): List<TileIcon> {
-        return LootablesApiImpl.getCustomEntry(id)?.createDisplay()?.provideIcons() ?: listOf()
+        return display?.provideIcons() ?: listOf(TileIcon { context, x, y ->
+            val id = Lootables.identity("attribute/unknown")
+            context.drawTex(id, x, y, 18, 18)
+        })
     }
 
     companion object {

@@ -23,6 +23,7 @@ import net.minecraft.client.gui.DrawContext
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder
 import net.minecraft.client.gui.widget.PressableWidget
+import net.minecraft.entity.attribute.EntityAttributeModifier
 import net.minecraft.entity.attribute.EntityAttributes
 import net.minecraft.entity.effect.StatusEffects
 import net.minecraft.item.Items
@@ -36,16 +37,16 @@ class TestScreen(private var choicesLeft: Int = 1): Screen(FcText.empty()) {
 
     private val maxChoices = choicesLeft
     private val canClick: Supplier<Boolean> = Supplier { choicesLeft > 0 }
-    private val display1 = ItemLootablePoolEntryDisplay(Items.DIAMOND_HELMET.defaultStack)
-    private val display2 = AttributeLootablePoolEntryDisplay(EntityAttributes.GENERIC_ATTACK_DAMAGE)
-    private val display3 = TableLootablePoolEntryDisplay(listOf(Items.DIAMOND.defaultStack, Items.GOLD_INGOT.defaultStack, Items.GLOW_BERRIES.defaultStack))
+    private val display1 = ItemLootablePoolEntryDisplay(Items.DIAMOND_HELMET.defaultStack, false)
+    private val display2 = AttributeLootablePoolEntryDisplay(EntityAttributes.GENERIC_ATTACK_DAMAGE, 1.0f, EntityAttributeModifier.Operation.ADD_VALUE, true)
+    private val display3 = TableLootablePoolEntryDisplay(listOf(Items.DIAMOND.defaultStack, Items.GOLD_INGOT.defaultStack, Items.GLOW_BERRIES.defaultStack), false)
     private val display4 = MultiLootablePoolEntryDisplay(
-        StatusEffectLootablePoolEntryDisplay(StatusEffects.JUMP_BOOST),
-        StatusEffectLootablePoolEntryDisplay(StatusEffects.STRENGTH),
-        StatusEffectLootablePoolEntryDisplay(StatusEffects.LUCK)
+        StatusEffectLootablePoolEntryDisplay(StatusEffects.JUMP_BOOST, 1, 100),
+        StatusEffectLootablePoolEntryDisplay(StatusEffects.STRENGTH, 1, 100),
+        StatusEffectLootablePoolEntryDisplay(StatusEffects.LUCK, 1, 100)
     )
-    private val display5 = ExperienceLootablePoolEntryDisplay(false)
-    private val display6 =  HealLootablePoolEntryDisplay
+    private val display5 = ExperienceLootablePoolEntryDisplay("5", false)
+    private val display6 =  HealLootablePoolEntryDisplay("3")
 
 
     private val confirmWidget = ConfirmChoicesWidget(

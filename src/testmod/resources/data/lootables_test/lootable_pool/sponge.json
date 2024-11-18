@@ -1,0 +1,13 @@
+{
+  "rarity": "uncommon",
+  "entry": {
+    "type": "lootables:item",
+    "item": {
+      "id": "minecraft:sponge",
+      "count": {
+        "min": 1,
+        "max": 4
+      }
+    }
+  }
+}

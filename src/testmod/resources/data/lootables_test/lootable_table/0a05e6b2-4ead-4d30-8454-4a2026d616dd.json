@@ -1,0 +1,194 @@
+{
+  "pools": [
+    {
+      "max_uses": 5,
+      "id": "lootables:cb0c0a42-3749-4b97-b7c4-f078b845cd72",
+      "rarity": "legendary",
+      "entry": {
+        "children": [
+          {
+            "children": [
+              {
+                "item": {
+                  "id": "minecraft:bedrock",
+                  "count": 61.0
+                },
+                "type": "lootables:item"
+              },
+              {
+                "children": [
+                  {
+                    "value": 9.225583014675514,
+                    "operation": "add_multiplied_total",
+                    "attribute": "minecraft:generic.armor",
+                    "id": "lootables:c4ce1739-3e4e-48f4-9078-35bcfce86895",
+                    "type": "lootables:attribute"
+                  },
+                  {
+                    "value": 6.874325605537041,
+                    "attribute": "minecraft:generic.burning_time",
+                    "id": "lootables:7b06bb5e-720e-4cb5-a1d1-2e5cf9840a70",
+                    "type": "lootables:attribute"
+                  }
+                ],
+                "type": "lootables:multi"
+              }
+            ],
+            "type": "lootables:multi"
+          }
+        ],
+        "type": "lootables:random"
+      }
+    },
+    {
+      "id": "lootables:d58ec3ac-457a-4f95-9683-33a90cbe8b08",
+      "rarity": "legendary",
+      "entry": {
+        "xp": 37.34472,
+        "levels": false,
+        "type": "lootables:xp"
+      }
+    },
+    {
+      "max_uses": 50,
+      "id": "lootables:d343896b-ae9e-42cf-9ae0-9bf78548f7c4",
+      "rarity": "rare",
+      "entry": {
+        "advancement": "minecraft:recipes/misc/lapis_lazuli_from_smelting_deepslate_lapis_ore",
+        "type": "lootables:advancement"
+      }
+    },
+    {
+      "weight": 3,
+      "max_uses": 100,
+      "id": "lootables:f8339e85-213b-4374-969a-7853ea94b3e6",
+      "rarity": "epic",
+      "entry": {
+        "xp": 41.16894,
+        "levels": false,
+        "type": "lootables:xp"
+      },
+      "guaranteed": true
+    },
+    {
+      "max_uses": 41,
+      "id": "lootables:389db9d6-8656-4092-bc58-30e91c678363",
+      "rarity": "rare",
+      "entry": {
+        "value": 9.409350404483328,
+        "operation": "add_multiplied_base",
+        "persistent": true,
+        "attribute": "minecraft:player.submerged_mining_speed",
+        "id": "lootables:c77ceaf8-274f-48bf-87f2-116a7855ed09",
+        "type": "lootables:attribute"
+      },
+      "guaranteed": true
+    },
+    {
+      "weight": 5,
+      "max_uses": 34,
+      "id": "lootables:64fa566d-5ae9-4235-a135-f8724070a12a",
+      "rarity": "legendary",
+      "entry": {
+        "value": 4.824194568316601,
+        "attribute": "minecraft:generic.attack_damage",
+        "id": "lootables:2a3527f4-81e4-4703-85a4-32bc1b091de4",
+        "type": "lootables:attribute"
+      },
+      "guaranteed": true
+    },
+    {
+      "weight": 5,
+      "id": "lootables:535db19d-3d32-4339-af49-2f744920375d",
+      "rarity": "epic",
+      "entry": {
+        "children": [],
+        "type": "lootables:multi"
+      },
+      "guaranteed": true
+    },
+    {
+      "weight": 5,
+      "max_uses": 31,
+      "id": "lootables:866d7b80-2d67-47e2-8008-21c17aea86a1",
+      "rarity": "rare",
+      "entry": {
+        "xp": 71.249466,
+        "levels": false,
+        "type": "lootables:xp"
+      }
+    },
+    {
+      "max_uses": 17,
+      "id": "lootables:1d4bdefd-a1c6-4cdf-a84e-94e66806b7f8",
+      "rarity": "uncommon",
+      "entry": {
+        "value": 2.944582548990766,
+        "operation": "add_multiplied_base",
+        "attribute": "minecraft:generic.scale",
+        "id": "lootables:a972fae4-28a4-41ef-ac30-4eb6c7c39477",
+        "type": "lootables:attribute"
+      },
+      "guaranteed": true
+    },
+    {
+      "id": "lootables:c9594d38-29e8-4bc5-8942-b84d353c25f8",
+      "rarity": "uncommon",
+      "entry": {
+        "children": [
+          {
+            "advancement": "minecraft:recipes/redstone/cherry_button",
+            "type": "lootables:advancement"
+          },
+          {
+            "item": {
+              "id": "minecraft:light_blue_wool",
+              "count": 41.0
+            },
+            "drop_items": true,
+            "type": "lootables:item"
+          }
+        ],
+        "type": "lootables:multi"
+      }
+    },
+    {
+      "max_uses": 48,
+      "id": "lootables:e2694daa-4d13-4782-bcc5-ebd7250f29b7",
+      "entry": {
+        "children": [
+          {
+            "advancement": "minecraft:recipes/food/cooked_mutton_from_campfire_cooking",
+            "type": "lootables:advancement"
+          },
+          {
+            "xp": 61.657173,
+            "levels": false,
+            "type": "lootables:xp"
+          }
+        ],
+        "type": "lootables:multi"
+      },
+      "guaranteed": true
+    },
+    {
+      "weight": 12,
+      "id": "lootables:2daa8b0e-f8a1-40dd-b092-abe230b71e12",
+      "rarity": "epic",
+      "entry": {
+        "xp": 26.081902,
+        "levels": false,
+        "type": "lootables:xp"
+      }
+    },
+    {
+      "max_uses": 44,
+      "id": "lootables:de561908-7b03-47e4-b5dd-fc3af51cba78",
+      "entry": {
+        "xp": 95.240425,
+        "type": "lootables:xp"
+      },
+      "guaranteed": true
+    }
+  ]
+}

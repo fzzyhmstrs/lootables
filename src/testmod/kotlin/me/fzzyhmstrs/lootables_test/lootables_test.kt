@@ -16,9 +16,11 @@ import com.google.gson.GsonBuilder
 import com.mojang.brigadier.CommandDispatcher
 import com.mojang.brigadier.arguments.IntegerArgumentType
 import com.mojang.serialization.JsonOps
-import me.fzzyhmstrs.fzzy_config.api.ConfigApi
 import me.fzzyhmstrs.lootables.Lootables
+import me.fzzyhmstrs.lootables.api.LootablesApi
 import me.fzzyhmstrs.lootables.loot.LootableTable
+import me.fzzyhmstrs.lootables_test.entry.TestCustomEntry
+import me.fzzyhmstrs.lootables_test.entry.TestCustomEntryDisplay
 import me.fzzyhmstrs.lootables_test.screen.TestScreen
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.api.ModInitializer
@@ -35,6 +37,9 @@ import java.util.UUID
 object LootablesTest: ModInitializer {
 
     override fun onInitialize() {
+
+        LootablesApi.registerCustomEntry(Lootables.identity("test_custom_entry"), TestCustomEntry, TestCustomEntryDisplay)
+
         CommandRegistrationCallback.EVENT.register { dispatcher, _, _ ->
             dispatcher.register(
                 CommandManager.literal("create_random")

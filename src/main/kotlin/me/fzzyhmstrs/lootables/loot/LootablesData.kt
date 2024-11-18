@@ -13,6 +13,7 @@
 package me.fzzyhmstrs.lootables.loot
 
 import com.google.gson.*
+import com.ibm.icu.impl.PluralRulesLoader.loader
 import com.mojang.serialization.JsonOps
 import me.fzzyhmstrs.fzzy_config.api.ConfigApi
 import me.fzzyhmstrs.lootables.Lootables
@@ -340,8 +341,10 @@ internal object LootablesData: SimpleSynchronousResourceReloadListener {
 
     //endregion
 
+    private const val PARALLEL_BREAKPOINT = 512
+
     private fun<T> Map<Identifier, T>.ifStream(): Stream<Map.Entry<Identifier, T>> {
-        return if (this.size < 512) {
+        return if (this.size < PARALLEL_BREAKPOINT) {
             this.entries.stream()
         } else {
             this.entries.parallelStream()
@@ -354,12 +357,12 @@ internal object LootablesData: SimpleSynchronousResourceReloadListener {
         lootableSyncData = mapOf()
         LootablePool.reset()
 
-        val poolMap: MutableMap<Identifier, LootablePool>
-        manager.findResources("lootable_pools") {
+        val poolMap: MutableMap<Identifier, LootablePool.Companion.PoolData>
+        manager.findResources("lootable_pool") {
                 path -> path.path.endsWith(".json")
         }.also {
-            poolMap = if (it.size < 1024) {
-                HashMap((it.size / 0.95f + 2).toInt(), 0.95f)
+            poolMap = if (it.size < PARALLEL_BREAKPOINT) {
+                ConcurrentHashMap((it.size / 0.95f + 2).toInt(), 0.95f)
             } else {
                 ConcurrentHashMap((it.size / 0.95f + 2).toInt(), 0.95f, ForkJoinPool.getCommonPoolParallelism())
             }
@@ -368,25 +371,39 @@ internal object LootablesData: SimpleSynchronousResourceReloadListener {
                     val reader = resource.reader
                     val json = JsonParser.parseReader(reader)
                     val result = LootablePool.DATA_CODEC.parse(JsonOps.INSTANCE, json)
-                    val poolId = Identifier.of(id.namespace, id.path.substring(15, id.path.length - 5))
-                    result.ifSuccess { data -> poolMap[poolId] = LootablePool(poolId, data) }.ifError { error -> Lootables.LOGGER.error(error.messageSupplier.get()) }
+                    if (!id.path.startsWith("lootable_pool/")) {
+                        Lootables.LOGGER.error("Invalid resource location for lootable pool $id; needs to be in 'lootable_pool' folder")
+                    } else {
+                        val poolId = Identifier.of(id.namespace, id.path.substring(14, id.path.length - 5))
+                        result.ifSuccess { data ->
+                            if(data.replace) {
+                                poolMap[poolId] = data
+                            } else {
+                                poolMap.compute(poolId) { _, d ->
+                                    d?.composite(data) ?: data
+                                }
+                            }
+                        }.ifError { error ->
+                            Lootables.LOGGER.error(error.messageSupplier.get())
+                        }
+                    }
                 } catch (e: Throwable) {
                     Lootables.LOGGER.error("Error parsing lootable pool $id")
                     e.printStackTrace()
                 }
             }
-        lootablePools = poolMap
+        lootablePools = LootablePool.bake(poolMap, Lootables.LOGGER::error)
         if (FabricLoader.getInstance().isDevelopmentEnvironment) {
             println(lootablePools)
             println("Starting Table Load")
         }
         val start = System.currentTimeMillis()
-        val tableMap: MutableMap<Identifier, LootableTable>
-        manager.findResources("lootable_tables") {
+        val tableMap: MutableMap<Identifier, LootableTable.Companion.TableLoader>
+        manager.findResources("lootable_table") {
             path -> path.path.endsWith(".json")
         }.also {
-            tableMap = if (it.size < 1024) {
-                HashMap((it.size / 0.95f + 2).toInt(), 0.95f)
+            tableMap = if (it.size < PARALLEL_BREAKPOINT) {
+                ConcurrentHashMap((it.size / 0.95f + 2).toInt(), 0.95f)
             } else {
                 ConcurrentHashMap((it.size / 0.95f + 2).toInt(), 0.95f, ForkJoinPool.getCommonPoolParallelism())
             }
@@ -394,18 +411,32 @@ internal object LootablesData: SimpleSynchronousResourceReloadListener {
                 try {
                     val reader = resource.reader
                     val json = JsonParser.parseReader(reader)
-                    val result = LootableTable.CODEC.parse(JsonOps.INSTANCE, json)
-                    val tableId = Identifier.of(id.namespace, id.path.substring(16, id.path.length - 5))
-                    result.ifSuccess { table -> tableMap[tableId] = table }.ifError { error -> Lootables.LOGGER.error(error.messageSupplier.get()) }
+                    val result = LootableTable.LOADER_CODEC.parse(JsonOps.INSTANCE, json)
+                    if (!id.path.startsWith("lootable_table/")) {
+                        Lootables.LOGGER.error("Invalid resource location for lootable table $id; needs to be in 'lootable_table' folder")
+                    } else {
+                        val tableId = Identifier.of(id.namespace, id.path.substring(15, id.path.length - 5))
+                        result.ifSuccess { table ->
+                            if (table.replace) {
+                                tableMap[tableId] = table
+                            } else {
+                                tableMap.compute(tableId) { _, loader ->
+                                    loader?.composite(table) ?: table
+                                }
+                            }
+                        }.ifError { error ->
+                            Lootables.LOGGER.error(error.messageSupplier.get())
+                        }
+                    }
                 } catch (e: Throwable) {
                     Lootables.LOGGER.error("Error parsing lootable table $id")
                     e.printStackTrace()
                 }
             }
-        lootableTables = tableMap
+        lootableTables = LootableTable.bake(tableMap, Lootables.LOGGER::error)
         if (FabricLoader.getInstance().isDevelopmentEnvironment) {
             println("Finished Table Load in ${System.currentTimeMillis() - start}ms")
-            //println(lootableTables)
+            println(lootableTables)
         }
         LootablePool.reset()
     }

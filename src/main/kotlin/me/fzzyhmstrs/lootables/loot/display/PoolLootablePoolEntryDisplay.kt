@@ -16,13 +16,14 @@ import me.fzzyhmstrs.lootables.client.screen.TileIcon
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryDisplay
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryType
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryTypes
+import me.fzzyhmstrs.lootables.loot.entry.PoolLootablePoolEntry
 import net.minecraft.client.MinecraftClient
 import net.minecraft.item.ItemStack
 import net.minecraft.network.RegistryByteBuf
 import net.minecraft.network.codec.PacketCodec
 import net.minecraft.network.codec.PacketCodecs
 
-data class PoolLootablePoolEntryDisplay(private val itemStacks: List<ItemStack>): LootablePoolEntryDisplay {
+data class PoolLootablePoolEntryDisplay(private val itemStacks: List<ItemStack>, private val dropItems: Boolean): LootablePoolEntryDisplay {
 
     override fun type(): LootablePoolEntryType {
         return LootablePoolEntryTypes.POOL
@@ -58,9 +59,12 @@ data class PoolLootablePoolEntryDisplay(private val itemStacks: List<ItemStack>)
     }
 
     companion object {
-        val PACKET_CODEC: PacketCodec<RegistryByteBuf, PoolLootablePoolEntryDisplay> = ItemStack.PACKET_CODEC.collect(PacketCodecs.toList()).xmap(
-            ::PoolLootablePoolEntryDisplay,
-            PoolLootablePoolEntryDisplay::itemStacks
+        val PACKET_CODEC: PacketCodec<RegistryByteBuf, PoolLootablePoolEntryDisplay> = PacketCodec.tuple(
+            ItemStack.PACKET_CODEC.collect(PacketCodecs.toList()),
+            PoolLootablePoolEntryDisplay::itemStacks,
+            PacketCodecs.BOOL,
+            PoolLootablePoolEntryDisplay::dropItems,
+            ::PoolLootablePoolEntryDisplay
         )
     }
 }

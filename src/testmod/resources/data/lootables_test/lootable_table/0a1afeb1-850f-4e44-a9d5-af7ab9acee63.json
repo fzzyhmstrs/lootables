@@ -1,0 +1,258 @@
+{
+  "pools": [
+    {
+      "weight": 1,
+      "max_uses": 36,
+      "id": "lootables:e43a3b0f-d5a1-4130-8c77-1c398b11c2c7",
+      "rarity": "rainbow",
+      "entry": {
+        "xp": 19.842743,
+        "levels": false,
+        "type": "lootables:xp"
+      },
+      "guaranteed": true
+    },
+    {
+      "max_uses": 38,
+      "id": "lootables:041f3dc4-d098-4060-9e3e-875de29673a7",
+      "rarity": "epic",
+      "entry": {
+        "item": {
+          "id": "minecraft:donkey_spawn_egg",
+          "count": 39.0
+        },
+        "drop_items": true,
+        "type": "lootables:item"
+      }
+    },
+    {
+      "weight": 2,
+      "id": "lootables:22abde7f-6a64-450b-a5fe-dde614c76d95",
+      "rarity": "uncommon",
+      "entry": {
+        "value": 9.719614189898863,
+        "attribute": "minecraft:generic.armor_toughness",
+        "id": "lootables:f6a8d316-1652-4b17-bbbb-cc5172d9696b",
+        "type": "lootables:attribute"
+      }
+    },
+    {
+      "weight": 3,
+      "id": "lootables:41710c11-0355-4c17-88aa-d32d0d1aad90",
+      "rarity": "epic",
+      "entry": {
+        "children": [
+          {
+            "children": [
+              {
+                "xp": 61.477715,
+                "type": "lootables:xp"
+              },
+              {
+                "children": [
+                  {
+                    "xp": 54.72654,
+                    "type": "lootables:xp"
+                  }
+                ],
+                "type": "lootables:random"
+              },
+              {
+                "xp": 91.088326,
+                "type": "lootables:xp"
+              }
+            ],
+            "type": "lootables:multi"
+          },
+          {
+            "advancement": "minecraft:recipes/decorations/orange_carpet",
+            "type": "lootables:advancement"
+          }
+        ],
+        "type": "lootables:random"
+      },
+      "guaranteed": true
+    },
+    {
+      "weight": 4,
+      "id": "lootables:cbb3864a-7082-4c2a-b185-f3fa6241bacb",
+      "rarity": "legendary",
+      "entry": {
+        "advancement": "minecraft:recipes/misc/iron_nugget",
+        "type": "lootables:advancement"
+      },
+      "guaranteed": true
+    },
+    {
+      "weight": 4,
+      "max_uses": 35,
+      "id": "lootables:43166bc9-7053-45df-ab84-6a7df8df8d9e",
+      "entry": {
+        "children": [
+          {
+            "xp": 33.85248,
+            "levels": false,
+            "type": "lootables:xp"
+          },
+          {
+            "advancement": "minecraft:recipes/decorations/cartography_table",
+            "type": "lootables:advancement"
+          },
+          {
+            "children": [
+              {
+                "xp": 90.86383,
+                "levels": false,
+                "type": "lootables:xp"
+              }
+            ],
+            "type": "lootables:multi"
+          }
+        ],
+        "type": "lootables:random"
+      },
+      "guaranteed": true
+    },
+    {
+      "weight": 5,
+      "id": "lootables:32d874e2-cdd0-418b-b8ef-171837df7444",
+      "rarity": "rainbow",
+      "entry": {
+        "children": [
+          {
+            "children": [
+              {
+                "children": [
+                  {
+                    "xp": 69.79512,
+                    "type": "lootables:xp"
+                  },
+                  {
+                    "children": [
+                      {
+                        "value": 3.5667489537722172,
+                        "operation": "add_multiplied_base",
+                        "attribute": "minecraft:generic.fall_damage_multiplier",
+                        "id": "lootables:6cccd727-234c-4f8e-9493-86c885ff3096",
+                        "type": "lootables:attribute"
+                      },
+                      {
+                        "item": {
+                          "id": "minecraft:brick_wall",
+                          "count": 23.0
+                        },
+                        "drop_items": true,
+                        "type": "lootables:item"
+                      }
+                    ],
+                    "type": "lootables:multi"
+                  }
+                ],
+                "type": "lootables:multi"
+              }
+            ],
+            "type": "lootables:multi"
+          },
+          {
+            "children": [
+              {
+                "children": [
+                  {
+                    "children": [
+                      {
+                        "xp": 74.75786,
+                        "type": "lootables:xp"
+                      },
+                      {
+                        "xp": 1.89237,
+                        "type": "lootables:xp"
+                      }
+                    ],
+                    "type": "lootables:multi"
+                  },
+                  {
+                    "item": {
+                      "id": "minecraft:red_dye",
+                      "count": 42.0
+                    },
+                    "type": "lootables:item"
+                  }
+                ],
+                "type": "lootables:multi"
+              }
+            ],
+            "type": "lootables:multi"
+          },
+          {
+            "xp": 0.81860423,
+            "type": "lootables:xp"
+          }
+        ],
+        "type": "lootables:random"
+      },
+      "guaranteed": true
+    },
+    {
+      "max_uses": 36,
+      "id": "lootables:91373a97-75e8-4cc9-94e3-13a42094b350",
+      "rarity": "uncommon",
+      "entry": {
+        "item": {
+          "id": "minecraft:light_blue_candle",
+          "count": 16.0
+        },
+        "type": "lootables:item"
+      }
+    },
+    {
+      "id": "lootables:14c38ec0-abe8-45d5-a260-3e93cf01e207",
+      "rarity": "uncommon",
+      "entry": {
+        "advancement": "minecraft:recipes/redstone/oak_trapdoor",
+        "type": "lootables:advancement"
+      }
+    },
+    {
+      "weight": 7,
+      "max_uses": 75,
+      "id": "lootables:a2f38f56-5994-486c-b6a9-8078f5d63231",
+      "rarity": "uncommon",
+      "entry": {
+        "item": {
+          "id": "minecraft:waxed_exposed_copper_grate",
+          "count": 38.0
+        },
+        "type": "lootables:item"
+      }
+    },
+    {
+      "weight": 8,
+      "id": "lootables:6778ffbc-14f7-4eec-8146-4b3d8a598d8b",
+      "entry": {
+        "children": [
+          {
+            "children": [
+              {
+                "xp": 66.0593,
+                "levels": false,
+                "type": "lootables:xp"
+              }
+            ],
+            "type": "lootables:multi"
+          }
+        ],
+        "type": "lootables:random"
+      },
+      "guaranteed": true
+    },
+    {
+      "id": "lootables:062f5169-aab6-4ff6-b850-25a8cdb72a1e",
+      "entry": {
+        "xp": 2.309972,
+        "levels": false,
+        "type": "lootables:xp"
+      },
+      "guaranteed": true
+    }
+  ]
+}

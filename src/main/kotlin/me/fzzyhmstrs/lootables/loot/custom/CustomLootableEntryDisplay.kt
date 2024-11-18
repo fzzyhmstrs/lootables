@@ -13,7 +13,13 @@
 package me.fzzyhmstrs.lootables.loot.custom
 
 import me.fzzyhmstrs.lootables.client.screen.TileIcon
+import net.minecraft.text.Text
 
-fun interface CustomLootablePoolDisplay {
+@FunctionalInterface
+@JvmDefaultWithCompatibility
+interface CustomLootableEntryDisplay {
     fun provideIcons(): List<TileIcon>
+    fun clientDescription(): Text? {
+        return null
+    }
 }

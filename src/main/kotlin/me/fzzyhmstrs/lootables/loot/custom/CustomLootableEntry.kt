@@ -12,12 +12,15 @@
 
 package me.fzzyhmstrs.lootables.loot.custom
 
-import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.Text
 import net.minecraft.util.math.Vec3d
 
-interface CustomLootableEntry {
-    fun apply(player: PlayerEntity, origin: Vec3d)
-    fun defaultDescription(): Text
-    fun createDisplay(): CustomLootablePoolDisplay
+@FunctionalInterface
+@JvmDefaultWithCompatibility
+fun interface CustomLootableEntry {
+    fun apply(player: ServerPlayerEntity, origin: Vec3d)
+    fun serverDescription(playerEntity: ServerPlayerEntity): Text? {
+        return null
+    }
 }

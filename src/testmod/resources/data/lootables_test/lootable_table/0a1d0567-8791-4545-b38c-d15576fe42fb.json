@@ -1,0 +1,233 @@
+{
+  "pools": [
+    {
+      "id": "lootables:00312180-6b88-4adb-afcb-cdf49ca42ce6",
+      "rarity": "rainbow",
+      "entry": {
+        "advancement": "minecraft:recipes/building_blocks/waxed_copper_grate_from_honeycomb",
+        "type": "lootables:advancement"
+      }
+    },
+    {
+      "id": "lootables:0f2cd02e-ed46-4217-a764-fa9044eb934a",
+      "rarity": "rainbow",
+      "entry": {
+        "item": {
+          "id": "minecraft:heavy_core",
+          "count": 47.0
+        },
+        "type": "lootables:item"
+      },
+      "guaranteed": true
+    },
+    {
+      "max_uses": 58,
+      "id": "lootables:effd79e5-cdb6-4af7-91c6-4d1bca109ee5",
+      "rarity": "rainbow",
+      "entry": {
+        "xp": 85.3989,
+        "type": "lootables:xp"
+      }
+    },
+    {
+      "weight": 2,
+      "id": "lootables:04beb2f2-4357-46ca-9e4c-574c778404be",
+      "entry": {
+        "xp": 59.53988,
+        "type": "lootables:xp"
+      }
+    },
+    {
+      "max_uses": 25,
+      "id": "lootables:2061325f-ba3f-4b93-8760-c0d83078e17b",
+      "rarity": "epic",
+      "entry": {
+        "children": [
+          {
+            "advancement": "minecraft:recipes/redstone/lever",
+            "type": "lootables:advancement"
+          },
+          {
+            "advancement": "minecraft:recipes/decorations/pink_carpet",
+            "type": "lootables:advancement"
+          }
+        ],
+        "type": "lootables:multi"
+      },
+      "guaranteed": true
+    },
+    {
+      "max_uses": 77,
+      "id": "lootables:cb10c5eb-b115-40d2-b224-8e5ef5126a8b",
+      "rarity": "rare",
+      "entry": {
+        "children": [
+          {
+            "xp": 93.626205,
+            "type": "lootables:xp"
+          }
+        ],
+        "type": "lootables:multi"
+      },
+      "guaranteed": true
+    },
+    {
+      "weight": 5,
+      "id": "lootables:7e6117ac-1136-40c0-9409-86a9fea16385",
+      "rarity": "rare",
+      "entry": {
+        "children": [
+          {
+            "children": [
+              {
+                "advancement": "minecraft:recipes/building_blocks/polished_blackstone_brick_slab_from_polished_blackstone_bricks_stonecutting",
+                "type": "lootables:advancement"
+              }
+            ],
+            "type": "lootables:multi"
+          },
+          {
+            "xp": 94.875496,
+            "levels": false,
+            "type": "lootables:xp"
+          },
+          {
+            "advancement": "minecraft:recipes/building_blocks/chiseled_stone_bricks_from_stone_bricks_stonecutting",
+            "type": "lootables:advancement"
+          },
+          {
+            "item": {
+              "id": "minecraft:dead_fire_coral",
+              "count": 9.0
+            },
+            "drop_items": true,
+            "type": "lootables:item"
+          }
+        ],
+        "type": "lootables:multi"
+      }
+    },
+    {
+      "max_uses": 92,
+      "id": "lootables:5a955f7c-bf16-4517-83d5-33b57aa2ada9",
+      "rarity": "uncommon",
+      "entry": {
+        "xp": 66.9104,
+        "type": "lootables:xp"
+      }
+    },
+    {
+      "id": "lootables:95b9a4fd-d6c1-4eb4-a26a-001539914c36",
+      "rarity": "uncommon",
+      "entry": {
+        "children": [],
+        "type": "lootables:random"
+      },
+      "guaranteed": true
+    },
+    {
+      "weight": 7,
+      "max_uses": 22,
+      "id": "lootables:266a1cc5-12a9-4df5-ae26-6a8a67f8c987",
+      "rarity": "rare",
+      "entry": {
+        "advancement": "minecraft:recipes/building_blocks/waxed_oxidized_copper_grate_from_waxed_oxidized_copper_stonecutting",
+        "type": "lootables:advancement"
+      },
+      "guaranteed": true
+    },
+    {
+      "weight": 8,
+      "max_uses": 59,
+      "id": "lootables:205183f5-fe8c-4316-ae1f-d64b277d5ab6",
+      "rarity": "uncommon",
+      "entry": {
+        "children": [
+          {
+            "advancement": "minecraft:recipes/building_blocks/pink_stained_glass",
+            "type": "lootables:advancement"
+          },
+          {
+            "children": [
+              {
+                "item": {
+                  "id": "minecraft:name_tag",
+                  "count": 32.0
+                },
+                "type": "lootables:item"
+              },
+              {
+                "advancement": "minecraft:recipes/building_blocks/dye_yellow_wool",
+                "type": "lootables:advancement"
+              }
+            ],
+            "type": "lootables:multi"
+          },
+          {
+            "xp": 41.19942,
+            "type": "lootables:xp"
+          }
+        ],
+        "type": "lootables:random"
+      }
+    },
+    {
+      "weight": 10,
+      "max_uses": 61,
+      "id": "lootables:0cd2808d-f010-4846-ac17-9a0a38dac031",
+      "rarity": "rare",
+      "entry": {
+        "item": {
+          "id": "minecraft:sugar",
+          "count": 16.0
+        },
+        "drop_items": true,
+        "type": "lootables:item"
+      },
+      "guaranteed": true
+    },
+    {
+      "weight": 10,
+      "max_uses": 99,
+      "id": "lootables:e1fb22f6-0fc7-49fb-aab0-ced9b32b8980",
+      "rarity": "rainbow",
+      "entry": {
+        "xp": 30.171627,
+        "type": "lootables:xp"
+      },
+      "guaranteed": true
+    },
+    {
+      "weight": 11,
+      "id": "lootables:7a27e14b-267f-4557-be3d-c095487f95bf",
+      "rarity": "rare",
+      "entry": {
+        "item": {
+          "id": "minecraft:waxed_oxidized_copper",
+          "count": 51.0
+        },
+        "drop_items": true,
+        "type": "lootables:item"
+      },
+      "guaranteed": true
+    },
+    {
+      "weight": 12,
+      "id": "lootables:30c691f1-8754-4445-b99d-6578e5f0f3b2",
+      "rarity": "rainbow",
+      "entry": {
+        "children": [
+          {
+            "value": 9.923039283515704,
+            "persistent": true,
+            "attribute": "minecraft:generic.movement_speed",
+            "id": "lootables:c0b77ac2-b0a9-44c6-a7ce-941106e9466f",
+            "type": "lootables:attribute"
+          }
+        ],
+        "type": "lootables:multi"
+      },
+      "guaranteed": true
+    }
+  ]
+}

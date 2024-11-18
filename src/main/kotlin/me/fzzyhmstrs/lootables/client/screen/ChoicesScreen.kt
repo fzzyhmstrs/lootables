@@ -64,18 +64,19 @@ class ChoicesScreen(private val choiceData: ChoicesS2CCustomPayload, private var
                 var widgetY = (height / 2) - (((2 * LootablesConfig.INSTANCE.tileHeight.get()) + 12 + 12 + 20) / 2)
                 var dataIndex = 0
                 for (i in 1..topRowCount) {
+                    val d = data[dataIndex]
                     list.add(ChoiceTileWidget(
                         MinecraftClient.getInstance(),
-                        data[dataIndex].id,
+                        d.id,
                         widgetX,
                         widgetY,
                         LootablesConfig.INSTANCE.tileWidth.get(),
                         LootablesConfig.INSTANCE.tileHeight.get(),
-                        data[dataIndex].rarity,
-                        { data[dataIndex].display.provideIcons() },
+                        d.rarity,
+                        { d.display.provideIcons() },
                         { choice -> MathHelper.clamp(if(choice) choicesLeft-- else choicesLeft++, 0, maxChoices) },
                         canClick,
-                        data[dataIndex].description,
+                        d.provideDescription(),
                         dataIndex * delayMultiplier
                     ))
                     widgetX += LootablesConfig.INSTANCE.tileWidth.get()
@@ -86,18 +87,19 @@ class ChoicesScreen(private val choiceData: ChoicesS2CCustomPayload, private var
                 widgetY += LootablesConfig.INSTANCE.tileHeight.get()
                 widgetY += 10
                 for (i in 1.. bottomRowCount) {
+                    val d = data[dataIndex]
                     list.add(ChoiceTileWidget(
                         MinecraftClient.getInstance(),
-                        data[dataIndex].id,
+                        d.id,
                         widgetX,
                         widgetY,
                         LootablesConfig.INSTANCE.tileWidth.get(),
                         LootablesConfig.INSTANCE.tileHeight.get(),
-                        data[dataIndex].rarity,
-                        { data[dataIndex].display.provideIcons() },
+                        d.rarity,
+                        { d.display.provideIcons() },
                         { choice -> MathHelper.clamp(if(choice) choicesLeft-- else choicesLeft++, 0, maxChoices) },
                         canClick,
-                        data[dataIndex].description,
+                        d.provideDescription(),
                         dataIndex * delayMultiplier
                     ))
                     widgetX += LootablesConfig.INSTANCE.tileWidth.get()
@@ -125,7 +127,7 @@ class ChoicesScreen(private val choiceData: ChoicesS2CCustomPayload, private var
                         { data[i].display.provideIcons() },
                         { choice -> MathHelper.clamp(if(choice) choicesLeft-- else choicesLeft++, 0, maxChoices) },
                         canClick,
-                        data[i].description,
+                        data[i].provideDescription(),
                         i * delayMultiplier
                     ))
                     widgetX += LootablesConfig.INSTANCE.tileWidth.get()

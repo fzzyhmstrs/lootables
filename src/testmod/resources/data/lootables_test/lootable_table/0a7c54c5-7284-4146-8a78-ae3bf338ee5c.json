@@ -1,0 +1,222 @@
+{
+  "pools": [
+    {
+      "weight": 1,
+      "id": "lootables:9ec19e29-6601-4f01-90f0-b76b800c4050",
+      "rarity": "legendary",
+      "entry": {
+        "children": [
+          {
+            "xp": 43.332993,
+            "type": "lootables:xp"
+          },
+          {
+            "children": [
+              {
+                "advancement": "minecraft:recipes/building_blocks/deepslate",
+                "type": "lootables:advancement"
+              }
+            ],
+            "type": "lootables:random"
+          }
+        ],
+        "type": "lootables:multi"
+      },
+      "guaranteed": true
+    },
+    {
+      "id": "lootables:57d63fa9-6950-4357-996e-655f52ab08bb",
+      "rarity": "legendary",
+      "entry": {
+        "item": {
+          "id": "minecraft:baked_potato",
+          "count": 56.0
+        },
+        "drop_items": true,
+        "type": "lootables:item"
+      },
+      "guaranteed": true
+    },
+    {
+      "max_uses": 41,
+      "id": "lootables:2925e9bd-2f96-4eb5-9841-07daa38c82d1",
+      "rarity": "legendary",
+      "entry": {
+        "value": 6.191135054002887,
+        "operation": "add_multiplied_base",
+        "attribute": "minecraft:generic.scale",
+        "id": "lootables:debed130-3581-45d9-ad8d-165e0bcb0041",
+        "type": "lootables:attribute"
+      }
+    },
+    {
+      "weight": 2,
+      "id": "lootables:a435b5fd-d9d4-4a11-8821-513f5cb960a5",
+      "rarity": "uncommon",
+      "entry": {
+        "value": 1.0924082515825528,
+        "operation": "add_multiplied_total",
+        "attribute": "minecraft:generic.max_health",
+        "id": "lootables:a8a76409-cf9f-4ea8-b39b-d9ca39726eb2",
+        "type": "lootables:attribute"
+      },
+      "guaranteed": true
+    },
+    {
+      "weight": 4,
+      "max_uses": 93,
+      "id": "lootables:f017c927-6aee-4559-bb72-9b662dac6810",
+      "rarity": "epic",
+      "entry": {
+        "advancement": "minecraft:recipes/misc/creeper_banner_pattern",
+        "type": "lootables:advancement"
+      }
+    },
+    {
+      "id": "lootables:89a73275-ec2f-4204-9e23-a9d3e3378bf1",
+      "rarity": "uncommon",
+      "entry": {
+        "children": [
+          {
+            "children": [
+              {
+                "xp": 71.36671,
+                "type": "lootables:xp"
+              }
+            ],
+            "type": "lootables:multi"
+          }
+        ],
+        "type": "lootables:random"
+      },
+      "guaranteed": true
+    },
+    {
+      "max_uses": 28,
+      "id": "lootables:d0f50526-9bb5-4182-816f-86a72ba77a79",
+      "rarity": "uncommon",
+      "entry": {
+        "xp": 60.61077,
+        "levels": false,
+        "type": "lootables:xp"
+      }
+    },
+    {
+      "weight": 6,
+      "max_uses": 75,
+      "id": "lootables:eca14190-fd32-42e3-9b2f-043dcd4a3b3b",
+      "rarity": "rainbow",
+      "entry": {
+        "advancement": "minecraft:recipes/building_blocks/dye_black_bed",
+        "type": "lootables:advancement"
+      }
+    },
+    {
+      "max_uses": 75,
+      "id": "lootables:83296388-8f6e-43ff-9f96-1802cf45f051",
+      "rarity": "uncommon",
+      "entry": {
+        "xp": 19.137882,
+        "levels": false,
+        "type": "lootables:xp"
+      }
+    },
+    {
+      "max_uses": 39,
+      "id": "lootables:e3251fab-2376-43f3-adc0-eb329163dffb",
+      "rarity": "rare",
+      "entry": {
+        "item": {
+          "id": "minecraft:crimson_stem",
+          "count": 16.0
+        },
+        "type": "lootables:item"
+      }
+    },
+    {
+      "id": "lootables:2600fe19-8c1a-4e76-a168-0de8ed37a04f",
+      "rarity": "rare",
+      "entry": {
+        "advancement": "minecraft:recipes/tools/golden_axe",
+        "type": "lootables:advancement"
+      }
+    },
+    {
+      "weight": 10,
+      "id": "lootables:45677740-d728-4327-a31c-cb0d4a20c78d",
+      "rarity": "legendary",
+      "entry": {
+        "children": [],
+        "type": "lootables:random"
+      }
+    },
+    {
+      "weight": 11,
+      "max_uses": 100,
+      "id": "lootables:f753ee60-34d5-4774-90fc-aaef2e075234",
+      "rarity": "legendary",
+      "entry": {
+        "children": [
+          {
+            "value": 4.475616340611285,
+            "operation": "add_multiplied_total",
+            "attribute": "minecraft:generic.gravity",
+            "id": "lootables:c6c2341e-0959-490e-9abe-4356662a4a1f",
+            "type": "lootables:attribute"
+          },
+          {
+            "xp": 97.909584,
+            "levels": false,
+            "type": "lootables:xp"
+          }
+        ],
+        "type": "lootables:multi"
+      }
+    },
+    {
+      "max_uses": 100,
+      "id": "lootables:e41cae27-285a-4f73-97eb-696cab0fba47",
+      "entry": {
+        "children": [
+          {
+            "xp": 21.227789,
+            "levels": false,
+            "type": "lootables:xp"
+          },
+          {
+            "children": [
+              {
+                "children": [
+                  {
+                    "xp": 6.974655,
+                    "type": "lootables:xp"
+                  },
+                  {
+                    "xp": 98.753,
+                    "type": "lootables:xp"
+                  },
+                  {
+                    "xp": 11.37377,
+                    "levels": false,
+                    "type": "lootables:xp"
+                  },
+                  {
+                    "xp": 75.784134,
+                    "levels": false,
+                    "type": "lootables:xp"
+                  }
+                ],
+                "type": "lootables:multi"
+              }
+            ],
+            "type": "lootables:multi"
+          }
+        ],
+        "type": "lootables:multi"
+      }
+    }
+  ],
+  "weights": {
+    "rare": 9
+  }
+}

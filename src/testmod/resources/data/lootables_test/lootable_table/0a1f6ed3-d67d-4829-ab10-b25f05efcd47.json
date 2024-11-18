@@ -1,0 +1,137 @@
+{
+  "pools": [
+    {
+      "weight": 1,
+      "max_uses": 91,
+      "id": "lootables:9a8aec57-6377-47cf-8388-3da1fad8b6cd",
+      "rarity": "rainbow",
+      "entry": {
+        "children": [
+          {
+            "item": {
+              "id": "minecraft:netherite_sword",
+              "count": 40.0
+            },
+            "type": "lootables:item"
+          },
+          {
+            "item": {
+              "id": "minecraft:waxed_exposed_copper_grate",
+              "count": 57.0
+            },
+            "type": "lootables:item"
+          }
+        ],
+        "type": "lootables:random"
+      },
+      "guaranteed": true
+    },
+    {
+      "id": "lootables:c9f6dd4b-b730-4e1a-a791-2b302e53f0d8",
+      "rarity": "epic",
+      "entry": {
+        "item": {
+          "id": "minecraft:cobbled_deepslate_stairs",
+          "count": 26.0
+        },
+        "type": "lootables:item"
+      },
+      "guaranteed": true
+    },
+    {
+      "id": "lootables:bc4645b8-5b7d-4053-bb2d-fe2fc2e75a4f",
+      "rarity": "epic",
+      "entry": {
+        "advancement": "minecraft:recipes/misc/paper",
+        "type": "lootables:advancement"
+      },
+      "guaranteed": true
+    },
+    {
+      "weight": 2,
+      "max_uses": 63,
+      "id": "lootables:6564ef26-30fe-497b-abc5-57af8de2caaa",
+      "entry": {
+        "item": {
+          "id": "minecraft:lightning_rod",
+          "count": 21.0
+        },
+        "drop_items": true,
+        "type": "lootables:item"
+      },
+      "guaranteed": true
+    },
+    {
+      "id": "lootables:10f12641-7fdf-4457-936e-c0ea3bbce934",
+      "rarity": "epic",
+      "entry": {
+        "xp": 82.1739,
+        "type": "lootables:xp"
+      },
+      "guaranteed": true
+    },
+    {
+      "id": "lootables:3e9c2584-7fdb-4742-b300-af85ffb1a62a",
+      "rarity": "rare",
+      "entry": {
+        "xp": 43.001015,
+        "levels": false,
+        "type": "lootables:xp"
+      }
+    },
+    {
+      "id": "lootables:03972f6f-0768-4866-8381-f3fae232194f",
+      "rarity": "uncommon",
+      "entry": {
+        "value": 6.383653757482122,
+        "operation": "add_multiplied_total",
+        "attribute": "minecraft:player.sweeping_damage_ratio",
+        "id": "lootables:89ef7ba2-d906-4001-b8a1-24439c0d748c",
+        "type": "lootables:attribute"
+      }
+    },
+    {
+      "weight": 6,
+      "max_uses": 34,
+      "id": "lootables:b4abf512-d7d7-4a3a-ab28-c8a5a8229d86",
+      "rarity": "rainbow",
+      "entry": {
+        "xp": 61.309986,
+        "levels": false,
+        "type": "lootables:xp"
+      }
+    },
+    {
+      "weight": 7,
+      "max_uses": 39,
+      "id": "lootables:02bddece-9ce4-4f02-a64f-93180654a3e4",
+      "rarity": "rare",
+      "entry": {
+        "children": [],
+        "type": "lootables:random"
+      },
+      "guaranteed": true
+    },
+    {
+      "weight": 7,
+      "max_uses": 23,
+      "id": "lootables:a841b059-ee67-4ea3-9640-1ad6168c2f1f",
+      "entry": {
+        "advancement": "minecraft:recipes/building_blocks/black_terracotta",
+        "type": "lootables:advancement"
+      },
+      "guaranteed": true
+    },
+    {
+      "weight": 8,
+      "max_uses": 20,
+      "id": "lootables:95f6f6c9-ee15-4a51-ac30-50dc10e01743",
+      "entry": {
+        "xp": 39.798294,
+        "levels": false,
+        "type": "lootables:xp"
+      },
+      "guaranteed": true
+    }
+  ]
+}

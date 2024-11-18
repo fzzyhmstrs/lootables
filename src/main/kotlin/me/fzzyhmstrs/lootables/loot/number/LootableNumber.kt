@@ -63,7 +63,7 @@ interface LootableNumber {
                     return uniformResult
                 }
                 val binomialResult = binomial.decode(ops, input)
-                if (uniformResult.isSuccess) {
+                if (binomialResult.isSuccess) {
                     return binomialResult
                 }
                 val eitherResult = either.decode(ops, input)

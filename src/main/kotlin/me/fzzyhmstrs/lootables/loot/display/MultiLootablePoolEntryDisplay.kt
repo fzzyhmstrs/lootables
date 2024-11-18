@@ -12,6 +12,7 @@
 
 package me.fzzyhmstrs.lootables.loot.display
 
+import me.fzzyhmstrs.fzzy_config.util.FcText
 import me.fzzyhmstrs.lootables.client.screen.TileIcon
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryDisplay
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryType
@@ -19,17 +20,30 @@ import me.fzzyhmstrs.lootables.loot.LootablePoolEntryTypes
 import net.minecraft.network.RegistryByteBuf
 import net.minecraft.network.codec.PacketCodec
 import net.minecraft.network.codec.PacketCodecs
+import net.minecraft.text.Text
 
-data class MultiLootablePoolEntryDisplay(private val children: List<LootablePoolEntryDisplay>): LootablePoolEntryDisplay {
+data class MultiLootablePoolEntryDisplay(private val children: List<LootablePoolEntryDisplay.DisplayWithDesc>): LootablePoolEntryDisplay {
 
-    constructor(vararg child: LootablePoolEntryDisplay): this(child.toList())
+    constructor(vararg child: LootablePoolEntryDisplay): this(child.toList().map { LootablePoolEntryDisplay.DisplayWithDesc(it, null) })
 
     override fun type(): LootablePoolEntryType {
         return LootablePoolEntryTypes.MULTI
     }
 
+    override fun clientDescription(): Text {
+        val text = FcText.translatable("lootables.entry.multi")
+        text.append(FcText.literal("\n"))
+        for ((i, child) in children.withIndex()) {
+            text.append(child.provideDescription())
+            if (i != children.lastIndex) {
+                text.append(FcText.literal("\n"))
+            }
+        }
+        return text
+    }
+
     private val icons by lazy {
-        children.map { it.provideIcons() }.stream().collect({ mutableListOf() }, { list, newList -> list.addAll(newList) }, MutableList<TileIcon>::addAll )
+        children.map { it.display.provideIcons() }.stream().collect({ mutableListOf() }, { list, newList -> list.addAll(newList) }, MutableList<TileIcon>::addAll )
     }
 
     override fun provideIcons(): List<TileIcon> {
@@ -37,7 +51,7 @@ data class MultiLootablePoolEntryDisplay(private val children: List<LootablePool
     }
 
     companion object {
-        val PACKET_CODEC: PacketCodec<RegistryByteBuf, MultiLootablePoolEntryDisplay> = LootablePoolEntryDisplay.PACKET_CODEC.collect(PacketCodecs.toList()).xmap(
+        val PACKET_CODEC: PacketCodec<RegistryByteBuf, MultiLootablePoolEntryDisplay> = LootablePoolEntryDisplay.DisplayWithDesc.PACKET_CODEC.collect(PacketCodecs.toList()).xmap(
             ::MultiLootablePoolEntryDisplay,
             MultiLootablePoolEntryDisplay::children
         )

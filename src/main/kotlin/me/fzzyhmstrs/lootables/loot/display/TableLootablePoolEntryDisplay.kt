@@ -12,6 +12,7 @@
 
 package me.fzzyhmstrs.lootables.loot.display
 
+import me.fzzyhmstrs.fzzy_config.util.FcText.translate
 import me.fzzyhmstrs.lootables.client.screen.TileIcon
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryDisplay
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryType
@@ -21,11 +22,16 @@ import net.minecraft.item.ItemStack
 import net.minecraft.network.RegistryByteBuf
 import net.minecraft.network.codec.PacketCodec
 import net.minecraft.network.codec.PacketCodecs
+import net.minecraft.text.Text
 
-data class TableLootablePoolEntryDisplay(private val itemStacks: List<ItemStack>): LootablePoolEntryDisplay {
+data class TableLootablePoolEntryDisplay(private val itemStacks: List<ItemStack>, private val dropItems: Boolean): LootablePoolEntryDisplay {
 
     override fun type(): LootablePoolEntryType {
         return LootablePoolEntryTypes.TABLE
+    }
+
+    override fun clientDescription(): Text {
+        return if(dropItems) "lootables.entry.table.drop".translate() else "lootables.entry.table.give".translate()
     }
 
     private val icons: List<TileIcon> by lazy {
@@ -58,9 +64,12 @@ data class TableLootablePoolEntryDisplay(private val itemStacks: List<ItemStack>
     }
 
     companion object {
-        val PACKET_CODEC: PacketCodec<RegistryByteBuf, TableLootablePoolEntryDisplay> = ItemStack.PACKET_CODEC.collect(PacketCodecs.toList()).xmap(
-            ::TableLootablePoolEntryDisplay,
-            TableLootablePoolEntryDisplay::itemStacks
+        val PACKET_CODEC: PacketCodec<RegistryByteBuf, TableLootablePoolEntryDisplay> = PacketCodec.tuple(
+            ItemStack.PACKET_CODEC.collect(PacketCodecs.toList()),
+            TableLootablePoolEntryDisplay::itemStacks,
+            PacketCodecs.BOOL,
+            TableLootablePoolEntryDisplay::dropItems,
+            ::TableLootablePoolEntryDisplay
         )
     }
 }
