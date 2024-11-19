@@ -25,6 +25,12 @@ import me.fzzyhmstrs.lootables.loot.number.LootableNumber
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.math.Vec3d
 
+/**
+ * Heals the player the given amount
+ * @param amount [LootableNumber] amount to heal.
+ * @author fzzyhmstrs
+ * @since 0.1.0
+ */
 class HealLootablePoolEntry(private val amount: LootableNumber): LootablePoolEntry {
 
     override fun type(): LootablePoolEntryType {
@@ -39,7 +45,7 @@ class HealLootablePoolEntry(private val amount: LootableNumber): LootablePoolEnt
         return HealLootablePoolEntryDisplay(Lootables.DECIMAL_FORMAT.format(amount.descFloat() / 2f))
     }
 
-    companion object {
+    internal companion object {
 
         val CODEC: MapCodec<HealLootablePoolEntry> = RecordCodecBuilder.mapCodec { instance: RecordCodecBuilder.Instance<HealLootablePoolEntry> ->
             instance.group(
