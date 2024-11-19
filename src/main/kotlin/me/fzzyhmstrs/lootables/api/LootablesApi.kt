@@ -81,9 +81,10 @@ object LootablesApi {
     }
 
     /**
-     * Registers a [CustomLootableEntry] for use in the `custom` lootable pool type.
-     * @param id [Identifier] unique id to register this entry to
-     * @param entry [CustomLootableEntry] the entry to register
+     * Registers a [CustomLootableEntry] for use in the `"custom"` lootable pool type.
+     * @param id [Identifier] unique id to register this entry to.
+     * @param entry [CustomLootableEntry] the entry to register.
+     * @param entryDisplay [CustomLootableEntryDisplay] the display corresponding to the entry, registered alongside its entry.
      * @author fzzyhmstrs
      * @since 0.1.0
      */
