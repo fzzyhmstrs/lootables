@@ -28,6 +28,15 @@ import net.minecraft.sound.SoundEvent
 import net.minecraft.text.Text
 import net.minecraft.util.math.Vec3d
 
+/**
+ * Cosmetic entry. Plays a sound before applying the "real" child entry.
+ * @param soundEvent [RegistryEntry]&lt;[SoundEvent]&gt; sound to play
+ * @param volume [LootableNumber] volume of the sound
+ * @param pitch [LootableNumber] pitch of the sound
+ * @child [LootablePoolEntry] The wrapped "real" entry that will be applied after the sound is played.
+ * @author fzzyhmstrs
+ * @since 0.1.0
+ */
 class PlaySoundLootablePoolEntry(private val soundEvent: RegistryEntry<SoundEvent>, private val volume: LootableNumber, private val pitch: LootableNumber, private val child: LootablePoolEntry): LootablePoolEntry {
 
     override fun type(): LootablePoolEntryType {
@@ -47,7 +56,7 @@ class PlaySoundLootablePoolEntry(private val soundEvent: RegistryEntry<SoundEven
         return PlaySoundLootablePoolEntryDisplay(child.createDisplay(playerEntity))
     }
 
-    companion object {
+    internal companion object {
 
         val CODEC: MapCodec<PlaySoundLootablePoolEntry> = RecordCodecBuilder.mapCodec { instance: RecordCodecBuilder.Instance<PlaySoundLootablePoolEntry> ->
             instance.group(
