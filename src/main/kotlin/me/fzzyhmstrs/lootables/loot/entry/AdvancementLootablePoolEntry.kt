@@ -28,6 +28,12 @@ import net.minecraft.util.Identifier
 import net.minecraft.util.math.Vec3d
 import java.util.*
 
+/**
+ * Grants the player an advancement
+ * @param advancement [Identifier] the ID of the advancement to grant
+ * @author fzzyhmstrs
+ * @since 0.1.0
+ */
 class AdvancementLootablePoolEntry(private val advancement: Identifier): LootablePoolEntry {
 
     override fun type(): LootablePoolEntryType {
@@ -59,9 +65,13 @@ class AdvancementLootablePoolEntry(private val advancement: Identifier): Lootabl
         return AdvancementLootablePoolEntryDisplay(adv.value.display.map { it.icon })
     }
 
+    override fun maxUses(): Int {
+        return 1
+    }
+
     /*override */
 
-    companion object {
+    internal companion object {
 
         val CODEC: MapCodec<AdvancementLootablePoolEntry> = RecordCodecBuilder.mapCodec { instance: RecordCodecBuilder.Instance<AdvancementLootablePoolEntry> ->
             instance.group(
