@@ -27,6 +27,8 @@
 
 	"lootables.number.either": "%1$s or %2$s",
 
+	"lootables.item.use": "§6§o%s to open this loot§r",
+
 	"lootables.rarity.common": "Common Choice",
 	"lootables.rarity.uncommon": "Uncommon Choice",
 	"lootables.rarity.rare": "Rare Choice",
