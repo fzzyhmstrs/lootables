@@ -32,7 +32,14 @@ import net.minecraft.util.math.Vec3d
 import java.util.*
 import java.util.function.Consumer
 
-class PoolLootablePoolEntry(private val pool: LootPool, private val dropItems: Boolean = false): LootablePoolEntry {
+/**
+ * Rolls a vanilla loot pool and provides the results to the player
+ * @param pool [LootPool] the loot pool to roll
+ * @param dropItems Boolean whether items are scattered on the ground or directly given to the player. Default false. When false, will give to inventory, when true will scatter.
+ * @author fzzyhmstrs
+ * @since 0.1.0
+ */
+class PoolLootablePoolEntry @JvmOverloads constructor(private val pool: LootPool, private val dropItems: Boolean = false): LootablePoolEntry {
 
     override fun type(): LootablePoolEntryType {
         return LootablePoolEntryTypes.POOL
@@ -57,7 +64,7 @@ class PoolLootablePoolEntry(private val pool: LootPool, private val dropItems: B
         return PoolLootablePoolEntryDisplay(list, dropItems)
     }
 
-    companion object {
+    internal companion object {
 
         val CODEC: MapCodec<PoolLootablePoolEntry> = RecordCodecBuilder.mapCodec { instance: RecordCodecBuilder.Instance<PoolLootablePoolEntry> ->
             instance.group(
