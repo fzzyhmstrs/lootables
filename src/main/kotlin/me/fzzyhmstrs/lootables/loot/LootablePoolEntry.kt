@@ -25,6 +25,9 @@ interface LootablePoolEntry {
         return null
     }
     fun createDisplay(playerEntity: ServerPlayerEntity): LootablePoolEntryDisplay
+    fun maxUses(): Int? {
+        return null
+    }
 
     companion object {
         val CODEC: Codec<LootablePoolEntry> = LootablePoolEntryType.CODEC.dispatch({ entry -> entry.type() }, { type -> type.codec() })
