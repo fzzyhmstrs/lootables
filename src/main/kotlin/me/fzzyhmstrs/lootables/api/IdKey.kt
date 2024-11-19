@@ -19,9 +19,16 @@ import net.minecraft.network.codec.PacketCodec
 import net.minecraft.network.codec.PacketCodecs
 import net.minecraft.util.Identifier
 
+/**
+ * A key for restricting a certain instance of loot generation to a certain number of rolls per player.
+ * @param id [Identifier] unique ID to make this key distint from others.
+ * @param count Int max number of times a particular player can roll the loot supplied with this key
+ * @author fzzyhmstrs
+ * @since 0.1.0
+ */
 class IdKey @JvmOverloads constructor(val id: Identifier, val count: Int = 1) {
 
-    companion object {
+    internal companion object {
         val CODEC: Codec<IdKey> = RecordCodecBuilder.create { instance: RecordCodecBuilder.Instance<IdKey> ->
             instance.group(
                 Identifier.CODEC.fieldOf("id").forGetter(IdKey::id),
