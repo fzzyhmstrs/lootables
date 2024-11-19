@@ -18,12 +18,19 @@ import me.fzzyhmstrs.lootables.loot.LootablePoolEntry
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryDisplay
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryType
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryTypes
+import me.fzzyhmstrs.lootables.loot.custom.CustomLootableEntry
 import me.fzzyhmstrs.lootables.loot.display.CustomLootablePoolEntryDisplay
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.Vec3d
 
+/**
+ * Links a [CustomLootableEntry] to a Lootable pool/table
+ * @param id [Identifier] the registered ID of the custom entry.
+ * @author fzzyhmstrs
+ * @since 0.1.0
+ */
 class CustomLootablePoolEntry(private val id: Identifier): LootablePoolEntry {
 
     override fun type(): LootablePoolEntryType {
