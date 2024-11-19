@@ -35,6 +35,14 @@ import net.minecraft.util.math.Vec3d
 import java.util.*
 import java.util.function.Function
 
+/**
+ * Applies loot functions (item modifiers) to one or more equipped items on the player
+ * @param functions List&lt;[LootFunction]&gt; functions to be applied to the players gear
+ * @param relevantSlots [AttributeModifierSlot] defines which equipment slot or slots is relevant to the functions. Default MAINHAND
+ * @see [me.fzzyhmstrs.lootables.loot.RepairEquipmentLootFunction]
+ * @author fzzyhmstrs
+ * @since 0.1.0
+ */
 class LootFunctionLootablePoolEntry(private val functions: List<LootFunction>, private val relevantSlots: AttributeModifierSlot = AttributeModifierSlot.MAINHAND): LootablePoolEntry {
 
     override fun type(): LootablePoolEntryType {
@@ -58,7 +66,7 @@ class LootFunctionLootablePoolEntry(private val functions: List<LootFunction>, p
         return LootFunctionLootablePoolEntryDisplay(relevantSlots)
     }
 
-    companion object {
+    internal companion object {
 
         private val SINGLE_FUNCTION_CODEC: MapCodec<List<LootFunction>> = LootFunctionTypes.CODEC.fieldOf("function").flatXmap(
             { lf -> DataResult.success(mutableListOf(lf)) },
