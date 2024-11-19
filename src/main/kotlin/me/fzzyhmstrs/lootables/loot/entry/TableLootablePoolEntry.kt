@@ -31,6 +31,13 @@ import net.minecraft.util.ItemScatterer
 import net.minecraft.util.math.Vec3d
 import java.util.function.Consumer
 
+/**
+ * Rolls an entire vanilla loot table and provides it to the player.
+ * @param table [RegistryEntry]&lt;[LootTable]&gt; the table to roll from
+ * @param dropItems Boolean whether items are scattered on the ground or directly given to the player. Default false. When false, will give to inventory, when true will scatter.
+ * @author fzzyhmstrs
+ * @since 0.1.0
+ */
 class TableLootablePoolEntry(private val table: RegistryEntry<LootTable>, private val dropItems: Boolean = false): LootablePoolEntry {
 
     override fun type(): LootablePoolEntryType {
@@ -54,7 +61,7 @@ class TableLootablePoolEntry(private val table: RegistryEntry<LootTable>, privat
         return TableLootablePoolEntryDisplay(list, dropItems)
     }
 
-    companion object {
+    internal companion object {
 
         val CODEC: MapCodec<TableLootablePoolEntry> = RecordCodecBuilder.mapCodec { instance: RecordCodecBuilder.Instance<TableLootablePoolEntry> ->
             instance.group(
