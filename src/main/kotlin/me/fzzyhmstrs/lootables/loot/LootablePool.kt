@@ -51,7 +51,8 @@ internal class LootablePool private constructor(
     fun canApply(context: LootContext): Boolean {
         val entity = context.get(LootContextParameters.THIS_ENTITY) ?: return false
         val uses = LootablesData.getUses(id, entity.uuid)
-        if (maxUses in 1..uses) return false
+        val totalUses = if(maxUses > -1) maxUses else entry.maxUses() ?: maxUses
+        if (totalUses in 1..uses) return false
         for (condition in conditions) {
             if (!condition.test(context)) return false
         }
