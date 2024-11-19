@@ -49,7 +49,7 @@ class CustomLootablePoolEntry(private val id: Identifier): LootablePoolEntry {
         return CustomLootablePoolEntryDisplay(id)
     }
 
-    companion object {
+    internal companion object {
         val CODEC: MapCodec<CustomLootablePoolEntry> = Identifier.CODEC.fieldOf("id").xmap(
             ::CustomLootablePoolEntry,
             CustomLootablePoolEntry::id
