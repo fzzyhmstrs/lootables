@@ -23,6 +23,12 @@ import me.fzzyhmstrs.lootables.loot.display.MultiLootablePoolEntryDisplay
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.math.Vec3d
 
+/**
+ * Applies multiple child entries together. This is an "AND" entry.
+ * @param children List&lt;[LootablePoolEntry]&gt; list of children to apply when this parent entry is applied.
+ * @author fzzyhmstrs
+ * @since 0.1.0
+ */
 class MultiLootablePoolEntry(private val children: List<LootablePoolEntry>): LootablePoolEntry {
 
     override fun type(): LootablePoolEntryType {
@@ -39,7 +45,7 @@ class MultiLootablePoolEntry(private val children: List<LootablePoolEntry>): Loo
         return MultiLootablePoolEntryDisplay(children.map { LootablePoolEntryDisplay.DisplayWithDesc(it.createDisplay(playerEntity), it.serverDescription(playerEntity)) })
     }
 
-    companion object {
+    internal companion object {
 
         val CODEC: MapCodec<MultiLootablePoolEntry> = RecordCodecBuilder.mapCodec { instance: RecordCodecBuilder.Instance<MultiLootablePoolEntry> ->
             instance.group(
