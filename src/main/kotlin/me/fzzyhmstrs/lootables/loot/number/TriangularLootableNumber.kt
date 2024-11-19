@@ -41,6 +41,24 @@ class TriangularLootableNumber(private val a: Float, private val b: Float): Loot
         return ((a + b + b) / 3f)
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as TriangularLootableNumber
+
+        if (a != other.a) return false
+        if (b != other.b) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = a.hashCode()
+        result = 31 * result + b.hashCode()
+        return result
+    }
+
     companion object {
         val CODEC: Codec<TriangularLootableNumber> = RecordCodecBuilder.create { instance: RecordCodecBuilder.Instance<TriangularLootableNumber> ->
             instance.group(

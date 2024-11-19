@@ -17,6 +17,8 @@ import me.fzzyhmstrs.lootables.config.LootablesConfig
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryTypes
 import me.fzzyhmstrs.lootables.loot.LootablesData
 import me.fzzyhmstrs.lootables.network.LootablesNetworking
+import me.fzzyhmstrs.lootables.registry.ComponentRegistry
+import me.fzzyhmstrs.lootables.registry.LootFunctionRegistry
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
@@ -49,6 +51,9 @@ object Lootables: ModInitializer {
         LootablesData.init()
         LootablesNetworking.init()
         LootablesCommands.init()
+
+        ComponentRegistry.init()
+        LootFunctionRegistry.init()
     }
 
     fun random(): Random {

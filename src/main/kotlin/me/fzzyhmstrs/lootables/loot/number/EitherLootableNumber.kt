@@ -40,6 +40,26 @@ class EitherLootableNumber(private val either: Float, private val or: Float, pri
         return MathHelper.lerp(weight, or, either)
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as EitherLootableNumber
+
+        if (either != other.either) return false
+        if (or != other.or) return false
+        if (weight != other.weight) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = either.hashCode()
+        result = 31 * result + or.hashCode()
+        result = 31 * result + weight.hashCode()
+        return result
+    }
+
     companion object {
         val CODEC: Codec<EitherLootableNumber> = RecordCodecBuilder.create { instance: RecordCodecBuilder.Instance<EitherLootableNumber> ->
             instance.group(

@@ -17,7 +17,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder
 import me.fzzyhmstrs.fzzy_config.util.FcText
 import me.fzzyhmstrs.lootables.Lootables
 import net.minecraft.text.Text
-import net.minecraft.util.math.MathHelper
 
 class BinomialLootableNumber(private val n: Int, private val p: Float): LootableNumber {
 
@@ -49,6 +48,24 @@ class BinomialLootableNumber(private val n: Int, private val p: Float): Lootable
 
     override fun descFloat(): Float {
         return n * p
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as BinomialLootableNumber
+
+        if (n != other.n) return false
+        if (p != other.p) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = n
+        result = 31 * result + p.hashCode()
+        return result
     }
 
     companion object {

@@ -40,6 +40,24 @@ class UniformLootableNumber(private val min: Float, private val max: Float): Loo
         return ((min + max) / 2f)
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as UniformLootableNumber
+
+        if (min != other.min) return false
+        if (max != other.max) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = min.hashCode()
+        result = 31 * result + max.hashCode()
+        return result
+    }
+
     companion object {
         val CODEC: Codec<UniformLootableNumber> = RecordCodecBuilder.create { instance: RecordCodecBuilder.Instance<UniformLootableNumber> ->
             instance.group(

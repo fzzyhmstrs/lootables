@@ -13,7 +13,6 @@
 package me.fzzyhmstrs.lootables.loot
 
 import com.google.gson.*
-import com.ibm.icu.impl.PluralRulesLoader.loader
 import com.mojang.serialization.JsonOps
 import me.fzzyhmstrs.fzzy_config.api.ConfigApi
 import me.fzzyhmstrs.lootables.Lootables
@@ -34,10 +33,8 @@ import net.minecraft.util.math.Vec3d
 import java.io.File
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.ConcurrentMap
 import java.util.concurrent.ForkJoinPool
 import java.util.function.BiConsumer
-import java.util.function.Function
 import java.util.stream.Stream
 import kotlin.math.max
 import kotlin.math.min

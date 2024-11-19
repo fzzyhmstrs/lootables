@@ -73,7 +73,8 @@ class LootFunctionLootablePoolEntry(private val functions: List<LootFunction>, p
 
         val CODEC: MapCodec<LootFunctionLootablePoolEntry> = RecordCodecBuilder.mapCodec { instance: RecordCodecBuilder.Instance<LootFunctionLootablePoolEntry> ->
             instance.group(
-                FUNCTION_CODEC.forGetter(LootFunctionLootablePoolEntry::functions)
+                FUNCTION_CODEC.forGetter(LootFunctionLootablePoolEntry::functions),
+                AttributeModifierSlot.CODEC.optionalFieldOf("slots", AttributeModifierSlot.MAINHAND).forGetter(LootFunctionLootablePoolEntry::relevantSlots)
             ).apply(instance, ::LootFunctionLootablePoolEntry)
         }
     }

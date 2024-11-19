@@ -20,7 +20,6 @@ import net.minecraft.network.RegistryByteBuf
 import net.minecraft.network.codec.PacketCodec
 import net.minecraft.network.codec.PacketCodecs
 import net.minecraft.text.Text
-import net.minecraft.text.TextCodecs
 
 data class ExperienceLootablePoolEntryDisplay(private val xp: String, private val levels: Boolean): SimpleLootablePoolEntryDisplay(if(levels) Lootables.identity("display/experience_levels") else Lootables.identity("display/experience_points")) {
 

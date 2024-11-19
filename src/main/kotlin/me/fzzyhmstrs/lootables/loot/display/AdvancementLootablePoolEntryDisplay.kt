@@ -14,14 +14,12 @@ package me.fzzyhmstrs.lootables.loot.display
 
 import me.fzzyhmstrs.lootables.Lootables
 import me.fzzyhmstrs.lootables.client.screen.TileIcon
-import me.fzzyhmstrs.lootables.loot.LootablePoolEntryDisplay
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryType
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryTypes
-import net.minecraft.advancement.AdvancementDisplay
 import net.minecraft.client.MinecraftClient
 import net.minecraft.item.ItemStack
 import net.minecraft.network.codec.PacketCodecs
-import java.util.Optional
+import java.util.*
 
 data class AdvancementLootablePoolEntryDisplay(private val display: Optional<ItemStack>): SimpleLootablePoolEntryDisplay(Lootables.identity("display/advancement")) {
 

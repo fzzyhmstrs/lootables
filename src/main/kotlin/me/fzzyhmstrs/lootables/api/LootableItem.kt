@@ -15,6 +15,7 @@ package me.fzzyhmstrs.lootables.api
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import me.fzzyhmstrs.lootables.Lootables
+import me.fzzyhmstrs.lootables.api.LootableItem.LootableData
 import me.fzzyhmstrs.lootables.registry.ComponentRegistry
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.PlayerEntity
@@ -24,11 +25,7 @@ import net.minecraft.network.RegistryByteBuf
 import net.minecraft.network.codec.PacketCodec
 import net.minecraft.network.codec.PacketCodecs
 import net.minecraft.server.network.ServerPlayerEntity
-import net.minecraft.util.Hand
-import net.minecraft.util.Identifier
-import net.minecraft.util.ItemScatterer
-import net.minecraft.util.StringIdentifiable
-import net.minecraft.util.TypedActionResult
+import net.minecraft.util.*
 import net.minecraft.world.World
 import java.util.*
 

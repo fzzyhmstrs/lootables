@@ -12,6 +12,7 @@
 
 package me.fzzyhmstrs.lootables.loot.entry
 
+import com.mojang.serialization.DataResult
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import me.fzzyhmstrs.lootables.Lootables
@@ -40,9 +41,14 @@ class RandomLootablePoolEntry(private val children: List<LootablePoolEntry>): Lo
 
     companion object {
 
+        private val NON_EMPTY_LIST_CODEC = LootablePoolEntry.CODEC.listOf().flatXmap(
+            { l -> if (l.isEmpty()) DataResult.error { "Empty list not allowed" } else DataResult.success(l) },
+            { l -> if (l.isEmpty()) DataResult.error { "Empty list not allowed" } else DataResult.success(l) }
+        )
+
         val CODEC: MapCodec<RandomLootablePoolEntry> = RecordCodecBuilder.mapCodec { instance: RecordCodecBuilder.Instance<RandomLootablePoolEntry> ->
             instance.group(
-                LootablePoolEntry.CODEC.listOf().fieldOf("children").forGetter(RandomLootablePoolEntry::children)
+                NON_EMPTY_LIST_CODEC.fieldOf("children").forGetter(RandomLootablePoolEntry::children)
             ).apply(instance, ::RandomLootablePoolEntry)
         }
 

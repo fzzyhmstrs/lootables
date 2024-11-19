@@ -16,14 +16,10 @@ import com.mojang.datafixers.util.Either
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.EitherCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
-import me.fzzyhmstrs.fzzy_config.util.ValidationResult
 import me.fzzyhmstrs.fzzy_config.util.ValidationResult.Companion.report
 import me.fzzyhmstrs.lootables.Lootables
-import net.fabricmc.loader.api.FabricLoader
-import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.loot.context.LootContext
 import net.minecraft.loot.context.LootContextParameters
-import net.minecraft.network.packet.CustomPayload.Id
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.Vec3d

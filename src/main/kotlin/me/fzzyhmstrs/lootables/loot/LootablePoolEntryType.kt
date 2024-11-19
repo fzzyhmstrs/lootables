@@ -15,7 +15,6 @@ package me.fzzyhmstrs.lootables.loot
 import com.mojang.serialization.Codec
 import com.mojang.serialization.DataResult
 import com.mojang.serialization.MapCodec
-import me.fzzyhmstrs.lootables.Lootables
 import me.fzzyhmstrs.lootables.loot.number.BinomialLootableNumber
 import net.minecraft.network.RegistryByteBuf
 import net.minecraft.network.codec.PacketCodec
@@ -24,7 +23,6 @@ import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.Identifier
 import java.util.*
 import java.util.function.Function
-import java.util.function.Supplier
 
 class LootablePoolEntryType private constructor(private val codec: MapCodec<out LootablePoolEntry>, private val s2cCodec: PacketCodec<RegistryByteBuf, out LootablePoolEntryDisplay>, private val randomGenerator: Function<ServerPlayerEntity, LootablePoolEntry?>) {
 

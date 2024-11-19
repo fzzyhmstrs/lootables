@@ -19,7 +19,7 @@ import net.minecraft.network.codec.PacketCodec
 import net.minecraft.network.codec.PacketCodecs
 import net.minecraft.text.Text
 import net.minecraft.text.TextCodecs
-import java.util.Optional
+import java.util.*
 
 @JvmDefaultWithCompatibility
 interface LootablePoolEntryDisplay {

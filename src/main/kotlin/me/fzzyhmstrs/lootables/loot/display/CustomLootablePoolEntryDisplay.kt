@@ -20,10 +20,7 @@ import me.fzzyhmstrs.lootables.impl.LootablesApiImpl
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryDisplay
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryType
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryTypes
-import net.minecraft.client.MinecraftClient
-import net.minecraft.client.texture.MissingSprite
 import net.minecraft.network.codec.PacketCodec
-import net.minecraft.registry.Registries
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 

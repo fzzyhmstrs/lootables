@@ -39,6 +39,19 @@ class ConstantLootableNumber(private val value: Float): LootableNumber {
         return nextFloat()
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as ConstantLootableNumber
+
+        return value == other.value
+    }
+
+    override fun hashCode(): Int {
+        return value.hashCode()
+    }
+
     companion object {
         private val INLINE_CODEC: Codec<ConstantLootableNumber> = Codec.FLOAT.xmap(
             ::ConstantLootableNumber,

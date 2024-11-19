@@ -28,7 +28,7 @@ import net.minecraft.registry.Registries
 import net.minecraft.registry.entry.RegistryEntry
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.math.Vec3d
-import java.util.UUID
+import java.util.*
 
 class AttributeLootablePoolEntry(private val attribute: RegistryEntry<EntityAttribute>, private val value: Double, private val operation: Operation, private val persistent: Boolean = false): LootablePoolEntry {
 

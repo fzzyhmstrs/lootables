@@ -30,6 +30,9 @@ object LootablePoolEntryTypes {
     val RANDOM = LootablePoolEntryType.create(Lootables.identity("random"), RandomLootablePoolEntry.CODEC, RandomLootablePoolEntryDisplay.PACKET_CODEC, RandomLootablePoolEntry.Companion::createRandomInstance)
     val FUNCTION = LootablePoolEntryType.create(Lootables.identity("function"), LootFunctionLootablePoolEntry.CODEC, LootFunctionLootablePoolEntryDisplay.PACKET_CODEC)
     val ADVANCEMENT = LootablePoolEntryType.create(Lootables.identity("advancement"), AdvancementLootablePoolEntry.CODEC, AdvancementLootablePoolEntryDisplay.PACKET_CODEC, AdvancementLootablePoolEntry.Companion::createRandomInstance)
+    val PLAY_SOUND = LootablePoolEntryType.create(Lootables.identity("play_sound"), PlaySoundLootablePoolEntry.CODEC, PlaySoundLootablePoolEntryDisplay.PACKET_CODEC)
+    val PARTICLE = LootablePoolEntryType.create(Lootables.identity("particle"), SpawnParticlesLootablePoolEntry.CODEC, SpawnParticlesLootablePoolEntryDisplay.PACKET_CODEC)
+
 
     fun init(){}
 

@@ -16,7 +16,10 @@ import com.mojang.serialization.Codec
 import com.mojang.serialization.MapCodec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import me.fzzyhmstrs.lootables.Lootables
-import me.fzzyhmstrs.lootables.loot.*
+import me.fzzyhmstrs.lootables.loot.LootablePoolEntry
+import me.fzzyhmstrs.lootables.loot.LootablePoolEntryDisplay
+import me.fzzyhmstrs.lootables.loot.LootablePoolEntryType
+import me.fzzyhmstrs.lootables.loot.LootablePoolEntryTypes
 import me.fzzyhmstrs.lootables.loot.display.ExperienceLootablePoolEntryDisplay
 import me.fzzyhmstrs.lootables.loot.number.ConstantLootableNumber
 import me.fzzyhmstrs.lootables.loot.number.LootableNumber
