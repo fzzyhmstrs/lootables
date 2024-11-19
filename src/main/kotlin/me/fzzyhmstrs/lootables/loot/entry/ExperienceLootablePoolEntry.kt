@@ -26,7 +26,14 @@ import me.fzzyhmstrs.lootables.loot.number.LootableNumber
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.math.Vec3d
 
-class ExperienceLootablePoolEntry(private val xp: LootableNumber, private val levels: Boolean = true): LootablePoolEntry {
+/**
+ * Grants the player XP levels or points.
+ * @param xp [LootableNumber] the amount of xp to give
+ * @param levels Boolean; when true will grant the xp as levels, when false as points
+ * @author fzzyhmstrs
+ * @since 0.1.0
+ */
+class ExperienceLootablePoolEntry @JvmOverloads constructor(private val xp: LootableNumber, private val levels: Boolean = true): LootablePoolEntry {
 
     override fun type(): LootablePoolEntryType {
         return LootablePoolEntryTypes.XP
@@ -44,7 +51,7 @@ class ExperienceLootablePoolEntry(private val xp: LootableNumber, private val le
         return ExperienceLootablePoolEntryDisplay(xp.desc(true).string, levels)
     }
 
-    companion object {
+    internal companion object {
 
         val CODEC: MapCodec<ExperienceLootablePoolEntry> = RecordCodecBuilder.mapCodec { instance: RecordCodecBuilder.Instance<ExperienceLootablePoolEntry> ->
             instance.group(
