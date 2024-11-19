@@ -30,5 +30,12 @@ object ComponentRegistry {
     )
     val LOOTABLE_DATA: Supplier<ComponentType<LootableItem.LootableData>> = Supplier { lootableDataRegister }
 
+    private val pickedUpRegister = Registry.register(
+        Registries.DATA_COMPONENT_TYPE,
+        Lootables.identity("picked_up"),
+        ComponentType.builder<Boolean>().codec(Codec.BOOL).packetCodec(PacketCodecs.BOOL).cache().build()
+    )
+    val PICKED_UP: Supplier<ComponentType<Boolean>> = Supplier { pickedUpRegister }
+
 
 }
