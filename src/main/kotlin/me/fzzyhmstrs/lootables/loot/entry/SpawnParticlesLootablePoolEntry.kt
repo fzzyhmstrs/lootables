@@ -33,6 +33,16 @@ import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.math.Vec3d
 import java.util.*
 
+/**
+ * Cosmetic Entry. Spawns a "burst" of particles before applying the "real" child entry.
+ * @param particle [ParticleEffect] the particle to spawn
+ * @param count [LootableNumber] how many particles to spawn. You'll probably need more than you think. The defaul codec amount is 100
+ * @param radius [Radius] the size of burst the particles spawn in
+ * @param speed [Optional]&lt;[LootableNumber]&gt; how fast particles move away from the burst. Empty optional = 0.
+ * @param child [LootablePoolEntry] the "real" entry to apply after particles are spawned.
+ * @author fzzyhmstrs
+ * @since 0.1.0
+ */
 class SpawnParticlesLootablePoolEntry(private val particle: ParticleEffect, private val count: LootableNumber, private val radius: Radius, private val speed: Optional<LootableNumber>, private val child: LootablePoolEntry): LootablePoolEntry {
 
     override fun type(): LootablePoolEntryType {
@@ -57,7 +67,7 @@ class SpawnParticlesLootablePoolEntry(private val particle: ParticleEffect, priv
         return SpawnParticlesLootablePoolEntryDisplay(child.createDisplay(playerEntity))
     }
 
-    companion object {
+    internal companion object {
 
         val CODEC: MapCodec<SpawnParticlesLootablePoolEntry> = RecordCodecBuilder.mapCodec { instance: RecordCodecBuilder.Instance<SpawnParticlesLootablePoolEntry> ->
             instance.group(
