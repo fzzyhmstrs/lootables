@@ -24,6 +24,12 @@ import me.fzzyhmstrs.lootables.loot.display.RandomLootablePoolEntryDisplay
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.math.Vec3d
 
+/**
+ * Randomly picks one entry from its children and applies that; rerolled on every roll. This is an "OR" entry
+ * @param children List&lt;[LootablePoolEntry]&gt; children entries to randomly pick from
+ * @author fzzyhmstrs
+ * @since 0.1.0
+ */
 class RandomLootablePoolEntry(private val children: List<LootablePoolEntry>): LootablePoolEntry {
 
     override fun type(): LootablePoolEntryType {
@@ -39,7 +45,7 @@ class RandomLootablePoolEntry(private val children: List<LootablePoolEntry>): Lo
         return RandomLootablePoolEntryDisplay(children.map { LootablePoolEntryDisplay.DisplayWithDesc(it.createDisplay(playerEntity), it.serverDescription(playerEntity)) })
     }
 
-    companion object {
+    internal companion object {
 
         private val NON_EMPTY_LIST_CODEC = LootablePoolEntry.CODEC.listOf().flatXmap(
             { l -> if (l.isEmpty()) DataResult.error { "Empty list not allowed" } else DataResult.success(l) },
