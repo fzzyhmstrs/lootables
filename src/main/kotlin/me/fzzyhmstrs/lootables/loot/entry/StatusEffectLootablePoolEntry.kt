@@ -23,6 +23,12 @@ import net.minecraft.entity.effect.StatusEffectInstance
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.math.Vec3d
 
+/**
+ * Applies a status effect to the player.
+ * @param instance [StatusEffectInstance] effect to apply to the player.
+ * @author fzzyhmstrs
+ * @since 0.1.0
+ */
 class StatusEffectLootablePoolEntry(private val instance: StatusEffectInstance): LootablePoolEntry {
 
     override fun type(): LootablePoolEntryType {
@@ -37,7 +43,7 @@ class StatusEffectLootablePoolEntry(private val instance: StatusEffectInstance):
         return StatusEffectLootablePoolEntryDisplay(instance.effectType, instance.amplifier.toByte(), instance.duration)
     }
 
-    companion object {
+    internal companion object {
 
         val CODEC: MapCodec<StatusEffectLootablePoolEntry> = RecordCodecBuilder.mapCodec { instance: RecordCodecBuilder.Instance<StatusEffectLootablePoolEntry> ->
             instance.group(
