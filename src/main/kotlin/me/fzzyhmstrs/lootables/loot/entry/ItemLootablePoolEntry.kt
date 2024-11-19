@@ -35,10 +35,33 @@ import net.minecraft.util.ItemScatterer
 import net.minecraft.util.math.Vec3d
 import kotlin.math.min
 
+/**
+ * Drops one pre-defined item with optional count and components.
+ * @author fzzyhmstrs
+ * @since 0.1.0
+ */
 class ItemLootablePoolEntry private constructor(private val itemEntryStack: ItemEntryStack, private val dropItems: Boolean = false): LootablePoolEntry {
 
+    /**
+     * Drops one pre-defined itemstack.
+     * @param stack [ItemStack] the item to drop; will drop a new item stack instance with the matching features (item, count, components) as this input stack
+     * @param dropItems Boolean whether items are scattered on the ground or directly given to the player. Default false. When false, will give to inventory, when true will scatter.
+     * @author fzzyhmstrs
+     * @since 0.1.0
+     */
+    @JvmOverloads
     constructor(stack: ItemStack, dropItems: Boolean = false): this(ItemEntryStack(stack.registryEntry, ConstantLootableNumber(stack.count.toFloat()), stack.componentChanges), dropItems)
 
+    /**
+     * Drops an item with defined count and components. Each drop will be a new itemstack instance.
+     * @param item [Item] the item to drop
+     * @param count [LootableNumber] the potentially variable count of the item stack. Will be reevaluated on every drop
+     * @param components [ComponentChanges] the components to apply to the stack
+     * @param dropItems Boolean whether items are scattered on the ground or directly given to the player. Default false. When false, will give to inventory, when true will scatter.
+     * @author fzzyhmstrs
+     * @since 0.1.0
+     */
+    @JvmOverloads
     constructor(item: Item, count: LootableNumber, components: ComponentChanges, dropItems: Boolean = false): this(ItemEntryStack(item.registryEntry, count, components), dropItems)
 
     override fun type(): LootablePoolEntryType {
@@ -57,7 +80,7 @@ class ItemLootablePoolEntry private constructor(private val itemEntryStack: Item
         return ItemLootablePoolEntryDisplay(itemEntryStack.item, itemEntryStack.desc().string, itemEntryStack.avg().toByte(), itemEntryStack.hasGlint(), dropItems)
     }
 
-    companion object {
+    internal companion object {
 
         private val ITEM_CODEC: Codec<ItemEntryStack> = Codec.withAlternative(ItemEntryStack.CODEC, ItemEntryStack.INLINE_CODEC)
 
