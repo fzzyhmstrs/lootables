@@ -30,7 +30,16 @@ import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.math.Vec3d
 import java.util.*
 
-class AttributeLootablePoolEntry(private val attribute: RegistryEntry<EntityAttribute>, private val value: Double, private val operation: Operation, private val persistent: Boolean = false): LootablePoolEntry {
+/**
+ * Grants a temporary (until death, dimension change, or relog) or permanent attribute buff.
+ * @param attribute [RegistryEntry]&lt;[EntityAttribute]&gt; attribute to buff
+ * @param value Double value to buff the attribute by
+ * @param operation [Operation] how to apply the buff. See Minecraft wiki for details on what the different operations do internally.
+ * @param persistent Boolean; when true will be a permanent buff, when false will be temporary.
+ * @author fzzyhmstrs
+ * @since 0.1.0
+ */
+class AttributeLootablePoolEntry @JvmOverloads constructor(private val attribute: RegistryEntry<EntityAttribute>, private val value: Double, private val operation: Operation, private val persistent: Boolean = false): LootablePoolEntry {
 
     override fun type(): LootablePoolEntryType {
         return LootablePoolEntryTypes.ATTRIBUTE
@@ -49,7 +58,7 @@ class AttributeLootablePoolEntry(private val attribute: RegistryEntry<EntityAttr
         return AttributeLootablePoolEntryDisplay(attribute, value.toFloat(), operation, persistent)
     }
 
-    companion object {
+    internal companion object {
 
         val CODEC: MapCodec<AttributeLootablePoolEntry> = RecordCodecBuilder.mapCodec { instance: RecordCodecBuilder.Instance<AttributeLootablePoolEntry> ->
             instance.group(
