@@ -14,6 +14,15 @@
       }
     },
     {
+      "id": "lootables_test:table",
+      "rarity": "common",
+      "entry": {
+        "type": "lootables:table",
+        "drop_items": "true",
+        "table": "minecraft:chests/desert_pyramid"
+      }
+    },
+    {
       "id": "lootables_test:torches",
       "rarity": "common",
       "entry": {
