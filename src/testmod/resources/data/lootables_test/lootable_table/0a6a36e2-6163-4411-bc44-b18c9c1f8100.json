@@ -17,10 +17,6 @@
       "entry": {
         "children": [
           {
-            "children": [],
-            "type": "lootables:random"
-          },
-          {
             "item": {
               "id": "minecraft:black_carpet",
               "count": 54.0

@@ -52,17 +52,6 @@
       }
     },
     {
-      "weight": 2,
-      "max_uses": 6,
-      "id": "lootables:1eda4106-d5a5-471e-8fbc-2a563b8675b0",
-      "rarity": "uncommon",
-      "entry": {
-        "children": [],
-        "type": "lootables:random"
-      },
-      "guaranteed": true
-    },
-    {
       "id": "lootables:f22bdf2e-ce1c-49c7-9a33-f89f56cf370d",
       "rarity": "epic",
       "entry": {
@@ -88,10 +77,6 @@
                         "xp": 36.524082,
                         "levels": false,
                         "type": "lootables:xp"
-                      },
-                      {
-                        "children": [],
-                        "type": "lootables:multi"
                       },
                       {
                         "xp": 53.42672,
@@ -145,10 +130,6 @@
                         "attribute": "minecraft:generic.water_movement_efficiency",
                         "id": "lootables:e65870f8-062e-4093-9694-6ebd3df4df33",
                         "type": "lootables:attribute"
-                      },
-                      {
-                        "children": [],
-                        "type": "lootables:multi"
                       }
                     ],
                     "type": "lootables:multi"

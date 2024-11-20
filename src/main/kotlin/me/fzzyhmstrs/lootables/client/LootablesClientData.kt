@@ -28,15 +28,5 @@ object LootablesClientData {
 
     fun receiveSync(data: Map<Identifier, List<LootablePoolData>>) {
         tableData = ConcurrentHashMap(data.mapValues { (_, data) -> ConcurrentHashMap(data.associateBy { it.id }) })
-        if (FabricLoader.getInstance().isDevelopmentEnvironment) {
-            println("Receiving Sync for player ${MinecraftClient.getInstance().player}")
-            for ((id, d) in tableData) {
-                println(id)
-                for ((id2, d2) in d) {
-                    println(" >$id2")
-                    println("  $d2")
-                }
-            }
-        }
     }
 }

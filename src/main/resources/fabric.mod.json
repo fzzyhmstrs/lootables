@@ -3,7 +3,7 @@
   "id": "${id}",
   "version": "${version}",
   "name": "Lootables API",
-  "description": "API for creating and offering 'loot box' type selectable loot.",
+  "description": "API for creating featureful loot rewards that go beyond item drops, and can be provided randomly or via loot box choice mechanics.",
   "authors": [
     "fzzyhmstrs"
   ],

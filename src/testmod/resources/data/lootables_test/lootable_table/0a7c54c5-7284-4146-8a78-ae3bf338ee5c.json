@@ -142,15 +142,6 @@
       }
     },
     {
-      "weight": 10,
-      "id": "lootables:45677740-d728-4327-a31c-cb0d4a20c78d",
-      "rarity": "legendary",
-      "entry": {
-        "children": [],
-        "type": "lootables:random"
-      }
-    },
-    {
       "weight": 11,
       "max_uses": 100,
       "id": "lootables:f753ee60-34d5-4774-90fc-aaef2e075234",

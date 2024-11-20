@@ -26,7 +26,7 @@ import net.minecraft.util.Identifier
  * @author fzzyhmstrs
  * @since 0.1.0
  */
-class IdKey @JvmOverloads constructor(val id: Identifier, val count: Int = 1) {
+data class IdKey @JvmOverloads constructor(val id: Identifier, val count: Int = 1) {
 
     internal companion object {
         val CODEC: Codec<IdKey> = RecordCodecBuilder.create { instance: RecordCodecBuilder.Instance<IdKey> ->

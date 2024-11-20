@@ -101,15 +101,6 @@
                                             "type": "lootables:item"
                                           },
                                           {
-                                            "children": [
-                                              {
-                                                "children": [],
-                                                "type": "lootables:random"
-                                              }
-                                            ],
-                                            "type": "lootables:multi"
-                                          },
-                                          {
                                             "value": 8.47139692000897,
                                             "operation": "add_multiplied_total",
                                             "persistent": true,

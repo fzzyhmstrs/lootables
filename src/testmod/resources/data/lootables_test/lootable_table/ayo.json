@@ -4,6 +4,16 @@
     "lootables_test:iron_ingot",
     "lootables_test:sponge",
     {
+      "id": "lootables:xp",
+      "entry": {
+        "xp": {
+          "n": 5,
+          "p": 0.5
+        },
+        "type": "lootables:xp"
+      }
+    },
+    {
       "id": "lootables_test:planks2",
       "rarity": "uncommon",
       "entry": {
@@ -29,6 +39,30 @@
       }
     },
     {
+      "id": "lootables_test:adv",
+      "rarity": "uncommon",
+      "entry": {
+        "advancement": "minecraft:husbandry/breed_an_animal",
+        "type": "lootables:advancement"
+      }
+    },
+    {
+      "id": "lootables_test:diamondz",
+      "rarity": "rare",
+      "entry": {
+        "type": "lootables:item",
+        "item": {
+          "id": "minecraft:diamond_sword",
+          "count": 1,
+          "components": {
+            "minecraft:enchantments": {
+              "minecraft:looting": 3
+            }
+          }
+        }
+      }
+    },
+    {
       "id": "lootables_test:saturation_cloud",
       "rarity": "rare",
       "entry": {
@@ -37,11 +71,15 @@
       }
     },
     {
-      "id": "lootables_test:adv",
-      "rarity": "uncommon",
+      "id": "lootables_test:status",
+      "rarity": "epic",
       "entry": {
-        "advancement": "minecraft:husbandry/breed_an_animal",
-        "type": "lootables:advancement"
+        "type": "lootables:status",
+        "status": {
+          "id": "minecraft:water_breathing",
+          "duration": 18000,
+          "ambient": true
+        }
       }
     },
     {

@@ -12,9 +12,11 @@
 
 package me.fzzyhmstrs.lootables.registry
 
+import com.mojang.serialization.Codec
 import me.fzzyhmstrs.lootables.Lootables
 import me.fzzyhmstrs.lootables.api.LootableItem
 import net.minecraft.component.ComponentType
+import net.minecraft.network.codec.PacketCodecs
 import net.minecraft.registry.Registries
 import net.minecraft.registry.Registry
 import java.util.function.Supplier

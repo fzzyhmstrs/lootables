@@ -17,16 +17,19 @@ import com.mojang.serialization.JsonOps
 import me.fzzyhmstrs.fzzy_config.api.ConfigApi
 import me.fzzyhmstrs.lootables.Lootables
 import me.fzzyhmstrs.lootables.api.IdKey
+import me.fzzyhmstrs.lootables.api.LootableItem
 import me.fzzyhmstrs.lootables.network.AbortChoicesC2SCustomPayload
 import me.fzzyhmstrs.lootables.network.ChosenC2SCustomPayload
 import me.fzzyhmstrs.lootables.network.DataSyncS2CCustomPayload
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper
-import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener
+import net.fabricmc.fabric.api.resource.ResourceReloadListenerKeys
 import net.fabricmc.loader.api.FabricLoader
+import net.minecraft.registry.DynamicRegistryManager
 import net.minecraft.resource.ResourceManager
 import net.minecraft.resource.ResourceType
+import net.minecraft.server.MinecraftServer
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.Vec3d
@@ -39,7 +42,9 @@ import java.util.stream.Stream
 import kotlin.math.max
 import kotlin.math.min
 
-internal object LootablesData: SimpleSynchronousResourceReloadListener {
+internal object LootablesData {
+
+    private var minecraftServer: MinecraftServer? = null
 
     private var lootablePools: Map<Identifier, LootablePool> = mapOf()
     private var lootableTables: Map<Identifier, LootableTable> = mapOf()
@@ -59,16 +64,6 @@ internal object LootablesData: SimpleSynchronousResourceReloadListener {
         if (dataInvalid) {
             lootableSyncData = lootableTables.mapValues { (_, table) -> table.prepareForSync(playerEntity) }
         }
-        /*if (FabricLoader.getInstance().isDevelopmentEnvironment) {
-            println("Syncing to $playerEntity")
-            println(lootableSyncData)
-            for ((id, d) in lootableSyncData) {
-                println(id)
-                for (d2 in d) {
-                    println("  $d2")
-                }
-            }
-        }*/
         return lootableSyncData
     }
 
@@ -227,8 +222,6 @@ internal object LootablesData: SimpleSynchronousResourceReloadListener {
 
     private fun saveUsageData() {
         if (usageData.isEmpty()) return
-        if (FabricLoader.getInstance().isDevelopmentEnvironment)
-            println(usageData)
         try {
             val dir = ConfigApi.platform().gameDir()
             val f = File(dir, "lootables_uses.json")
@@ -310,8 +303,6 @@ internal object LootablesData: SimpleSynchronousResourceReloadListener {
 
     private fun saveStoredChoices() {
         if (storedChoices.isEmpty()) return
-        if (FabricLoader.getInstance().isDevelopmentEnvironment)
-            println(storedChoices)
         try {
             val dir = ConfigApi.platform().gameDir()
             val f = File(dir, "lootables_choices.json")
@@ -348,11 +339,15 @@ internal object LootablesData: SimpleSynchronousResourceReloadListener {
         }
     }
 
-    override fun reload(manager: ResourceManager) {
+    fun reload(manager: ResourceManager, dynamicRegistries: DynamicRegistryManager) {
 
         dataInvalid = true
         lootableSyncData = mapOf()
         LootablePool.reset()
+
+        Lootables.LOGGER.info("Starting lootables table load")
+        val start = System.currentTimeMillis()
+        val ops = dynamicRegistries.getOps(JsonOps.INSTANCE)
 
         val poolMap: MutableMap<Identifier, LootablePool.Companion.PoolData>
         manager.findResources("lootable_pool") {
@@ -367,7 +362,7 @@ internal object LootablesData: SimpleSynchronousResourceReloadListener {
                 try {
                     val reader = resource.reader
                     val json = JsonParser.parseReader(reader)
-                    val result = LootablePool.DATA_CODEC.parse(JsonOps.INSTANCE, json)
+                    val result = LootablePool.DATA_CODEC.parse(ops, json)
                     if (!id.path.startsWith("lootable_pool/")) {
                         Lootables.LOGGER.error("Invalid resource location for lootable pool $id; needs to be in 'lootable_pool' folder")
                     } else {
@@ -390,11 +385,7 @@ internal object LootablesData: SimpleSynchronousResourceReloadListener {
                 }
             }
         lootablePools = LootablePool.bake(poolMap, Lootables.LOGGER::error)
-        if (FabricLoader.getInstance().isDevelopmentEnvironment) {
-            println(lootablePools)
-            println("Starting Table Load")
-        }
-        val start = System.currentTimeMillis()
+
         val tableMap: MutableMap<Identifier, LootableTable.Companion.TableLoader>
         manager.findResources("lootable_table") {
             path -> path.path.endsWith(".json")
@@ -408,7 +399,7 @@ internal object LootablesData: SimpleSynchronousResourceReloadListener {
                 try {
                     val reader = resource.reader
                     val json = JsonParser.parseReader(reader)
-                    val result = LootableTable.LOADER_CODEC.parse(JsonOps.INSTANCE, json)
+                    val result = LootableTable.LOADER_CODEC.parse(ops, json)
                     if (!id.path.startsWith("lootable_table/")) {
                         Lootables.LOGGER.error("Invalid resource location for lootable table $id; needs to be in 'lootable_table' folder")
                     } else {
@@ -431,23 +422,18 @@ internal object LootablesData: SimpleSynchronousResourceReloadListener {
                 }
             }
         lootableTables = LootableTable.bake(tableMap, Lootables.LOGGER::error)
-        if (FabricLoader.getInstance().isDevelopmentEnvironment) {
-            println("Finished Table Load in ${System.currentTimeMillis() - start}ms")
-            println(lootableTables)
-        }
+        Lootables.LOGGER.info("Finished lootable table load in ${System.currentTimeMillis() - start}ms")
         LootablePool.reset()
-    }
-
-    override fun getFabricId(): Identifier {
-        return Lootables.identity("data_reloader")
     }
 
     fun init() {
 
-        ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(this)
-
         ServerLifecycleEvents.BEFORE_SAVE.register { _, _, _ ->
             saveUsageData()
+        }
+
+        ServerLifecycleEvents.SERVER_STARTING.register { server ->
+            reload(server.resourceManager, server.registryManager)
         }
 
         ServerLifecycleEvents.END_DATA_PACK_RELOAD.register { server, _, _ ->

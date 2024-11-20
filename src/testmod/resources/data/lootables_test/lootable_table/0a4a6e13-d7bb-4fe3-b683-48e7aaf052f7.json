@@ -55,10 +55,6 @@
       "entry": {
         "children": [
           {
-            "children": [],
-            "type": "lootables:random"
-          },
-          {
             "value": 6.623200002649947,
             "operation": "add_multiplied_base",
             "persistent": true,
@@ -111,26 +107,6 @@
         "type": "lootables:random"
       },
       "guaranteed": true
-    },
-    {
-      "weight": 5,
-      "id": "lootables:5b669414-b6ee-4e07-a434-46f1c60c3bf3",
-      "rarity": "epic",
-      "entry": {
-        "children": [],
-        "type": "lootables:random"
-      },
-      "guaranteed": true
-    },
-    {
-      "weight": 9,
-      "max_uses": 94,
-      "id": "lootables:9080c323-0bcc-43c8-aaeb-c1d9c27f5212",
-      "rarity": "rainbow",
-      "entry": {
-        "children": [],
-        "type": "lootables:multi"
-      }
     },
     {
       "weight": 12,

@@ -457,7 +457,6 @@ class ChoiceTileWidget(
             }
             val increment = (if(hovered) 1f else -0.7f) * ((time - lastFrameTime).toFloat() / duration.toFloat())
             progress = MathHelper.clamp(progress + increment, 0f, 1f)
-            //if (hovered) println("time: $time, lastFrameTime: $lastFrameTime, progress: $progress, increment: $increment, nanoTime: ${System.nanoTime()}")
             lastFrameTime = time
             return progress
         }

@@ -87,10 +87,6 @@
                 "attribute": "minecraft:generic.explosion_knockback_resistance",
                 "id": "lootables:b900e433-d67a-4c8f-92ab-14cc9ed86f78",
                 "type": "lootables:attribute"
-              },
-              {
-                "children": [],
-                "type": "lootables:random"
               }
             ],
             "type": "lootables:multi"

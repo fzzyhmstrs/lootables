@@ -35,14 +35,17 @@ data class StatusEffectLootablePoolEntryDisplay(private val effect: RegistryEntr
     }
 
     override fun clientDescription(): Text {
-        return "lootables.entry.status".translate(getStatusEffectDescription(), Lootables.DECIMAL_FORMAT.format(duration / 20f))
+        return if(duration % 1200 == 0)
+            "lootables.entry.status.minutes".translate(getStatusEffectDescription(), Lootables.DECIMAL_FORMAT.format(duration / 1200f))
+        else
+            "lootables.entry.status.seconds".translate(getStatusEffectDescription(), Lootables.DECIMAL_FORMAT.format(duration / 20f))
     }
 
     private fun getStatusEffectDescription(): Text {
         val mutableText = effect.value().name.copy()
-        val a = amplifier.toUByte().toInt()
+        val a = amplifier.toUByte().toInt() + 1
         if (a in 1..9) {
-            mutableText.append(ScreenTexts.SPACE).append(FcText.translatable("enchantment.level." + (a + 1)))
+            mutableText.append(ScreenTexts.SPACE).append(FcText.translatable("enchantment.level.$a"))
         } else {
             mutableText.append(ScreenTexts.SPACE).append(FcText.literal(a.toString()))
         }

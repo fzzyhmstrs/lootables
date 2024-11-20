@@ -13,6 +13,7 @@
 package me.fzzyhmstrs.lootables.client.screen
 
 import me.fzzyhmstrs.fzzy_config.api.ConfigApi
+import me.fzzyhmstrs.fzzy_config.screen.widget.ConfigScreenWidget
 import me.fzzyhmstrs.fzzy_config.util.FcText
 import me.fzzyhmstrs.fzzy_config.util.FcText.translate
 import me.fzzyhmstrs.lootables.client.LootablesClientData
@@ -184,6 +185,7 @@ class ChoicesScreen(private val choiceData: ChoicesS2CCustomPayload, private var
         for (widget in widgets) {
             addDrawableChild(widget)
         }
+        addDrawableChild(ConfigScreenWidget.of("lootables", ConfigScreenWidget.Position.Corner.BOTTOM_LEFT))
     }
 
     override fun shouldPause(): Boolean {

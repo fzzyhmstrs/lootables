@@ -14,19 +14,22 @@ package me.fzzyhmstrs.lootables.api
 
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
+import me.fzzyhmstrs.fzzy_config.util.FcText
 import me.fzzyhmstrs.lootables.Lootables
 import me.fzzyhmstrs.lootables.api.LootableItem.LootableData
 import me.fzzyhmstrs.lootables.loot.LootableRarity
 import me.fzzyhmstrs.lootables.registry.ComponentRegistry
-import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
+import net.minecraft.item.tooltip.TooltipType
 import net.minecraft.network.RegistryByteBuf
 import net.minecraft.network.codec.PacketCodec
 import net.minecraft.network.codec.PacketCodecs
 import net.minecraft.server.network.ServerPlayerEntity
+import net.minecraft.text.MutableText
+import net.minecraft.text.Text
 import net.minecraft.util.*
 import net.minecraft.world.World
 import java.util.*
@@ -50,9 +53,9 @@ open class LootableItem(settings: Settings) : Item(settings) {
         if (user !is ServerPlayerEntity) return TypedActionResult.pass(stack)
         val data = stack.get(ComponentRegistry.LOOTABLE_DATA.get()) ?: return TypedActionResult.pass(stack)
         if (data == LootableData.DEFAULT) return TypedActionResult.pass(stack)
-        val pickup = stack.getOfDefault(ComponentTypeRegistry.PICK_UP.get(), false)
+        val pickup = stack.getOrDefault(ComponentRegistry.PICKED_UP.get(), false)
         if (data.eventType != LootableData.EventType.USE && !pickup) return TypedActionResult.pass(stack)
-        
+
         if (data.rollType == LootableData.RollType.RANDOM) {
             if(!LootablesApi.supplyLootRandomly(data.table, user, user.pos.add(0.0, 1.0, 0.0), data.key, data.rolls)) {
                 return TypedActionResult.pass(stack)
@@ -61,7 +64,7 @@ open class LootableItem(settings: Settings) : Item(settings) {
             }
         } else {
             val originalStack = stack.copyWithCount(1)
-            if(!LootablesApi.supplyLootWithChoices(data.table, user, user.pos.add(0.0, 1.0, 0.0), { _, _ -> stack.set(ComponentTypeRegistry.PICK_UP.get(), false) }, { p, _ -> p.inventory.offerOrDrop(originalStack) }, data.key, data.rolls)) {
+            if(!LootablesApi.supplyLootWithChoices(data.table, user, user.pos.add(0.0, 1.0, 0.0), { _, _ -> stack.set(ComponentRegistry.PICKED_UP.get(), false) }, { p, _ -> p.inventory.offerOrDrop(originalStack) }, data.key, data.rolls)) {
                 return TypedActionResult.pass(stack)
             } else {
                 stack.decrement(1)
@@ -78,11 +81,11 @@ open class LootableItem(settings: Settings) : Item(settings) {
         if (entity !is ServerPlayerEntity) return false
         val data = stack.get(ComponentRegistry.LOOTABLE_DATA.get()) ?: return false
         if (data == LootableData.DEFAULT) return false
-        if (data.eventType != LootableData.EventType.PICKUP.get()) return false
-        val pickup = stack.getOfDefault(ComponentTypeRegistry.PICK_UP, false)
+        if (data.eventType != LootableData.EventType.PICKUP) return false
+        val pickup = stack.getOrDefault(ComponentRegistry.PICKED_UP.get(), false)
         if (pickup) return false
-        stack.set(ComponentTypeRegistry.PICK_UP.get(), true)
-        
+        stack.set(ComponentRegistry.PICKED_UP.get(), true)
+
         if (data.rollType == LootableData.RollType.RANDOM) {
             if(!LootablesApi.supplyLootRandomly(data.table, entity, entity.pos.add(0.0, 1.0, 0.0), data.key, data.rolls)) {
                 return false
@@ -91,7 +94,7 @@ open class LootableItem(settings: Settings) : Item(settings) {
             }
         } else {
             val originalStack = stack.copyWithCount(1)
-            if(!LootablesApi.supplyLootWithChoices(data.table, entity, entity.pos.add(0.0, 1.0, 0.0), { _, _ -> stack.set(ComponentTypeRegistry.PICK_UP.get(), false) }, { p, pos -> ItemScatterer.spawn(world, pos.x, pos.y, pos.z, originalStack) }, data.key, data.rolls)) {
+            if(!LootablesApi.supplyLootWithChoices(data.table, entity, entity.pos.add(0.0, 1.0, 0.0), { _, _ -> stack.set(ComponentRegistry.PICKED_UP.get(), false) }, { p, pos -> ItemScatterer.spawn(world, pos.x, pos.y, pos.z, originalStack) }, data.key, data.rolls)) {
                 return false
             } else {
                 stack.decrement(1)
@@ -100,13 +103,13 @@ open class LootableItem(settings: Settings) : Item(settings) {
         return true
     }
 
-    override appendTooltip(stack: ItemStack, world: World, tooltip: MutableList<Text>, context: TooltipContext) {
+    override fun appendTooltip(stack: ItemStack, context: TooltipContext, tooltip: MutableList<Text>, type: TooltipType) {
         val data = stack.get(ComponentRegistry.LOOTABLE_DATA.get()) ?: return
         if (data == LootableData.DEFAULT) return
-        val pickup = stack.getOfDefault(ComponentTypeRegistry.PICK_UP, false)
+        val pickup = stack.getOrDefault(ComponentRegistry.PICKED_UP.get(), false)
         if (data.eventType == LootableData.EventType.USE || pickup) {
-            val keybind: MutableText = TODO()
-            tooltip.add(FcText.translatable("lootables.item.use", keybind)
+            val keybind: MutableText = Text.keybind("key.mouse.right")
+            tooltip.add(FcText.translatable("lootables.item.use", keybind))
         }
     }
 
@@ -118,8 +121,8 @@ open class LootableItem(settings: Settings) : Item(settings) {
      */
     data class LootableData private constructor(val eventType: EventType, val rollType: RollType, val table: Identifier, val rolls: Int, val choices: Int, val rarity: LootableRarity? = null, val key: IdKey? = null) {
 
-        private constructor(eventType: EventType, rollType: RollType, table: Identifier, rolls: Int, choices: Int, key: Optional<IdKey>):
-                this(eventType, rollType, table, rolls, choices, key.orElse(null))
+        private constructor(eventType: EventType, rollType: RollType, table: Identifier, rolls: Int, choices: Int, rarity: Optional<LootableRarity>, key: Optional<IdKey>):
+                this(eventType, rollType, table, rolls, choices, rarity.orElse(null), key.orElse(null))
 
         /**
          * Defines when and how the [LootableItem] drops loot.
@@ -221,7 +224,7 @@ open class LootableItem(settings: Settings) : Item(settings) {
              * @since 0.1.0
              */
             fun choices(): Builder {
-                this.rollType = EventType.CHOICES
+                this.rollType = RollType.CHOICES
                 return this
             }
 
@@ -280,7 +283,7 @@ open class LootableItem(settings: Settings) : Item(settings) {
              * @since 0.1.0
              */
             fun keyed(keyId: Identifier, maxUses: Int): Builder {
-                this.key = key
+                this.key = IdKey(keyId, maxUses)
                 return this
             }
 
@@ -292,6 +295,7 @@ open class LootableItem(settings: Settings) : Item(settings) {
              */
             fun build(): LootableData {
                 if (rollType == RollType.CHOICES && choices <= 0) throw IllegalStateException("Choices must be greater than 0 for CHOICES loot mode.")
+                return LootableData(eventType, rollType, table, rolls, choices, rarity, key)
             }
         }
 
@@ -324,28 +328,38 @@ open class LootableItem(settings: Settings) : Item(settings) {
                     Identifier.CODEC.fieldOf("table").forGetter(LootableData::table),
                     Codec.INT.optionalFieldOf("rolls", 1).forGetter(LootableData::rolls),
                     Codec.INT.optionalFieldOf("choices", 1).forGetter(LootableData::choices),
-                    LootableRarity.CODEC.optionalFieldOf("rarity").forGetter{ ld -> Optional.ofNullable(ld.rarity) }
+                    LootableRarity.CODEC.optionalFieldOf("rarity").forGetter{ ld -> Optional.ofNullable(ld.rarity) },
                     IdKey.CODEC.optionalFieldOf("key").forGetter{ ld -> Optional.ofNullable(ld.key) }
                 ).apply(instance, ::LootableData)
             }
 
-            internal val PACKET_CODEC = PacketCodec.tuple(
-                EventType.PACKET_CODEC,
-                LootableData::eventType,
-                RollType.PACKET_CODEC,
-                LootableData::rollType,
-                Identifier.PACKET_CODEC,
-                LootableData::table,
-                PacketCodecs.INTEGER,
-                LootableData::rolls,
-                PacketCodecs.INTEGER,
-                LootableData::choices,
-                PacketCodecs.optional(LootableRarity.PACKET_CODEC),
-                { ld -> Optional.ofNullable(ld.rarity) },
-                PacketCodecs.optional(IdKey.PACKET_CODEC),
-                { ld -> Optional.ofNullable(ld.key) },
-                ::LootableData
-            )
+            internal val PACKET_CODEC = object: PacketCodec<RegistryByteBuf, LootableData> {
+
+                private val rarityCodec = PacketCodecs.optional(LootableRarity.PACKET_CODEC)
+                private val keyCodec = PacketCodecs.optional(IdKey.PACKET_CODEC)
+
+                override fun decode(buf: RegistryByteBuf): LootableData {
+                    val a = EventType.PACKET_CODEC.decode(buf)
+                    val b = RollType.PACKET_CODEC.decode(buf)
+                    val c = Identifier.PACKET_CODEC.decode(buf)
+                    val d = PacketCodecs.INTEGER.decode(buf)
+                    val e = PacketCodecs.INTEGER.decode(buf)
+                    val f = rarityCodec.decode(buf)
+                    val g = keyCodec.decode(buf)
+                    return LootableData(a, b, c, d, e, f, g)
+                }
+
+                override fun encode(buf: RegistryByteBuf, value: LootableData) {
+                    EventType.PACKET_CODEC.encode(buf, value.eventType)
+                    RollType.PACKET_CODEC.encode(buf, value.rollType)
+                    Identifier.PACKET_CODEC.encode(buf, value.table)
+                    PacketCodecs.INTEGER.encode(buf, value.rolls)
+                    PacketCodecs.INTEGER.encode(buf, value.choices)
+                    rarityCodec.encode(buf, Optional.ofNullable(value.rarity))
+                    keyCodec.encode(buf, Optional.ofNullable(value.key))
+                }
+
+            }
         }
     }
 

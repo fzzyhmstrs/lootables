@@ -117,15 +117,6 @@
       }
     },
     {
-      "id": "lootables:95b9a4fd-d6c1-4eb4-a26a-001539914c36",
-      "rarity": "uncommon",
-      "entry": {
-        "children": [],
-        "type": "lootables:random"
-      },
-      "guaranteed": true
-    },
-    {
       "weight": 7,
       "max_uses": 22,
       "id": "lootables:266a1cc5-12a9-4df5-ae26-6a8a67f8c987",

@@ -49,19 +49,6 @@
       "guaranteed": true
     },
     {
-      "id": "lootables:e5aa8b76-a13c-412a-8f1e-8aae0d114981",
-      "rarity": "uncommon",
-      "entry": {
-        "children": [
-          {
-            "children": [],
-            "type": "lootables:random"
-          }
-        ],
-        "type": "lootables:multi"
-      }
-    },
-    {
       "weight": 7,
       "max_uses": 51,
       "id": "lootables:d1609faa-d64e-4dde-82cb-3d7f259afe21",

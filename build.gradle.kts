@@ -11,6 +11,7 @@ import com.matthewprenger.cursegradle.CurseArtifact
 import com.matthewprenger.cursegradle.CurseProject
 import com.matthewprenger.cursegradle.CurseRelation
 import com.matthewprenger.cursegradle.Options
+import masecla.modrinth4j.model.search.Facet.license
 import net.fabricmc.loom.task.RemapJarTask
 import org.gradle.jvm.tasks.Jar
 
@@ -20,6 +21,7 @@ plugins {
     kotlin("jvm").version(kotlinVersion)
     id("com.matthewprenger.cursegradle") version "1.4.0"
     id("com.modrinth.minotaur") version "2.+"
+    `maven-publish`
 }
 
 base {
@@ -264,4 +266,51 @@ tasks.register("uploadAll") {
     group = "upload"
     dependsOn(tasks.modrinth.get())
     dependsOn(tasks.curseforge.get())
+    dependsOn(tasks.publish.get())
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("lootables") {
+            from(components["java"])
+
+            pom {
+                name.set("Lootables")
+                description.set("API for creating featureful loot rewards that go beyond item drops, and can be provided randomly or via loot box choice mechanics.")
+                inceptionYear.set("2024")
+                licenses {
+                    license {
+                        name.set("TDL-M")
+                        url.set("https://github.com/fzzyhmstrs/Timefall-Development-Licence-Modified")
+                        distribution.set("repo")
+                        comments.set("Lootables is free software provided under the terms of the Timefall Development License - Modified (TDL-M). See license url for full license details.")
+                    }
+                }
+                scm {
+                    url.set("https://github.com/fzzyhmstrs/lootables")
+                }
+                issueManagement {
+                    system.set("Github")
+                    url.set("https://github.com/fzzyhmstrs/lootables/issues")
+                }
+                developers {
+                    developer {
+                        name.set("Fzzyhmstrs")
+                        url.set("https://github.com/fzzyhmstrs")
+                    }
+                }
+            }
+        }
+    }
+
+    repositories {
+        maven {
+            name = "FzzyMaven"
+            url = uri("https://maven.fzzyhmstrs.me")
+            credentials {
+                username = System.getProperty("fzzyMavenUsername")
+                password = System.getProperty("fzzyMavenPassword")
+            }
+        }
+    }
 }
