@@ -17,7 +17,6 @@ import com.mojang.serialization.JsonOps
 import me.fzzyhmstrs.fzzy_config.api.ConfigApi
 import me.fzzyhmstrs.lootables.Lootables
 import me.fzzyhmstrs.lootables.api.IdKey
-import me.fzzyhmstrs.lootables.api.LootableItem
 import me.fzzyhmstrs.lootables.network.AbortChoicesC2SCustomPayload
 import me.fzzyhmstrs.lootables.network.ChosenC2SCustomPayload
 import me.fzzyhmstrs.lootables.network.DataSyncS2CCustomPayload
@@ -35,6 +34,7 @@ import net.minecraft.util.Identifier
 import net.minecraft.util.math.Vec3d
 import java.io.File
 import java.util.*
+import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ForkJoinPool
 import java.util.function.BiConsumer
@@ -339,7 +339,7 @@ internal object LootablesData {
         }
     }
 
-    fun reload(manager: ResourceManager, dynamicRegistries: DynamicRegistryManager) {
+    fun reload(manager: ResourceManager, dynamicRegistries: RegistryWrapper.WrapperLookup) {
 
         dataInvalid = true
         lootableSyncData = mapOf()
@@ -433,12 +433,16 @@ internal object LootablesData {
         }
 
         ServerLifecycleEvents.SERVER_STARTING.register { server ->
+            //performed syncronously to avoid race condition with join or something
             reload(server.resourceManager, server.registryManager)
         }
 
-        ServerLifecycleEvents.END_DATA_PACK_RELOAD.register { server, _, _ ->
-            for (player in server.playerManager.playerList) {
-                ConfigApi.network().send(DataSyncS2CCustomPayload(getSyncData(player)), player)
+        ServerLifecycleEvents.END_DATA_PACK_RELOAD.register { server, resourceManager, _ ->
+            val reloadFuture = CompletableFuture.supplyAsync { reload(resourceManager, server.registryManager) }
+            reloadFuture.thenRun {
+                for (player in server.playerManager.playerList) {
+                    ConfigApi.network().send(DataSyncS2CCustomPayload(getSyncData(player)), player)
+                }
             }
         }
 
