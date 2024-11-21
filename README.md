@@ -1,6 +1,6 @@
 # Lootables
 
-## Depending on Fzzy Config
+## Depending on Lootables
 Add the following to your build script to depend on Fzzy Config:
 
 #### Repositories section
