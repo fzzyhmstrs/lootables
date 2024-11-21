@@ -80,6 +80,10 @@ class ItemLootablePoolEntry private constructor(private val itemEntryStack: Item
         return ItemLootablePoolEntryDisplay(itemEntryStack.item, itemEntryStack.desc().string, itemEntryStack.avg().toByte(), itemEntryStack.hasGlint(), dropItems)
     }
 
+    override fun needsInvalidation(type: LootablePoolEntry.InvalidationType): Boolean {
+        return type == LootablePoolEntry.InvalidationType.INIT
+    }
+
     internal companion object {
 
         private val ITEM_CODEC: Codec<ItemEntryStack> = Codec.withAlternative(ItemEntryStack.CODEC, ItemEntryStack.INLINE_CODEC)

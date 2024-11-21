@@ -15,7 +15,7 @@ package me.fzzyhmstrs.lootables.network
 import me.fzzyhmstrs.fzzy_config.api.ConfigApi
 import me.fzzyhmstrs.fzzy_config.networking.api.ServerPlayNetworkContext
 import me.fzzyhmstrs.lootables.client.LootablesClientNetworking
-import me.fzzyhmstrs.lootables.loot.LootablesData
+import me.fzzyhmstrs.lootables.data.LootablesData
 
 object LootablesNetworking {
 

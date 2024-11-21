@@ -45,6 +45,10 @@ class MultiLootablePoolEntry(private val children: List<LootablePoolEntry>): Loo
         return MultiLootablePoolEntryDisplay(children.map { LootablePoolEntryDisplay.DisplayWithDesc(it.createDisplay(playerEntity), it.serverDescription(playerEntity)) })
     }
 
+    override fun needsInvalidation(type: LootablePoolEntry.InvalidationType): Boolean {
+        return children.any { it.needsInvalidation(type) }
+    }
+
     internal companion object {
 
         val CODEC: MapCodec<MultiLootablePoolEntry> = RecordCodecBuilder.mapCodec { instance: RecordCodecBuilder.Instance<MultiLootablePoolEntry> ->

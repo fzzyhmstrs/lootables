@@ -18,7 +18,7 @@
       "rarity": "rare",
       "entry": {
         "type": "lootables:pool",
-        "drop_items": "true",
+        "drop_items": true,
         "pool": {
           "bonus_rolls": 0.0,
           "entries": [
@@ -193,7 +193,7 @@
       "rarity": "common",
       "entry": {
         "type": "lootables:table",
-        "drop_items": "true",
+        "drop_items": true,
         "table": "minecraft:chests/desert_pyramid"
       }
     },

@@ -1,5 +1,29 @@
 # Lootables
 
+## Depending on Fzzy Config
+Add the following to your build script to depend on Fzzy Config:
+
+#### Repositories section
+``` Kotlin
+// build.gradle.kts
+
+maven {
+    name = "FzzyMaven"
+    url = uri("https://maven.fzzyhmstrs.me/")
+}
+```
+``` groovy
+// build.gradle
+
+maven {
+    name = "FzzyMaven"
+    url = "https://maven.fzzyhmstrs.me/"
+}
+```
+
+#### Dependencies section:
+Version names will be in the form `x.x.x+[mc_version]`, e.g. `0.1.1+1.21.1`. For NeoForge builds, add `+neoforge`.
+
 ### What is it?
 Lootables aims to provide more featureful and flavorful loot drops for players.
 * Random Loot; the same style as vanilla loot tables.

@@ -21,6 +21,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder
 import me.fzzyhmstrs.fzzy_config.util.ValidationResult
 import me.fzzyhmstrs.fzzy_config.util.ValidationResult.Companion.report
 import me.fzzyhmstrs.lootables.Lootables
+import me.fzzyhmstrs.lootables.data.LootablesData
 import net.minecraft.loot.condition.LootCondition
 import net.minecraft.loot.context.LootContext
 import net.minecraft.loot.context.LootContextParameters
@@ -69,9 +70,17 @@ internal class LootablePool private constructor(
     }
 
     private fun initData(playerEntity: ServerPlayerEntity): LootablePoolData {
-        val d = LootablePoolData.of(id, description.orElse(entry.serverDescription(playerEntity)), rarity, entry.createDisplay(playerEntity)).also { data = it }
+        val d = LootablePoolData.of(id, description.orElse(entry.serverDescription(playerEntity)), rarity, entry.createDisplay(playerEntity))
         data = d
         return d
+    }
+
+    fun invalidateData(type: LootablePoolEntry.InvalidationType): Boolean {
+        if (entry.needsInvalidation(type)) {
+            data = null
+            return true
+        }
+        return false
     }
 
     fun createData(playerEntity: ServerPlayerEntity): LootablePoolData {

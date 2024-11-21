@@ -28,6 +28,14 @@ interface LootablePoolEntry {
     fun maxUses(): Int? {
         return null
     }
+    fun needsInvalidation(type: InvalidationType): Boolean {
+        return false
+    }
+
+    enum class InvalidationType {
+        INIT,
+        PLAYER
+    }
 
     companion object {
         val CODEC: Codec<LootablePoolEntry> = LootablePoolEntryType.CODEC.dispatch({ entry -> entry.type() }, { type -> type.codec() })

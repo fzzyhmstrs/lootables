@@ -45,6 +45,10 @@ class RandomLootablePoolEntry(private val children: List<LootablePoolEntry>): Lo
         return RandomLootablePoolEntryDisplay(children.map { LootablePoolEntryDisplay.DisplayWithDesc(it.createDisplay(playerEntity), it.serverDescription(playerEntity)) })
     }
 
+    override fun needsInvalidation(type: LootablePoolEntry.InvalidationType): Boolean {
+        return children.any { it.needsInvalidation(type) }
+    }
+
     internal companion object {
 
         private val NON_EMPTY_LIST_CODEC = LootablePoolEntry.CODEC.listOf().flatXmap(

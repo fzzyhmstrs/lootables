@@ -15,7 +15,7 @@ package me.fzzyhmstrs.lootables.impl
 import me.fzzyhmstrs.fzzy_config.api.ConfigApi
 import me.fzzyhmstrs.lootables.Lootables
 import me.fzzyhmstrs.lootables.api.IdKey
-import me.fzzyhmstrs.lootables.loot.LootablesData
+import me.fzzyhmstrs.lootables.data.LootablesData
 import me.fzzyhmstrs.lootables.loot.custom.CustomLootableEntry
 import me.fzzyhmstrs.lootables.loot.custom.CustomLootableEntryDisplay
 import me.fzzyhmstrs.lootables.network.ChoicesS2CCustomPayload

@@ -11,7 +11,6 @@ import com.matthewprenger.cursegradle.CurseArtifact
 import com.matthewprenger.cursegradle.CurseProject
 import com.matthewprenger.cursegradle.CurseRelation
 import com.matthewprenger.cursegradle.Options
-import masecla.modrinth4j.model.search.Facet.license
 import net.fabricmc.loom.task.RemapJarTask
 import org.gradle.jvm.tasks.Jar
 
@@ -61,7 +60,7 @@ sourceSets {
     }
 }
 
-val testmodImplementation by configurations.getting {
+val testmodImplementation: Configuration by configurations.getting {
     extendsFrom(configurations.implementation.get())
 }
 
@@ -93,7 +92,7 @@ dependencies {
 
 loom {
     runs {
-        create("testmodClient"){
+        create("testmodClient") {
             client()
             name = "Testmod Client"
             source(sourceSets["testmod"])
@@ -156,15 +155,15 @@ val testmodJar =  tasks.register("testmodJar", Jar::class) {
     archiveClassifier = "testmod"
 }
 
-val remapTestmodJar =  tasks.register("remapTestmodJar", RemapJarTask::class){
+val remapTestmodJar =  tasks.register("remapTestmodJar", RemapJarTask::class) {
     dependsOn(testmodJar.get())
-    input.set(testmodJar.get().archiveFile)
+    inputFile.set(testmodJar.get().archiveFile)
     archiveClassifier = "testmod"
     addNestedDependencies = false
     //destinationDirectory =  File(project.layout.buildDirectory.get().asFile, "testmod")
 }
 
-tasks.build{
+tasks.build {
     dependsOn(remapTestmodJar.get())
 }
 

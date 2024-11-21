@@ -10,25 +10,24 @@
  *
  */
 
-package me.fzzyhmstrs.lootables.loot
+package me.fzzyhmstrs.lootables.data
 
 import com.google.gson.*
 import com.mojang.serialization.JsonOps
 import me.fzzyhmstrs.fzzy_config.api.ConfigApi
 import me.fzzyhmstrs.lootables.Lootables
 import me.fzzyhmstrs.lootables.api.IdKey
+import me.fzzyhmstrs.lootables.loot.LootablePool
+import me.fzzyhmstrs.lootables.loot.LootablePoolData
+import me.fzzyhmstrs.lootables.loot.LootablePoolEntry
+import me.fzzyhmstrs.lootables.loot.LootableTable
 import me.fzzyhmstrs.lootables.network.AbortChoicesC2SCustomPayload
 import me.fzzyhmstrs.lootables.network.ChosenC2SCustomPayload
 import me.fzzyhmstrs.lootables.network.DataSyncS2CCustomPayload
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents
-import net.fabricmc.fabric.api.resource.ResourceManagerHelper
-import net.fabricmc.fabric.api.resource.ResourceReloadListenerKeys
-import net.fabricmc.loader.api.FabricLoader
-import net.minecraft.registry.DynamicRegistryManager
+import net.minecraft.registry.RegistryWrapper
 import net.minecraft.resource.ResourceManager
-import net.minecraft.resource.ResourceType
-import net.minecraft.server.MinecraftServer
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.Vec3d
@@ -44,12 +43,10 @@ import kotlin.math.min
 
 internal object LootablesData {
 
-    private var minecraftServer: MinecraftServer? = null
-
     private var lootablePools: Map<Identifier, LootablePool> = mapOf()
     private var lootableTables: Map<Identifier, LootableTable> = mapOf()
     private var dataInvalid = true
-    private var lootableSyncData: Map<Identifier, List<LootablePoolData>> = mapOf()
+    private var lootableSyncData: SyncDataHolder = SyncDataHolder.Empty
     private val pendingChoicesMap: MutableMap<UUID, PendingChoices> = mutableMapOf()
     private val abortedChoices: MutableSet<UUID> = mutableSetOf()
     private val storedChoices: MutableMap<UUID, List<Identifier>> by lazy {
@@ -60,9 +57,22 @@ internal object LootablesData {
         loadUsageData()
     }
 
-    private fun getSyncData(playerEntity: ServerPlayerEntity): Map<Identifier, List<LootablePoolData>> {
+    private fun getSyncData(players: List<ServerPlayerEntity>): SyncDataHolder {
         if (dataInvalid) {
-            lootableSyncData = lootableTables.mapValues { (_, table) -> table.prepareForSync(playerEntity) }
+            lootableTables.forEach { it.value.preSync(LootablePoolEntry.InvalidationType.INIT) }
+
+            var b = false
+
+            val m: Map<ServerPlayerEntity, Map<Identifier, List<LootablePoolData>>> = players.associateByTo(
+                ConcurrentHashMap((players.size/0.95f).toInt(), 1f),
+                { p -> p },
+                { p ->
+                    lootableTables.forEach { b = b || it.value.preSync(LootablePoolEntry.InvalidationType.PLAYER) }
+                    lootableTables.mapValuesTo(ConcurrentHashMap((lootableTables.size/0.95f).toInt(), 1f)) { (_, tables) -> tables.sync(p) }
+                }
+            )
+            lootableSyncData = SyncDataHolder.create(b, m)
+            dataInvalid = false
         }
         return lootableSyncData
     }
@@ -342,7 +352,7 @@ internal object LootablesData {
     fun reload(manager: ResourceManager, dynamicRegistries: RegistryWrapper.WrapperLookup) {
 
         dataInvalid = true
-        lootableSyncData = mapOf()
+        lootableSyncData = SyncDataHolder.Empty
         LootablePool.reset()
 
         Lootables.LOGGER.info("Starting lootables table load")
@@ -434,20 +444,31 @@ internal object LootablesData {
 
         ServerLifecycleEvents.SERVER_STARTING.register { server ->
             //performed syncronously to avoid race condition with join or something
-            reload(server.resourceManager, server.registryManager)
+            reload(server.resourceManager, server.reloadableRegistries.registryManager)
+            server.isDedicated
         }
 
         ServerLifecycleEvents.END_DATA_PACK_RELOAD.register { server, resourceManager, _ ->
-            val reloadFuture = CompletableFuture.supplyAsync { reload(resourceManager, server.registryManager) }
-            reloadFuture.thenRun {
-                for (player in server.playerManager.playerList) {
-                    ConfigApi.network().send(DataSyncS2CCustomPayload(getSyncData(player)), player)
+            if (server.playerManager.playerList.isEmpty()) return@register
+            CompletableFuture.supplyAsync {
+                reload(resourceManager, server.reloadableRegistries.registryManager)
+            }.thenApplyAsync {
+                getSyncData(server.playerManager.playerList)
+            }.thenAccept { sd ->
+                sd.forEachPlayer(server.playerManager.playerList) { p, m ->
+                    ConfigApi.network().send(DataSyncS2CCustomPayload(m), p)
                 }
             }
         }
 
-        ServerPlayConnectionEvents.JOIN.register { handler, _, _ ->
-            ConfigApi.network().send(DataSyncS2CCustomPayload(getSyncData(handler.getPlayer())), handler.getPlayer())
+        ServerPlayConnectionEvents.JOIN.register { handler, _, server ->
+            CompletableFuture.supplyAsync {
+                getSyncData(server.playerManager.playerList)
+            }.thenAccept { sd ->
+                sd.forPlayer(handler.getPlayer()) {p, m ->
+                    ConfigApi.network().send(DataSyncS2CCustomPayload(m), p)
+                }
+            }
         }
 
         ServerPlayConnectionEvents.DISCONNECT.register { handler, _ ->

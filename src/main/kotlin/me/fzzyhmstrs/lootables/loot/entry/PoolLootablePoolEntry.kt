@@ -64,6 +64,10 @@ class PoolLootablePoolEntry @JvmOverloads constructor(private val pool: LootPool
         return PoolLootablePoolEntryDisplay(list, dropItems)
     }
 
+    override fun needsInvalidation(type: LootablePoolEntry.InvalidationType): Boolean {
+        return type == LootablePoolEntry.InvalidationType.INIT
+    }
+
     internal companion object {
 
         val CODEC: MapCodec<PoolLootablePoolEntry> = RecordCodecBuilder.mapCodec { instance: RecordCodecBuilder.Instance<PoolLootablePoolEntry> ->

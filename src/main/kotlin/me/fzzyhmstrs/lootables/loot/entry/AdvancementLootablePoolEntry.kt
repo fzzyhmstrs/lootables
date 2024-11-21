@@ -69,6 +69,10 @@ class AdvancementLootablePoolEntry(private val advancement: Identifier): Lootabl
         return 1
     }
 
+    override fun needsInvalidation(type: LootablePoolEntry.InvalidationType): Boolean {
+        return type == LootablePoolEntry.InvalidationType.INIT
+    }
+
     /*override */
 
     internal companion object {

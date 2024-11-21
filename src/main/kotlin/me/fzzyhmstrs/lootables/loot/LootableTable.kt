@@ -89,7 +89,15 @@ class LootableTable private constructor(private val pools: List<LootablePool>, p
         }
     }
 
-    fun prepareForSync(playerEntity: ServerPlayerEntity): List<LootablePoolData> {
+    fun preSync(type: LootablePoolEntry.InvalidationType): Boolean {
+        var b = false
+        for (p in pools) {
+            b = b || p.invalidateData(type)
+        }
+        return b
+    }
+
+    fun sync(playerEntity: ServerPlayerEntity): List<LootablePoolData> {
         return pools.map { it.createData(playerEntity) }
     }
 

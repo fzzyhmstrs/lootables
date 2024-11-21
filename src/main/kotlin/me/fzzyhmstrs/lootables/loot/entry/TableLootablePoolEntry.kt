@@ -54,6 +54,10 @@ class TableLootablePoolEntry(private val table: RegistryEntry<LootTable>, privat
         table.value().generateLoot(params.build(LootContextTypes.CHEST), consumer)
     }
 
+    override fun needsInvalidation(type: LootablePoolEntry.InvalidationType): Boolean {
+        return type == LootablePoolEntry.InvalidationType.INIT
+    }
+
     override fun createDisplay(playerEntity: ServerPlayerEntity): LootablePoolEntryDisplay {
         val list: MutableList<ItemStack> = mutableListOf()
         val params = LootContextParameterSet.Builder(playerEntity.serverWorld).add(LootContextParameters.THIS_ENTITY, playerEntity).add(LootContextParameters.ORIGIN, playerEntity.pos).luck(playerEntity.luck)

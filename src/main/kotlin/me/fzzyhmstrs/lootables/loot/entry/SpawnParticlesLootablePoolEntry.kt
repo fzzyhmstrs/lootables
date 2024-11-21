@@ -67,6 +67,10 @@ class SpawnParticlesLootablePoolEntry(private val particle: ParticleEffect, priv
         return SpawnParticlesLootablePoolEntryDisplay(child.createDisplay(playerEntity))
     }
 
+    override fun needsInvalidation(type: LootablePoolEntry.InvalidationType): Boolean {
+        return child.needsInvalidation(type)
+    }
+
     internal companion object {
 
         val CODEC: MapCodec<SpawnParticlesLootablePoolEntry> = RecordCodecBuilder.mapCodec { instance: RecordCodecBuilder.Instance<SpawnParticlesLootablePoolEntry> ->

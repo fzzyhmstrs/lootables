@@ -56,6 +56,10 @@ class PlaySoundLootablePoolEntry(private val soundEvent: RegistryEntry<SoundEven
         return PlaySoundLootablePoolEntryDisplay(child.createDisplay(playerEntity))
     }
 
+    override fun needsInvalidation(type: LootablePoolEntry.InvalidationType): Boolean {
+        return child.needsInvalidation(type)
+    }
+
     internal companion object {
 
         val CODEC: MapCodec<PlaySoundLootablePoolEntry> = RecordCodecBuilder.mapCodec { instance: RecordCodecBuilder.Instance<PlaySoundLootablePoolEntry> ->

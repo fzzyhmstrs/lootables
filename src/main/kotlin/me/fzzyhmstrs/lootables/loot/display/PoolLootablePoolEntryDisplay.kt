@@ -12,6 +12,7 @@
 
 package me.fzzyhmstrs.lootables.loot.display
 
+import me.fzzyhmstrs.fzzy_config.util.FcText.translate
 import me.fzzyhmstrs.lootables.client.screen.TileIcon
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryDisplay
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryType
@@ -21,11 +22,16 @@ import net.minecraft.item.ItemStack
 import net.minecraft.network.RegistryByteBuf
 import net.minecraft.network.codec.PacketCodec
 import net.minecraft.network.codec.PacketCodecs
+import net.minecraft.text.Text
 
 data class PoolLootablePoolEntryDisplay(private val itemStacks: List<ItemStack>, private val dropItems: Boolean): LootablePoolEntryDisplay {
 
     override fun type(): LootablePoolEntryType {
         return LootablePoolEntryTypes.POOL
+    }
+
+    override fun clientDescription(): Text {
+        return if(dropItems) "lootables.entry.pool.drop".translate() else "lootables.entry.pool.give".translate()
     }
 
     private val icons: List<TileIcon> by lazy {

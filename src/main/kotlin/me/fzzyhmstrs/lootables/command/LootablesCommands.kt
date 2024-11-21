@@ -18,7 +18,7 @@ import com.mojang.brigadier.context.CommandContext
 import me.fzzyhmstrs.fzzy_config.util.FcText
 import me.fzzyhmstrs.lootables.Lootables
 import me.fzzyhmstrs.lootables.api.LootablesApi
-import me.fzzyhmstrs.lootables.loot.LootablesData
+import me.fzzyhmstrs.lootables.data.LootablesData
 import net.fabricmc.fabric.api.command.v2.ArgumentTypeRegistry
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
 import net.minecraft.command.CommandRegistryAccess

@@ -57,14 +57,12 @@ class LootablePoolData private constructor(val id: Identifier, val description: 
 
     companion object {
 
-        private val INSTANCES: ConcurrentMap<Identifier, LootablePoolData> = ConcurrentHashMap(24, 0.8f, 2)
-
         fun of(id: Identifier, description: Text?, rarity: LootableRarity, display: LootablePoolEntryDisplay): LootablePoolData {
-            return INSTANCES.computeIfAbsent(id) { _ -> LootablePoolData(id, description, rarity, display) }
+            return LootablePoolData(id, description, rarity, display)
         }
 
         private fun of(id: Identifier, description: Optional<Text>, rarity: LootableRarity, display: LootablePoolEntryDisplay): LootablePoolData {
-            return INSTANCES.computeIfAbsent(id) { _ -> LootablePoolData(id, description.orElse(null), rarity, display) }
+            return LootablePoolData(id, description.orElse(null), rarity, display)
         }
 
         val PACKET_CODEC = PacketCodec.tuple(
