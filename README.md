@@ -24,6 +24,18 @@ maven {
 #### Dependencies section:
 Version names will be in the form `x.x.x+[mc_version]`, e.g. `0.1.1+1.21.1`. For NeoForge builds, add `+neoforge`.
 
+``` kotlin
+// build.gradle.kts
+
+val lootablesVersion: String by project //define this in your gradle.properties file
+modImplementation("me.fzzyhmstrs:lootables:$lootablesVersion") 
+```
+``` java
+// build.gradle
+
+modImplementation "me.fzzyhmstrs:lootables:${project.lootablesVersion}"
+```
+
 ### What is it?
 Lootables aims to provide more featureful and flavorful loot drops for players.
 * Random Loot; the same style as vanilla loot tables.
