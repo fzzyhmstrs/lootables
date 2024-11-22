@@ -1,4 +1,15 @@
 {
+	"lootables.config.tileStackingStyle": "Tile Layout Style",
+	"lootables.config.choiceStyle.HORIZONTAL": "Horizontal",
+	"lootables.config.choiceStyle.STACKED": "Stacked",
+	"lootables.config.easeInTiles": "Animate Tile Ease-In",
+	"lootables.config.easeInDuration": "Ease-In Duration",
+	"lootables.config.easeInAmount": "Ease-In Pixel Offset",
+	"lootables.config.animateTileHover": "Animate Tile Hover",
+	"lootables.config.hoverDelay": "Hover Delay",
+	"lootables.config.tileWidth": "Tile Width",
+	"lootables.config.tileHeight": "Tile Height",
+	
 	"lootables.entry.advancement": "Unlock advancement %s",
 	"lootables.entry.attribute.persistent": "§6Permanently gain:§r\n%s",
 	"lootables.entry.attribute.temporary": "Temporarily gain:\n%s",
