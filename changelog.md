@@ -1,11 +1,9 @@
 ### Additions
-* None.
+* Added `ConfigLootableNumber` for interaction with config values in Lootable Tables
 
 ### Changes
-* Lootable tables now reload (async) on /reload. Previously they only loaded on server start.
-* Sync data now supports player-specific client data
+* None.
 
 ### Fixes
-* Fix loot table entries not loading properly.
-* Pool loot entries properly display their fallback description.
-* Fix potential sync issue on quit and rejoin thanks to stale registry references.
+* Fix choice tiles not syncing properly to joining players.
+* Fix config not having translations.

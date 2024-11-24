@@ -1,0 +1,276 @@
+{
+  "pools": [
+    {
+      "id": "orbs_n_stuff:epic/dmg",
+      "rarity": "epic",
+      "max_uses": 2,
+      "entry": {
+	"type": "lootables:attribute",
+	"attribute": "minecraft:generic.attack_damage",
+	"value": 0.5,
+	"persistent": true
+      }
+    },
+    {
+      "id": "orbs_n_stuff:epic/o2",
+      "rarity": "epic",
+      "max_uses": 2,
+      "entry": {
+	"type": "lootables:attribute",
+	"attribute": "minecraft:generic.oxygen_bonus",
+	"value": 0.25,
+	"persistent": true
+      }
+    },
+    {
+      "id": "orbs_n_stuff:epic/atk_spd",
+      "rarity": "epic",
+      "max_uses": 2,
+      "entry": {
+	"type": "lootables:attribute",
+	"attribute": "minecraft:generic.attack_speed",
+	"value": 0.05,
+	"operation": "add_multiplied_base",
+	"persistent": true
+      }
+    },
+    {
+      "id": "orbs_n_stuff:epic/hp",
+      "rarity": "epic",
+      "max_uses": 2,
+      "entry": {
+	"type": "lootables:attribute",
+	"attribute": "minecraft:generic.max_health",
+	"value": 1.0,
+	"persistent": true
+      }
+    },
+    {
+      "id": "orbs_n_stuff:epic/sweep",
+      "rarity": "epic",
+      "max_uses": 2,
+      "entry": {
+	"type": "lootables:attribute",
+	"attribute": "minecraft:player.sweeping_damage_ratio",
+	"value": 0.25,
+	"persistent": true
+      }
+    },
+    {
+      "id": "orbs_n_stuff:epic/luck",
+      "rarity": "epic",
+      "max_uses": 1,
+      "weight": 1,
+      "entry": {
+	"type": "lootables:attribute",
+	"attribute": "minecraft:generic.luck",
+	"value": 1.0,
+	"persistent": true
+      }
+    },
+    {
+      "id": "orbs_n_stuff:epic/spd",
+      "rarity": "epic",
+      "max_uses": 2,
+      "entry": {
+	"type": "lootables:attribute",
+	"attribute": "minecraft:generic.movement_speed",
+	"value": 0.05,
+	"operation": "add_multiplied_base",
+	"persistent": true
+      }
+    },
+    {
+      "id": "orbs_n_stuff:epic/block_break",
+      "rarity": "epic",
+      "max_uses": 2,
+      "entry": {
+	"type": "lootables:attribute",
+	"attribute": "minecraft:player.block_break_speed",
+	"value": 0.05,
+	"operation": "add_multiplied_base",
+	"persistent": true
+      }
+    },
+    {
+      "id": "orbs_n_stuff:epic/safe_fall",
+      "rarity": "epic",
+      "max_uses": 2,
+      "entry": {
+	"type": "lootables:attribute",
+	"attribute": "minecraft:generic.safe_fall_distance",
+	"value": 1.5,
+	"persistent": true
+      }
+    },
+    {
+      "id": "orbs_n_stuff:rare/armor",
+      "rarity": "rare",
+      "max_uses": 4,
+      "entry": {
+	"type": "lootables:attribute",
+	"attribute": "minecraft:generic.armor",
+	"value": 0.5,
+	"persistent": true
+      }
+    },
+    {
+      "id": "orbs_n_stuff:rare/armor_toughness",
+      "rarity": "rare",
+      "max_uses": 4,
+      "entry": {
+	"type": "lootables:attribute",
+	"attribute": "minecraft:generic.armor_toughness",
+	"value": 0.5,
+	"persistent": true
+      }
+    },
+    {
+      "id": "orbs_n_stuff:rare/knockback",
+      "rarity": "rare",
+      "max_uses": 4,
+      "entry": {
+	"type": "lootables:attribute",
+	"attribute": "minecraft:generic.knockback_resistance",
+	"value": 0.075,
+	"persistent": true
+      }
+    },
+    {
+      "id": "orbs_n_stuff:rare/mining",
+      "rarity": "rare",
+      "max_uses": 4,
+      "entry": {
+	"type": "lootables:attribute",
+	"attribute": "minecraft:player.mining_efficiency",
+	"value": 1.0,
+	"persistent": true
+      }
+    },
+    {
+      "id": "orbs_n_stuff:rare/sneak",
+      "rarity": "rare",
+      "max_uses": 4,
+      "entry": {
+	"type": "lootables:attribute",
+	"attribute": "minecraft:player.sneaking_speed",
+	"value": 0.1,
+        "operation": "add_multiplied_base",
+	"persistent": true
+      }
+    },
+    {
+      "id": "orbs_n_stuff:rare/dmg",
+      "rarity": "rare",
+      "max_uses": 2,
+      "entry": {
+	"type": "lootables:attribute",
+	"attribute": "minecraft:generic.attack_damage",
+	"value": 0.25,
+	"persistent": true
+      }
+    },
+    {
+      "id": "orbs_n_stuff:rare/o2",
+      "rarity": "rare",
+      "max_uses": 4,
+      "entry": {
+	"type": "lootables:attribute",
+	"attribute": "minecraft:generic.oxygen_bonus",
+	"value": 0.1,
+	"persistent": true
+      }
+    },
+    {
+      "id": "orbs_n_stuff:legendary/dmg",
+      "rarity": "legendary",
+      "max_uses": 1,
+      "entry": {
+	"type": "lootables:attribute",
+	"attribute": "minecraft:generic.attack_damage",
+	"value": 1.0,
+	"persistent": true
+      }
+    },
+    {
+      "id": "orbs_n_stuff:legendary/atk_spd",
+      "rarity": "legendary",
+      "max_uses": 1,
+      "entry": {
+	"type": "lootables:attribute",
+	"attribute": "minecraft:generic.attack_speed",
+	"value": 0.1,
+	"operation": "add_multiplied_base",
+	"persistent": true
+      }
+    },
+    {
+      "id": "orbs_n_stuff:legendary/hp",
+      "rarity": "legendary",
+      "max_uses": 1,
+      "entry": {
+	"type": "lootables:attribute",
+	"attribute": "minecraft:generic.max_health",
+	"value": 2.0,
+	"persistent": true
+      }
+    },
+    {
+      "id": "orbs_n_stuff:rainbow/block_reach",
+      "rarity": "rainbow",
+      "max_uses": 1,
+      "entry": {
+	"type": "lootables:attribute",
+	"attribute": "minecraft:player.block_interaction_range",
+	"value": 1.0,
+	"persistent": true
+      }
+    },
+    {
+      "id": "orbs_n_stuff:rainbow/entity_reach",
+      "rarity": "rainbow",
+      "max_uses": 1,
+      "entry": {
+	"type": "lootables:attribute",
+	"attribute": "minecraft:player.entity_interaction_range",
+	"value": 2.0,
+	"persistent": true
+      }
+    },
+    {
+      "id": "orbs_n_stuff:rainbow/step",
+      "rarity": "rainbow",
+      "max_uses": 1,
+      "entry": {
+	"type": "lootables:attribute",
+	"attribute": "minecraft:generic.step_height",
+	"value": 0.5,
+	"persistent": true
+      }
+    },
+    {
+      "id": "orbs_n_stuff:rainbow/scale",
+      "rarity": "rainbow",
+      "max_uses": 1,
+      "entry": {
+	"type": "lootables:attribute",
+	"attribute": "minecraft:generic.scale",
+	"value": -0.5,
+	"operation": "add_multiplied_total",
+	"persistent": true
+      }
+    },
+    {
+      "id": "orbs_n_stuff:rainbow/burning",
+      "rarity": "rainbow",
+      "max_uses": 1,
+      "entry": {
+	"type": "lootables:attribute",
+	"attribute": "minecraft:generic.burning_time",
+	"value": -0.5,
+	"operation": "add_multiplied_total",
+	"persistent": true
+      }
+    }
+  ]
+}

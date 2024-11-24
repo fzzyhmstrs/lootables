@@ -41,6 +41,7 @@ interface LootableNumber {
             private val binomial = BinomialLootableNumber.CODEC.cast<Codec<LootableNumber>>()
             private val either = EitherLootableNumber.CODEC.cast<Codec<LootableNumber>>()
             private val triangular = TriangularLootableNumber.CODEC.cast<Codec<LootableNumber>>()
+            private val config = ConfigLootableNumber.CODEC.cast<Codec<LootableNumber>>()
 
             override fun <T : Any?> encode(input: LootableNumber, ops: DynamicOps<T>, prefix: T): DataResult<T> {
                 return when (input) {
@@ -49,6 +50,7 @@ interface LootableNumber {
                     is BinomialLootableNumber -> binomial.encode(input, ops, prefix)
                     is EitherLootableNumber -> either.encode(input, ops, prefix)
                     is TriangularLootableNumber -> triangular.encode(input, ops, prefix)
+                    is ConfigLootableNumber -> config.encode(input, ops, prefix)
                     else -> DataResult.error { "Failed to encode Lootable Number. ${input::class.java.simpleName} is not a known number type." }
                 }
             }
@@ -73,6 +75,10 @@ interface LootableNumber {
                 val triangularResult = triangular.decode(ops, input)
                 if (triangularResult.isSuccess) {
                     return triangularResult
+                }
+                val configResult = config.decode(ops, input)
+                if (configResult.isSuccess) {
+                    return configResult
                 }
                 return DataResult.error { "Failed to parse Lootable Number. Const: ${constantResult.error().map { it.messageSupplier.get() }.orElse("none")}, Uniform: ${uniformResult.error().map { it.messageSupplier.get() }.orElse("none")}, Binomial: ${binomialResult.error().map { it.messageSupplier.get() }.orElse("none")}, Either: ${eitherResult.error().map { it.messageSupplier.get() }.orElse("none")}, Triangular: ${triangularResult.error().map { it.messageSupplier.get() }.orElse("none")}" }
             }

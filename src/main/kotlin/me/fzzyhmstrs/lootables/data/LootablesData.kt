@@ -463,7 +463,10 @@ internal object LootablesData {
 
         ServerPlayConnectionEvents.JOIN.register { handler, _, server ->
             CompletableFuture.supplyAsync {
-                getSyncData(server.playerManager.playerList)
+                dataInvalid = true
+                val list: MutableList<ServerPlayerEntity> = server.playerManager.playerList.toMutableList()
+                list.add(handler.getPlayer())
+                getSyncData(list)
             }.thenAccept { sd ->
                 sd.forPlayer(handler.getPlayer()) {p, m ->
                     ConfigApi.network().send(DataSyncS2CCustomPayload(m), p)
