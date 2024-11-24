@@ -176,22 +176,24 @@ if (System.getenv("MODRINTH_TOKEN") != null) {
         val uploadDebugMode: String by project
 
         token.set(System.getenv("MODRINTH_TOKEN"))
-        projectId.set(modrinthSlugName)
+        projectId.set("lootables")
         versionNumber.set("${project.version}")
         versionName.set("${base.archivesName.get()}-${project.version}")
         versionType.set(releaseType)
         uploadFile.set(tasks.remapJar.get())
         gameVersions.addAll(mcVersions.split(","))
-        loaders.addAll(modLoaders.split(",").map { it.lowercase() })
+        loaders.addAll("fabric")
         detectLoaders.set(false)
         changelog.set("## Changelog for " + "${project.version} \n\n" + log.readText())
         dependencies {
             val requiredDeps: String by project
             for (dep in requiredDeps.split(",")) {
+                if (dep.isEmpty()) continue
                 required.project(dep)
             }
             val optionalDeps: String by project
             for (dep in optionalDeps.split(",")) {
+                if (dep.isEmpty()) continue
                 optional.project(dep)
             }
         }
