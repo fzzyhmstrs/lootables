@@ -19,6 +19,7 @@ import me.fzzyhmstrs.lootables.data.LootablesData
 import me.fzzyhmstrs.lootables.loot.custom.CustomLootableEntry
 import me.fzzyhmstrs.lootables.loot.custom.CustomLootableEntryDisplay
 import me.fzzyhmstrs.lootables.network.ChoicesS2CCustomPayload
+import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.loot.context.LootContext
 import net.minecraft.loot.context.LootContextParameterSet
 import net.minecraft.loot.context.LootContextParameters
@@ -100,6 +101,10 @@ internal object LootablesApiImpl {
 
     internal fun getCustomEntryDisplay(id: Identifier): CustomLootableEntryDisplay? {
         return customEntryDisplays[id]
+    }
+
+    internal fun canApplyKey(key: IdKey, playerEntity: PlayerEntity): Boolean {
+        return LootablesData.keyAvailable(key, playerEntity.uuid)
     }
 
 }

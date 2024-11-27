@@ -92,4 +92,17 @@ object LootablesApi {
     fun registerCustomEntry(id: Identifier, entry: CustomLootableEntry, entryDisplay: CustomLootableEntryDisplay) {
         LootablesApiImpl.registerCustomEntry(id, entry, entryDisplay)
     }
+
+    /**
+     * Determines if the player can apply the provided IdKey. This is typically used to determine if a player can roll a Lootable Table before trying.
+     * @param key [IdKey] the key to test
+     * @param playerEntity [ServerPlayerEntity] the server player checked against.
+     * @return True if the key can still be applied, false otherwise. NOTE: This information is only on the server. If you need this result on the client for some reason, you will need to sync it as needed.
+     * @author fzzyhmstrs
+     * @since 0.1.3
+     */
+    @JvmStatic
+    fun canApplyKey(key: IdKey, playerEntity: ServerPlayerEntity): Boolean {
+        return LootablesApiImpl.canApplyKey(key, playerEntity)
+    }
 }

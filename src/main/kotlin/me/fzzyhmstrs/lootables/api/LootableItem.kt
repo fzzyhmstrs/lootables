@@ -321,7 +321,8 @@ open class LootableItem(settings: Settings) : Item(settings) {
             @JvmStatic
             val DEFAULT = LootableData(EventType.USE, RollType.RANDOM, Lootables.identity("default"), 1, 1)
 
-            internal val CODEC = RecordCodecBuilder.create { instance: RecordCodecBuilder.Instance<LootableData> ->
+            @JvmStatic
+            val CODEC = RecordCodecBuilder.create { instance: RecordCodecBuilder.Instance<LootableData> ->
                 instance.group(
                     EventType.CODEC.optionalFieldOf("event_type", EventType.USE).forGetter(LootableData::eventType),
                     RollType.CODEC.optionalFieldOf("roll_type", RollType.RANDOM).forGetter(LootableData::rollType),
@@ -333,7 +334,8 @@ open class LootableItem(settings: Settings) : Item(settings) {
                 ).apply(instance, ::LootableData)
             }
 
-            internal val PACKET_CODEC = object: PacketCodec<RegistryByteBuf, LootableData> {
+            @JvmStatic
+            val PACKET_CODEC = object: PacketCodec<RegistryByteBuf, LootableData> {
 
                 private val rarityCodec = PacketCodecs.optional(LootableRarity.PACKET_CODEC)
                 private val keyCodec = PacketCodecs.optional(IdKey.PACKET_CODEC)
