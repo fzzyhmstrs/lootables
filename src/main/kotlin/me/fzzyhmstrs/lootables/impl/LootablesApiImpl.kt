@@ -89,6 +89,16 @@ internal object LootablesApiImpl {
         return true
     }
 
+    internal fun supplySinglePool(
+    poolId: Identifier,
+    playerEntity: ServerPlayerEntity,
+    origin: Vec3d)
+    : Boolean {
+        val pool = LootablesData.getPool(poolId) ?: return false
+        pool.apply(playerEntity, origin)
+        return true
+    }
+
     internal fun registerCustomEntry(id: Identifier, entry: CustomLootableEntry, entryDisplay: CustomLootableEntryDisplay) {
         if (customEntries.containsKey(id)) throw IllegalStateException("Custom lootable pool entry already registered at id: $id")
         customEntries[id] = entry

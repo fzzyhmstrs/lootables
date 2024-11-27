@@ -41,14 +41,14 @@ object LootablesApi {
      * @throws IllegalArgumentException if choices is greater than rolls or rolls is less than 1.
      * @return true if the choices were successfully sent to the user, false otherwise. This is not confirming the loot is actually picked! The choices are made on the client and then sent back to the server for final supply. This means you will be able to send multiple requests even for a IdKey-bound call. Each request will override the one before it (reopen the choices screen), and user choices can still only be supplied a maximum if IdKey.count times.
      * @author fzzyhmstrs
-     * @since 0.1.0
+     * @since 0.1.0, new origin overload 0.1.3
      */
     @JvmStatic
     @JvmOverloads
     fun supplyLootWithChoices(
         tableId: Identifier,
         playerEntity: ServerPlayerEntity,
-        origin: Vec3d,
+        origin: Vec3d = playerEntity.pos,
         onSuccess: BiConsumer<ServerPlayerEntity, Vec3d> = BiConsumer { _, _ -> },
         onAbort: BiConsumer<ServerPlayerEntity, Vec3d> = BiConsumer { _, _ -> },
         key: IdKey? = null,
@@ -66,18 +66,39 @@ object LootablesApi {
      * @param key [IdKey], Nullable. A bounded key that indicates how many times this specific loot supply can be obtained by the player. Useful for containers that can only be looted once per player, for example. If null, no tracking will be done of how many times this supply is called for a specific player.
      * @param rolls Int, default 1. How many pools will be rolled from the Lootable Tables available pools. If the Lootable Table doesn't have this many pools, it will supply all of its pools instead.
      * @author fzzyhmstrs
-     * @since 0.1.0
+     * @since 0.1.0, new origin overload 0.1.3
      */
     @JvmStatic
     @JvmOverloads
     fun supplyLootRandomly(
         tableId: Identifier,
         playerEntity: ServerPlayerEntity,
-        origin: Vec3d,
+        origin: Vec3d = playerEntity.pos,
         key: IdKey? = null,
         rolls: Int = 1)
     : Boolean {
         return LootablesApiImpl.supplyLootRandomly(tableId, playerEntity, origin, key, rolls)
+    }
+
+    /**
+     * Supplies the loot from a single loot pool. This is by nature only as random as the pool is. A RANDOM pool will somewhat mimic rolling 1 pool from a lootable table, otherwise the pool will always supply what it will.
+     *
+     * This only works for standalone pools. Pools created inline with a table aren't mapped for use by this method.
+     * @param poolId [Identifier] standalone pool resource location id.
+     * @param playerEntity [ServerPlayerEntity] the player to apply the loot to.
+     * @param origin [Vec3d] the location of loot supply. This doesn't necessarily have to be at the players position, but often is.
+     * @return true if the poolId is valid, false if not. The loot is only supplied on a success.
+     * @author fzzyhmstrs
+     * @since 0.1.3
+     */
+    @JvmStatic
+    @JvmOverloads
+    fun supplySinglePool(
+        poolId: Identifier,
+        playerEntity: ServerPlayerEntity,
+        origin: Vec3d = playerEntity.pos)
+    : Boolean {
+        return LootablesApiImpl.supplySinglePool(poolId, playerEntity, origin)
     }
 
     /**
