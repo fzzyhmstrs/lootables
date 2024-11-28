@@ -15,8 +15,10 @@ package me.fzzyhmstrs.lootables.api
 import com.mojang.serialization.Codec
 import com.mojang.serialization.codecs.RecordCodecBuilder
 import me.fzzyhmstrs.fzzy_config.util.FcText
+import me.fzzyhmstrs.fzzy_config.util.ValidationResult
 import me.fzzyhmstrs.lootables.Lootables
 import me.fzzyhmstrs.lootables.api.LootableItem.LootableData
+import me.fzzyhmstrs.lootables.loot.LootablePool.Companion.otherwise
 import me.fzzyhmstrs.lootables.loot.LootableRarity
 import me.fzzyhmstrs.lootables.registry.ComponentRegistry
 import net.minecraft.entity.Entity
@@ -33,6 +35,7 @@ import net.minecraft.text.Text
 import net.minecraft.util.*
 import net.minecraft.world.World
 import java.util.*
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * Template item class with automatic component-based support for Lootables tables
@@ -296,6 +299,83 @@ open class LootableItem(settings: Settings) : Item(settings) {
             fun build(): LootableData {
                 if (rollType == RollType.CHOICES && choices <= 0) throw IllegalStateException("Choices must be greater than 0 for CHOICES loot mode.")
                 return LootableData(eventType, rollType, table, rolls, choices, rarity, key)
+            }
+        }
+
+        /**
+         * Helper class for loading lootable data compositionally, like vanilla tags.
+         *
+         * In order to load data this way, you should have a top-level Loader Codec for whatever thing you are loading, with this loader representing the future [LootableData] in the baked object
+         * 1. Load into a map of loaders `val myLoaders: MutableMap<Identifier, MyObjectLoader>`. Identifier is the loaded resource location
+         * 2. Load new loader instances compositionally. If not in the map, `myLoaders.put(location, newLoader)`, else `myLoaders.compute(location) { _, oldLoader -> oldLoader.compose(newLoader) }
+         * 3. Bake loader map into completed map `val myLoadedMap: Map<Identifier, MyObject>`. This could be completed with a `create` method similar to the method below.
+         * @author fzzyhmstrs
+         * @since 0.1.4
+         */
+        class Loader private constructor(
+            val eventType: Optional<EventType>,
+            val rollType: Optional<RollType>,
+            val table: Optional<Identifier>,
+            val rolls: Optional<Int>,
+            val choices: Optional<Int>,
+            val rarity: Optional<LootableRarity>,
+            val key: Optional<IdKey>,
+            val replace: Boolean)
+        {
+
+            /**
+             * Composes this loader with a newer instance that may be supplying or overriding information.
+             * @param other [Loader] the newer instance of Loader to composite with this one. Information present in the newer loader
+             * @return [Loader] instance with newer information composited in. If `replace` was true on the newer instance it will return that instance wholesale.
+             * @author fzzyhmstrs
+             * @since 0.1.4
+             */
+            fun compose(other: Loader): Loader {
+                if (other.replace) return other
+                val et = other.eventType.otherwise(this.eventType)
+                val rt = other.rollType.otherwise(this.rollType)
+                val t = other.table.otherwise(this.table)
+                val r = other.rolls.otherwise(this.rolls)
+                val c = other.choices.otherwise(this.choices)
+                val y = other.rarity.otherwise(this.rarity)
+                val k = other.key.otherwise(this.key)
+                return Loader(et, rt, t, r, c, y, k, false)
+            }
+
+            /**
+             * Attempts to create a [LootableData] instance from the information in this loader.
+             *
+             * If [table] is empty, creation will fail.
+             * @param info String for populating error messages with useful info. String representation of the resource location being loaded, for example.
+             * @return [ValidationResult]&lt;[LootableData]&gt; - The creation result. If the creation is successful, the validation storedValue won't be null.
+             * @author fzzyhmstrs
+             * @since 0.1.4
+             */
+            fun create(info: String): ValidationResult<LootableData?> {
+                if (this.table.isEmpty) return ValidationResult.error(null, "Lootable Data can't have empty table id. Key: $info")
+                val eType = eventType.orElse(EventType.USE)
+                val rType = rollType.orElse(RollType.RANDOM)
+                val t = table.get()
+                val r = rolls.orElse(1)
+                val c = choices.orElse(1)
+                val rare = rarity.getOrNull()
+                val k = key.getOrNull()
+                return ValidationResult.success(LootableData(eType, rType, t, r, c, rare, k))
+            }
+
+            companion object {
+                val CODEC = RecordCodecBuilder.create { instance: RecordCodecBuilder.Instance<Loader> ->
+                    instance.group(
+                        EventType.CODEC.optionalFieldOf("event_type").forGetter(Loader::eventType),
+                        RollType.CODEC.optionalFieldOf("roll_type").forGetter(Loader::rollType),
+                        Identifier.CODEC.optionalFieldOf("table").forGetter(Loader::table),
+                        Codec.INT.optionalFieldOf("rolls").forGetter(Loader::rolls),
+                        Codec.INT.optionalFieldOf("choices").forGetter(Loader::choices),
+                        LootableRarity.CODEC.optionalFieldOf("rarity").forGetter(Loader::rarity),
+                        IdKey.CODEC.optionalFieldOf("key").forGetter(Loader::key),
+                        Codec.BOOL.optionalFieldOf("replace", false).forGetter(Loader::replace)
+                    ).apply(instance, ::Loader)
+                }
             }
         }
 
