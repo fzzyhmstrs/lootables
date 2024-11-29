@@ -373,25 +373,21 @@ internal object LootablesData {
                     val reader = resource.reader
                     val json = JsonParser.parseReader(reader)
                     val result = LootablePool.DATA_CODEC.parse(ops, json)
-                    if (!id.path.startsWith("lootable_pool/")) {
-                        Lootables.LOGGER.error("Invalid resource location for lootable pool $id; needs to be in 'lootable_pool' folder")
-                    } else {
+                    result.ifSuccess { data ->
                         val poolId = Identifier.of(id.namespace, id.path.substring(14, id.path.length - 5))
-                        result.ifSuccess { data ->
-                            if(data.replace) {
-                                poolMap[poolId] = data
-                            } else {
-                                poolMap.compute(poolId) { _, d ->
-                                    d?.composite(data) ?: data
-                                }
+                        if(data.replace) {
+                            poolMap[poolId] = data
+                        } else {
+                            poolMap.compute(poolId) { _, d ->
+                                d?.composite(data) ?: data
                             }
-                        }.ifError { error ->
-                            Lootables.LOGGER.error(error.messageSupplier.get())
                         }
+                    }.ifError { error ->
+                        Lootables.LOGGER.error("Error parsing Lootables pool file: $id")
+                        Lootables.LOGGER.error(error.messageSupplier.get())
                     }
                 } catch (e: Throwable) {
-                    Lootables.LOGGER.error("Error parsing lootable pool $id")
-                    e.printStackTrace()
+                    Lootables.LOGGER.error("Critical error encountered while parsing lootable pool $id", e)
                 }
             }
         lootablePools = LootablePool.bake(poolMap, Lootables.LOGGER::error)
@@ -410,25 +406,21 @@ internal object LootablesData {
                     val reader = resource.reader
                     val json = JsonParser.parseReader(reader)
                     val result = LootableTable.LOADER_CODEC.parse(ops, json)
-                    if (!id.path.startsWith("lootable_table/")) {
-                        Lootables.LOGGER.error("Invalid resource location for lootable table $id; needs to be in 'lootable_table' folder")
-                    } else {
+                    result.ifSuccess { table ->
                         val tableId = Identifier.of(id.namespace, id.path.substring(15, id.path.length - 5))
-                        result.ifSuccess { table ->
-                            if (table.replace) {
-                                tableMap[tableId] = table
-                            } else {
-                                tableMap.compute(tableId) { _, loader ->
-                                    loader?.composite(table) ?: table
-                                }
+                        if (table.replace) {
+                            tableMap[tableId] = table
+                        } else {
+                            tableMap.compute(tableId) { _, loader ->
+                                loader?.composite(table) ?: table
                             }
-                        }.ifError { error ->
-                            Lootables.LOGGER.error(error.messageSupplier.get())
                         }
+                    }.ifError { error ->
+                        Lootables.LOGGER.error("Error while parsing Lootables table file: $id")
+                        Lootables.LOGGER.error(error.messageSupplier.get())
                     }
                 } catch (e: Throwable) {
-                    Lootables.LOGGER.error("Error parsing lootable table $id")
-                    e.printStackTrace()
+                    Lootables.LOGGER.error("Critical error encountered while parsing Lootables table $id", e)
                 }
             }
         lootableTables = LootableTable.bake(tableMap, Lootables.LOGGER::error)
