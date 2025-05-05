@@ -1,27 +1,26 @@
 /*
-* Copyright (c) 2024 Fzzyhmstrs
+* Copyright (c) 2024-5 Fzzyhmstrs
 *
 * This is free software provided under the terms of the Timefall Development License - Modified (TDL-M).
 * You should have received a copy of the TDL-M with this software.
 * If you did not, see <https://github.com/fzzyhmstrs/Timefall-Development-Licence-Modified>.
 * */
 
-import org.jetbrains.kotlin.cli.common.toBooleanLenient
-import com.matthewprenger.cursegradle.CurseArtifact
-import com.matthewprenger.cursegradle.CurseProject
-import com.matthewprenger.cursegradle.CurseRelation
-import com.matthewprenger.cursegradle.Options
-import net.fabricmc.loom.task.RemapJarTask
-import org.gradle.jvm.tasks.Jar
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
-    id("fabric-loom")
+    id("dev.architectury.loom").apply(false)//.version("1.7-SNAPSHOT").apply(false)
+    id("architectury-plugin")
+    id("com.github.johnrengelman.shadow").apply(false)//.version("7.1.2").apply(false)
     val kotlinVersion: String by System.getProperties()
     kotlin("jvm").version(kotlinVersion)
-    id("com.matthewprenger.cursegradle") version "1.4.0"
-    id("com.modrinth.minotaur") version "2.+"
     `maven-publish`
 }
+
+val minecraftVersion: String by project
+val modVersion: String by project
+val javaVersion = JavaVersion.VERSION_21
+val mavenGroup: String by project
 
 base {
     val archivesBaseName: String by project
@@ -29,31 +28,73 @@ base {
 }
 
 val log: File = file("changelog.md")
-val minecraftVersion: String by project
-val modVersion: String by project
-version = "$modVersion+$minecraftVersion"
-val mavenGroup: String by project
-group = mavenGroup
 println("## Changelog for ${base.archivesName.get()} $version \n\n" + log.readText())
 println(base.archivesName.get().replace('_','-'))
 
-repositories {
-    maven {
-        name = "Modrinth"
-        url = uri("https://api.modrinth.com/maven")
-        content {
-            includeGroup("maven.modrinth")
+allprojects {
+    apply {
+        plugin("java")
+    }
+    apply {
+        plugin("architectury-plugin")
+    }
+
+    architectury {
+        compileOnly()
+    }
+
+    base {
+        val archivesBaseName: String by rootProject
+        archivesName.set(archivesBaseName)
+    }
+
+    version = "$modVersion+$minecraftVersion+${project.name}"
+    group = mavenGroup
+
+    repositories {
+        exclusiveContent {
+            forRepository {
+                maven {
+                    name = "Modrinth"
+                    url = uri("https://api.modrinth.com/maven")
+
+                }
+            }
+            filter {
+                includeGroup("maven.modrinth")
+            }
+        }
+        maven {
+            name = "FzzyMaven"
+            url = uri("https://maven.fzzyhmstrs.me/")
+        }
+        mavenLocal()
+        mavenCentral()
+    }
+
+    tasks {
+        withType<JavaCompile> {
+            options.encoding = "UTF-8"
+            sourceCompatibility = javaVersion.toString()
+            targetCompatibility = javaVersion.toString()
+            options.release.set(javaVersion.majorVersion.toInt())
+        }
+        withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+            compilerOptions {
+                jvmTarget.set(JvmTarget.fromTarget(javaVersion.majorVersion))
+                freeCompilerArgs = listOf("-Xjvm-default=all")
+            }
+        }
+        java {
+            toolchain { languageVersion.set(JavaLanguageVersion.of(javaVersion.toString())) }
+            sourceCompatibility = javaVersion
+            targetCompatibility = javaVersion
+            withSourcesJar()
         }
     }
-    maven {
-        name = "FzzyMaven"
-        url = uri("https://maven.fzzyhmstrs.me/")
-    }
-    mavenLocal()
-    mavenCentral()
 }
 
-sourceSets {
+/*sourceSets {
     create("testmod") {
         compileClasspath += sourceSets.main.get().compileClasspath
         runtimeClasspath += sourceSets.main.get().runtimeClasspath
@@ -69,9 +110,9 @@ idea {
         testSources.from(sourceSets["testmod"].java.srcDirs)
         testSources.from(sourceSets["testmod"].kotlin.srcDirs)
     }
-}
+}*/
 
-dependencies {
+/*dependencies {
     minecraft("com.mojang:minecraft:$minecraftVersion")
     val yarnMappings: String by project
     mappings("net.fabricmc:yarn:$yarnMappings:v2")
@@ -88,9 +129,9 @@ dependencies {
     }
 
     testmodImplementation(sourceSets.main.get().output)
-}
+}*/
 
-loom {
+/*loom {
     runs {
         create("testmodClient") {
             client()
@@ -98,9 +139,9 @@ loom {
             source(sourceSets["testmod"])
         }
     }
-}
+}*/
 
-tasks {
+/*tasks {
     val javaVersion = JavaVersion.VERSION_21
     withType<JavaCompile> {
         options.encoding = "UTF-8"
@@ -165,8 +206,9 @@ val remapTestmodJar =  tasks.register("remapTestmodJar", RemapJarTask::class) {
 
 tasks.build {
     dependsOn(remapTestmodJar.get())
-}
+}*/
 
+/*
 if (System.getenv("MODRINTH_TOKEN") != null) {
     modrinth {
         val modrinthSlugName: String by project
@@ -314,4 +356,4 @@ publishing {
             }
         }
     }
-}
+}*/
