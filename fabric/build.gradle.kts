@@ -35,6 +35,8 @@ configurations {
 
 sourceSets {
     create("testmod") {
+        compileClasspath += project(":common").sourceSets.main.get().compileClasspath
+        compileClasspath += project(":common").sourceSets.main.get().runtimeClasspath
         compileClasspath += sourceSets.main.get().compileClasspath
         runtimeClasspath += sourceSets.main.get().runtimeClasspath
     }

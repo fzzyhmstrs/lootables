@@ -55,11 +55,11 @@ object LootablesData {
     private val abortedChoices: MutableSet<UUID> = mutableSetOf()
 
     private fun getUsageData(server: MinecraftServer): UsageData {
-        return server.overworld?.persistentStateManager?.get(UsageData.TYPE, Lootables.ID + "_usage_data") ?: UsageData.EMPTY
+        return server.overworld?.persistentStateManager?.getOrCreate(UsageData.TYPE, Lootables.ID + "_usage_data") ?: UsageData.EMPTY
     }
 
     private fun getChoicesData(server: MinecraftServer): ChoicesData {
-        return server.overworld?.persistentStateManager?.get(ChoicesData.TYPE, Lootables.ID + "_choices_data") ?: ChoicesData.EMPTY
+        return server.overworld?.persistentStateManager?.getOrCreate(ChoicesData.TYPE, Lootables.ID + "_choices_data") ?: ChoicesData.EMPTY
     }
 
     private fun getSyncData(players: List<ServerPlayerEntity>): SyncDataHolder {
@@ -233,7 +233,7 @@ object LootablesData {
                 }
             }
         lootableTables = LootableTable.bake(tableMap, Lootables.LOGGER::error)
-        Lootables.LOGGER.info("Finished lootable table load in ${System.currentTimeMillis() - start}ms")
+        Lootables.LOGGER.info("Finished lootables table load in ${System.currentTimeMillis() - start}ms")
         LootablePool.reset()
     }
 
@@ -335,6 +335,7 @@ object LootablesData {
         }
 
         fun use(id: Identifier, uuid: UUID) {
+            Lootables.DEVLOG.info("Using {} for {}", id, uuid)
             markDirty()
             val map = usesMap.computeIfAbsent(id) { _ -> mutableMapOf() }
             val uses = map[uuid] ?: 0
@@ -360,6 +361,7 @@ object LootablesData {
         }
 
         override fun writeNbt(nbt: NbtCompound, registryLookup: RegistryWrapper.WrapperLookup): NbtCompound {
+            Lootables.DEVLOG.info("Saving Usage Data")
             val ops = registryLookup.getOps(NbtOps.INSTANCE)
             val useResult = MAP_CODEC.encodeStart(ops, usesMap)
             val keyResult = MAP_CODEC.encodeStart(ops, keyMap)
@@ -397,7 +399,7 @@ object LootablesData {
             private const val USES_KEY = "uses_map"
             private const val KEY_KEY = "key_map"
 
-            private val UUID_CODEC = Codec.unboundedMap(Uuids.STRICT_CODEC, Codec.INT).xmap({ m -> m.toMutableMap() }, Function.identity())
+            private val UUID_CODEC = Codec.unboundedMap(Uuids.STRING_CODEC, Codec.INT).xmap({ m -> m.toMutableMap() }, Function.identity())
             private val MAP_CODEC = Codec.unboundedMap(Identifier.CODEC, UUID_CODEC).xmap({ m -> m.toMutableMap() }, Function.identity())
 
         }
@@ -442,6 +444,7 @@ object LootablesData {
         }
 
         override fun writeNbt(nbt: NbtCompound, registryLookup: RegistryWrapper.WrapperLookup): NbtCompound {
+            Lootables.DEVLOG.info("Saving Choice Data")
             for ((uuid, pendingChoices) in pendingChoices) {
                 pendingChoices.abort(null)
                 storedChoices[uuid] = pendingChoices.poolChoices
