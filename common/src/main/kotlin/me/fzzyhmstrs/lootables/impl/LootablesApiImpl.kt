@@ -58,6 +58,7 @@ internal object LootablesApiImpl {
                 val params = LootContextParameterSet.Builder(playerEntity.serverWorld).add(LootContextParameters.THIS_ENTITY, playerEntity).add(LootContextParameters.ORIGIN, origin)
                 val context = LootContext.Builder(params.build(LootContextTypes.CHEST)).build(Optional.empty())
                 val newPoolChoices = table.supplyPoolsById(context, rolls)
+                if (newPoolChoices.isEmpty()) return false //no valid choices, bail out
                 LootablesData.setPending(choiceKey, playerEntity, origin, newPoolChoices, key, onSuccess, onAbort)
                 newPoolChoices
             }

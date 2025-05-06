@@ -269,6 +269,8 @@ publishing {
         create<MavenPublication>(archivesBaseName) {
             from(components["java"])
 
+            artifactId = "lootables"
+
             pom {
                 name.set(modName)
                 description.set(modDesc)

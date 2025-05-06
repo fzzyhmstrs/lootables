@@ -304,10 +304,12 @@ tasks.register("uploadAll") {
 publishing {
     publications {
         create<MavenPublication>(archivesBaseName) {
-            from(components["java"])
+            from(components["java"].also { println(it.name) })
+
+            artifactId = "lootables"
 
             pom {
-                name.set(modName)
+                name.set("$modName Fabric")
                 description.set(modDesc)
                 inceptionYear.set(modYear)
                 licenses {
