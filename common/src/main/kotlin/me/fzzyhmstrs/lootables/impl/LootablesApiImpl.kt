@@ -117,4 +117,11 @@ internal object LootablesApiImpl {
         return LootablesData.keyAvailable(key, playerEntity)
     }
 
+    internal fun resetKey(key: IdKey, playerEntity: ServerPlayerEntity) {
+        LootablesData.resetKey(key, playerEntity)
+    }
+
+    internal fun resetKey(key: IdKey, server: MinecraftServer) {
+        LootablesData.resetKey(key, server)
+    }
 }
