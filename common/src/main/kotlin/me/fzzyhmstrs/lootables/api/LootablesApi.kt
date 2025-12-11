@@ -136,9 +136,8 @@ object LootablesApi {
      * @since 0.2.0
      */
     @JvmStatic
-    @JvmOverloads
     fun resetKey(key: IdKey, playerEntity: ServerPlayerEntity) {
-        return LootablesApiImpl.resetKey(key, playerEntity)
+        LootablesApiImpl.resetKey(key, playerEntity)
     }
 
     /**
@@ -149,8 +148,7 @@ object LootablesApi {
      * @since 0.2.0
      */
     @JvmStatic
-    @JvmOverloads
     fun resetKey(key: IdKey, server: MinecraftServer) {
-        return LootablesApiImpl.resetKey(key, server)
+       LootablesApiImpl.resetKey(key, server)
     }
 }
