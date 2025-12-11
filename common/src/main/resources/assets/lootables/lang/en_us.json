@@ -24,6 +24,7 @@
 	"lootables.entry.attribute.persistent": "§6Permanently gain:§r\n%s",
 	"lootables.entry.attribute.temporary": "Temporarily gain:\n%s",
 	"lootables.entry.function": "Apply modifiers to items in your %s slot(s)",
+	"lootables.entry.command": "Runs an undescribed command",
 	"lootables.entry.heal": "Heal %s hearts",
 	"lootables.entry.item.drop": "Drops %1$s %2$s",
 	"lootables.entry.item.give": "Get %1$s %2$s",
