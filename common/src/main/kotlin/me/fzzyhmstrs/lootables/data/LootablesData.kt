@@ -118,6 +118,14 @@ object LootablesData {
         getUsageData(playerEntity.server).retractKey(key, playerEntity.uuid)
     }
 
+    internal fun resetKey(key: IdKey, playerEntity: ServerPlayerEntity) {
+        getUsageData(playerEntity.server).resetKey(key, playerEntity.uuid)
+    }
+
+    internal fun resetKey(key: IdKey, server: MinecraftServer) {
+        getUsageData(server).resetKey(key)
+    }
+
     fun applyChosen(payload: ChosenC2SCustomPayload, playerEntity: ServerPlayerEntity) {
         val choices = getChoicesData(playerEntity.server)
         val pending = choices.getPending(payload.choiceKey)
@@ -358,6 +366,19 @@ object LootablesData {
             val map = keyMap.computeIfAbsent(key.id) { _ -> mutableMapOf() }
             val uses = map[uuid] ?: 0
             map[uuid] = max(uses - 1, 0)
+        }
+
+        fun resetKey(key: IdKey, uuid: UUID) {
+            markDirty()
+            val map = keyMap[key.id]
+            if (map != null) {
+                map.remove(uuid)
+            }
+        }
+
+        fun resetKey(key: IdKey) {
+            markDirty()
+            keyMap.remove(key.id)
         }
 
         override fun writeNbt(nbt: NbtCompound, registryLookup: RegistryWrapper.WrapperLookup): NbtCompound {
