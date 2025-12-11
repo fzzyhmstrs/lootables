@@ -15,6 +15,7 @@ package me.fzzyhmstrs.lootables.api
 import me.fzzyhmstrs.lootables.impl.LootablesApiImpl
 import me.fzzyhmstrs.lootables.loot.custom.CustomLootableEntry
 import me.fzzyhmstrs.lootables.loot.custom.CustomLootableEntryDisplay
+import net.minecraft.server.MinecraftServer
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.Vec3d
@@ -128,17 +129,28 @@ object LootablesApi {
     }
 
     /**
-     * Resets the progress of a particular [IdKey], either for a particular player or for all players
-     * - Player provided: resets only for them
-     * - null provided (default): resets for everybody who has used it
+     * Resets the progress of a particular [IdKey] for a particular player
      * @param key [IdKey] the key to reset
-     * @param playerEntity [ServerPlayerEntity], nullable, default null - the server player to reset for. Will reset all players if none is provided.
+     * @param playerEntity [ServerPlayerEntity] the server player to reset for
      * @author fzzyhmstrs
      * @since 0.2.0
      */
     @JvmStatic
     @JvmOverloads
-    fun resetKey(key: IdKey, playerEntity: ServerPlayerEntity? = null) {
+    fun resetKey(key: IdKey, playerEntity: ServerPlayerEntity) {
         return LootablesApiImpl.resetKey(key, playerEntity)
+    }
+
+    /**
+     * Resets the progress of a particular [IdKey] for all players
+     * @param key [IdKey] the key to reset
+     * @param server [MinecraftServer] the server the lootables data is attached to
+     * @author fzzyhmstrs
+     * @since 0.2.0
+     */
+    @JvmStatic
+    @JvmOverloads
+    fun resetKey(key: IdKey, server: MinecraftServer) {
+        return LootablesApiImpl.resetKey(key, server)
     }
 }
