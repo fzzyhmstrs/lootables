@@ -126,4 +126,19 @@ object LootablesApi {
     fun canApplyKey(key: IdKey, playerEntity: ServerPlayerEntity): Boolean {
         return LootablesApiImpl.canApplyKey(key, playerEntity)
     }
+
+    /**
+     * Resets the progress of a particular [IdKey], either for a particular player or for all players
+     * - Player provided: resets only for them
+     * - null provided (default): resets for everybody who has used it
+     * @param key [IdKey] the key to reset
+     * @param playerEntity [ServerPlayerEntity], nullable, default null - the server player to reset for. Will reset all players if none is provided.
+     * @author fzzyhmstrs
+     * @since 0.2.0
+     */
+    @JvmStatic
+    @JvmOverloads
+    fun resetKey(key: IdKey, playerEntity: ServerPlayerEntity? = null) {
+        return LootablesApiImpl.resetKey(key, playerEntity)
+    }
 }
