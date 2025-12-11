@@ -20,6 +20,7 @@ object LootablePoolEntryTypes {
 
     val CUSTOM = LootablePoolEntryType.create(Lootables.identity("custom"), CustomLootablePoolEntry.CODEC, CustomLootablePoolEntryDisplay.PACKET_CODEC.cast())
     val ITEM = LootablePoolEntryType.create(Lootables.identity("item"), ItemLootablePoolEntry.CODEC, ItemLootablePoolEntryDisplay.PACKET_CODEC, ItemLootablePoolEntry.Companion::createRandomInstance)
+    val COMMAND = LootablePoolEntryType.create(Lootables.identity("command"), CommandLootablePoolEntry.CODEC, CommandLootablePoolEntryDisplay.PACKET_CODEC)
     val POOL = LootablePoolEntryType.create(Lootables.identity("pool"), PoolLootablePoolEntry.CODEC, PoolLootablePoolEntryDisplay.PACKET_CODEC)
     val TABLE = LootablePoolEntryType.create(Lootables.identity("table"), TableLootablePoolEntry.CODEC, TableLootablePoolEntryDisplay.PACKET_CODEC)
     val XP = LootablePoolEntryType.create(Lootables.identity("xp"), ExperienceLootablePoolEntry.CODEC, ExperienceLootablePoolEntryDisplay.PACKET_CODEC, ExperienceLootablePoolEntry.Companion::createRandomInstance)
