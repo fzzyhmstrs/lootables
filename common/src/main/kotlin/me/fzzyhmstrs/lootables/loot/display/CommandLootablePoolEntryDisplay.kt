@@ -13,15 +13,11 @@
 package me.fzzyhmstrs.lootables.loot.display
 
 import me.fzzyhmstrs.fzzy_config.util.FcText.translate
-import me.fzzyhmstrs.lootables.client.screen.TileIcon
-import me.fzzyhmstrs.lootables.loot.LootablePoolEntryDisplay
+import me.fzzyhmstrs.lootables.Lootables
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryType
 import me.fzzyhmstrs.lootables.loot.LootablePoolEntryTypes
-import net.minecraft.client.MinecraftClient
-import net.minecraft.item.ItemStack
 import net.minecraft.network.RegistryByteBuf
 import net.minecraft.network.codec.PacketCodec
-import net.minecraft.network.codec.PacketCodecs
 import net.minecraft.text.Text
 
 data object CommandLootablePoolEntryDisplay: SimpleLootablePoolEntryDisplay(Lootables.identity("display/command")) {

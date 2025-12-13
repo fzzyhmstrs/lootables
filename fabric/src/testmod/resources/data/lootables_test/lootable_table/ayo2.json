@@ -1,0 +1,35 @@
+{
+  "pools": [
+    {
+      "id": "lootables:xp2",
+      "entry": {
+        "xp": {
+          "n": 5,
+          "p": 0.5
+        },
+        "type": "lootables:xp"
+      }
+    },
+    {
+      "id": "lootables_test:planks22",
+      "rarity": "uncommon",
+      "entry": {
+        "type": "lootables:item",
+        "item": {
+          "id": "minecraft:oak_planks",
+          "count": 32
+        }
+      }
+    },
+    {
+      "id": "lootables_test:command_test",
+      "desc": {
+        "translate": "lootables_test.command.test"
+      },
+      "entry": {
+        "type": "lootables:command",
+        "command": "give @s minecraft:nether_star 1"
+      }
+    }
+  ]
+}

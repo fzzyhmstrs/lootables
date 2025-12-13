@@ -21,7 +21,7 @@ import net.minecraft.util.Identifier
 
 /**
  * A key for restricting a certain instance of loot generation to a certain number of rolls per player.
- * @param id [Identifier] unique ID to make this key distint from others.
+ * @param id [Identifier] unique ID to make this key distinct from others.
  * @param count Int max number of times a particular player can roll the loot supplied with this key
  * @author fzzyhmstrs
  * @since 0.1.0

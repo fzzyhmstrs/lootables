@@ -370,10 +370,7 @@ object LootablesData {
 
         fun resetKey(key: IdKey, uuid: UUID) {
             markDirty()
-            val map = keyMap[key.id]
-            if (map != null) {
-                map.remove(uuid)
-            }
+            keyMap[key.id]?.remove(uuid)
         }
 
         fun resetKey(key: IdKey) {

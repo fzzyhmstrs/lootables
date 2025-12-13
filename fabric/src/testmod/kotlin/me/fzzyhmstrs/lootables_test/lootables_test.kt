@@ -32,7 +32,7 @@ import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.server.command.CommandManager
 import java.io.File
-import java.util.UUID
+import java.util.*
 
 object LootablesTest: ModInitializer {
 

@@ -6,5 +6,6 @@
   "lootables_test.test_screen.desc5": "Gain 5 XP levels",
   "lootables_test.test_screen.desc6": "Heal 3 hearts",
 
-  "lootables_test.custom.desc": "Spawn a 5 second cloud of saturating energy"
+  "lootables_test.custom.desc": "Spawn a 5 second cloud of saturating energy",
+  "lootables_test.command.test": "Give you a nether star ^o^"
 }

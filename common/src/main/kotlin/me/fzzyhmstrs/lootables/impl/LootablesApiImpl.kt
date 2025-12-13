@@ -23,6 +23,7 @@ import net.minecraft.loot.context.LootContext
 import net.minecraft.loot.context.LootContextParameterSet
 import net.minecraft.loot.context.LootContextParameters
 import net.minecraft.loot.context.LootContextTypes
+import net.minecraft.server.MinecraftServer
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.Vec3d
