@@ -37,7 +37,7 @@ import java.util.concurrent.ConcurrentMap
 import java.util.function.Consumer
 import java.util.function.Function
 
-class LootablePool private constructor(
+class LootablePool internal constructor(
     internal val id: Identifier,
     internal val rarity: LootableRarity,
     internal val entry: LootablePoolEntry,
