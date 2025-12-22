@@ -25,7 +25,7 @@ import net.minecraft.util.math.Vec3d
 
 /**
  * Executes a command on the server with permission level 2.
- * @param command the command string to run, without the '/' prefix.
+ * @param command the command string to run, with or without the '/' prefix.
  * @author fzzyhmstrs
  * @since 0.2.0
  */

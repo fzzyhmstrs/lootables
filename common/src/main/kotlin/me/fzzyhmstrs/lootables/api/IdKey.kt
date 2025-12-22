@@ -28,6 +28,10 @@ import net.minecraft.util.Identifier
  */
 data class IdKey @JvmOverloads constructor(val id: Identifier, val count: Int = 1) {
 
+    fun pretty(): String {
+        return "ID<$id x $count>"
+    }
+
     internal companion object {
         val CODEC: Codec<IdKey> = RecordCodecBuilder.create { instance: RecordCodecBuilder.Instance<IdKey> ->
             instance.group(

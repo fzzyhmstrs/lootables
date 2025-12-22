@@ -46,7 +46,7 @@ import java.util.stream.Stream
 import kotlin.math.max
 import kotlin.math.min
 
-object LootablesData {
+internal object LootablesData {
 
     private var lootablePools: Map<Identifier, LootablePool> = mapOf()
     private var lootableTables: Map<Identifier, LootableTable> = mapOf()
@@ -84,6 +84,10 @@ object LootablesData {
 
     fun getPool(id: Identifier): LootablePool? {
         return lootablePools[id]
+    }
+
+    fun getPoolIds(): Set<Identifier> {
+        return lootableTables.keys
     }
 
     fun hasTable(id: Identifier): Boolean {

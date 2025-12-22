@@ -26,7 +26,9 @@ import java.util.concurrent.CompletableFuture
 import java.util.function.UnaryOperator
 
 /**
- * A data provider for lootable pools and tables. Register with your data generator in a [DataGenerator.Pack] in the typical way, `pack.addProvider(::LootableTableDataProviderSubClass)` (kotlin) or `pack.addProvider(LootableTableDataProviderSubClass::new);` (java)
+ * A data provider for lootable pools and tables. Register with your data generator in a [DataGenerator.Pack] in the typical way
+ * - Fabric: `pack.addProvider(::LootableTableDataProviderSubClass)` (kotlin) or `pack.addProvider(LootableTableDataProviderSubClass::new);` (java)
+ * - Neoforge: `event.getGenerator().addProvider(event.includeServer(), LootableTableDataProviderSubClass(event.getGenerator().getPackOutput(), event.getLookupProvider()))` (kotlin) or `pack.addProvider(LootableTableDataProviderSubClass::new);` (java)
  * @see configure
  * @author fzzyhmstrs
  * @since 0.2.0

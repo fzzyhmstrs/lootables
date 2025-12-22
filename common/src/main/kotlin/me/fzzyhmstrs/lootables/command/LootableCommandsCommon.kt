@@ -15,17 +15,22 @@ package me.fzzyhmstrs.lootables.command
 import com.mojang.brigadier.CommandDispatcher
 import com.mojang.brigadier.arguments.IntegerArgumentType
 import com.mojang.brigadier.builder.ArgumentBuilder
+import com.mojang.brigadier.builder.RequiredArgumentBuilder
 import com.mojang.brigadier.context.CommandContext
 import me.fzzyhmstrs.fzzy_config.util.FcText
+import me.fzzyhmstrs.fzzy_config.util.FcText.lit
 import me.fzzyhmstrs.lootables.api.IdKey
 import me.fzzyhmstrs.lootables.api.LootablesApi
+import me.fzzyhmstrs.lootables.command.LootableCommandsCommon.buildKey
 import me.fzzyhmstrs.lootables.data.LootablesData
 import net.minecraft.command.argument.EntityArgumentType
 import net.minecraft.command.argument.IdentifierArgumentType
 import net.minecraft.server.command.CommandManager
 import net.minecraft.server.command.ServerCommandSource
 import net.minecraft.server.network.ServerPlayerEntity
+import net.minecraft.text.Text
 import net.minecraft.util.Identifier
+import java.util.function.Supplier
 
 object LootableCommandsCommon {
 
@@ -37,13 +42,10 @@ object LootableCommandsCommon {
                     .then(CommandManager.argument("targets", EntityArgumentType.players())
                         .then(CommandManager.argument("table", LootableTableArgumentType())
                             .finishRandomCommand()
-                            .then(CommandManager.argument("max_uses", IntegerArgumentType.integer(1))
-                                .then(CommandManager.argument("id_key", IdentifierArgumentType.identifier())
-                                    .finishRandomCommand("id_key", "max_uses")
-                                )
-                            )
-                            .then(CommandManager.argument("id_key", IdentifierArgumentType.identifier())
-                                .finishRandomCommand("id_key")
+                            .then(CommandManager.literal("keyed")
+                                .finishIdKeys { arg, id, max ->
+                                    arg.finishRandomCommand(id, max)
+                                }
                             )
                         )
                     )
@@ -53,18 +55,40 @@ object LootableCommandsCommon {
                         .then(CommandManager.argument("table", LootableTableArgumentType())
                             .finishChoiceCommand()
                             .then(CommandManager.literal("keyed")
-                                .then(CommandManager.argument("max_uses", IntegerArgumentType.integer(1))
-                                    .then(CommandManager.argument("id_key", IdentifierArgumentType.identifier())
-                                        .finishChoiceCommand("id_key", "max_uses")
-                                    )
-                                )
-                                .then(CommandManager.argument("id_key", IdentifierArgumentType.identifier())
-                                    .finishChoiceCommand("id_key")
-                                )
+                                .finishIdKeys { arg, id, max ->
+                                    arg.finishChoiceCommand(id, max)
+                                }
                             )
                         )
                     )
                 )
+                .then(CommandManager.literal("reset_key")
+                    .finishIdKeys { arg, id, max ->
+                        arg.executes { context ->
+                            reset(context, context.buildKey(id, max))
+                        }
+                        .then(CommandManager.argument("targets", EntityArgumentType.players())
+                            .executes { context ->
+                                reset(context, context.buildKey(id, max), EntityArgumentType.getPlayers(context, "targets"))
+                            }
+                        )
+                    }
+                )
+        )
+    }
+
+    private fun <T: ArgumentBuilder<ServerCommandSource, T>> T.finishIdKeys(executor: (RequiredArgumentBuilder<ServerCommandSource, Identifier>, String?, String?) -> ArgumentBuilder<ServerCommandSource, *>): T {
+        return this.then(CommandManager.argument("max_uses", IntegerArgumentType.integer(1))
+            .then(CommandManager.argument("id_key", IdentifierArgumentType.identifier())
+                .also {
+                    executor(it, "id_key", "max_uses")
+                }
+            )
+        )
+        .then(CommandManager.argument("id_key", IdentifierArgumentType.identifier())
+            .also {
+                executor(it, "id_key", null)
+            }
         )
     }
 
@@ -103,6 +127,12 @@ object LootableCommandsCommon {
             )
     }
 
+    private fun <T: ArgumentBuilder<ServerCommandSource, T>> T.finishResetCommand(id: String? = null, maxCount: String? = null): T {
+        return this
+
+
+    }
+
     private fun CommandContext<ServerCommandSource>.buildKey(id: String?, maxCount: String?): IdKey? {
         if (id == null) return null
         val count = if (maxCount == null) 1 else IntegerArgumentType.getInteger(this, maxCount)
@@ -115,7 +145,7 @@ object LootableCommandsCommon {
             return 0
         }
         for (player in players) {
-            LootablesApi.supplyLootRandomly(table, player, player.pos, null, rolls)
+            LootablesApi.supplyLootRandomly(table, player, player.pos, idKey, rolls)
         }
         return 1
     }
@@ -136,4 +166,40 @@ object LootableCommandsCommon {
         }
     }
 
+    private fun reset(context: CommandContext<ServerCommandSource>, idKey: IdKey?, players: Collection<ServerPlayerEntity>? = null): Int {
+        if (idKey == null) {
+            context.source.sendError(FcText.translatable("lootables.command.error.no_key"))
+            return 0
+        }
+        if (players != null) {
+            for (player in players) {
+                LootablesApi.resetKey(idKey, player)
+            }
+            if (players.size == 1) {
+                context.source.sendFeedback({
+                    FcText.translatable("lootables.command.feedback.reset_players", idKey.pretty(), players.toList()[0])
+                }, true)
+            } else {
+                val playerTexts = joinToText(players.map { it.name }, ", ".lit())
+                context.source.sendFeedback({
+                    FcText.translatable("lootables.command.feedback.reset_players", idKey.pretty(), playerTexts)
+                }, true)
+            }
+        } else {
+            LootablesApi.resetKey(idKey, context.source.server)
+            FcText.translatable("lootables.command.feedback.reset_all_players", idKey.pretty())
+        }
+        return 1
+    }
+
+    private fun joinToText(texts: List<Text>, separator: Text): Text {
+        if (texts.isEmpty()) return FcText.empty()
+        if (texts.size == 1) return texts[0]
+        var t = texts[0].copy()
+        for (i in 1..texts.lastIndex) {
+            t = t.append(separator)
+            t = t.append(texts[i])
+        }
+        return t
+    }
 }
