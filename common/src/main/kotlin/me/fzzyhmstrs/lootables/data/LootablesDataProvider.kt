@@ -33,7 +33,7 @@ import java.util.function.UnaryOperator
  * @author fzzyhmstrs
  * @since 0.2.0
  */
-abstract class LootableTableDataProvider(output: DataOutput, private val registryFuture: CompletableFuture<WrapperLookup>): DataProvider {
+abstract class LootablesDataProvider(output: DataOutput, private val registryFuture: CompletableFuture<WrapperLookup>): DataProvider {
 
     private val poolResolver = output.getResolver(DataOutput.OutputType.DATA_PACK, "lootable_pool")
     private val tableResolver = output.getResolver(DataOutput.OutputType.DATA_PACK, "lootable_table")

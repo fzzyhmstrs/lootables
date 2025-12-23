@@ -176,18 +176,20 @@ object LootableCommandsCommon {
                 LootablesApi.resetKey(idKey, player)
             }
             if (players.size == 1) {
-                context.source.sendFeedback({
+                context.source.sendFeedback( {
                     FcText.translatable("lootables.command.feedback.reset_players", idKey.pretty(), players.toList()[0])
                 }, true)
             } else {
                 val playerTexts = joinToText(players.map { it.name }, ", ".lit())
-                context.source.sendFeedback({
+                context.source.sendFeedback( {
                     FcText.translatable("lootables.command.feedback.reset_players", idKey.pretty(), playerTexts)
                 }, true)
             }
         } else {
             LootablesApi.resetKey(idKey, context.source.server)
-            FcText.translatable("lootables.command.feedback.reset_all_players", idKey.pretty())
+            context.source.sendFeedback( {
+                FcText.translatable("lootables.command.feedback.reset_all_players", idKey.pretty())
+            }, true)
         }
         return 1
     }
