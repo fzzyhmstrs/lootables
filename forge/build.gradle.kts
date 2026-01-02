@@ -18,7 +18,7 @@ evaluationDependsOn(":common")
 
 architectury {
     platformSetupLoomIde()
-    neoForge()
+    forge()
 }
 
 val archivesBaseName: String by rootProject
@@ -56,26 +56,22 @@ val minecraftVersion: String by rootProject
 dependencies {
     minecraft("com.mojang:minecraft:$minecraftVersion")
     val yarnMappings: String by project
-    val yarnMappingsPatchVersion: String by project
-    mappings( loom.layered {
-        mappings("net.fabricmc:yarn:$yarnMappings:v2")
-        mappings("dev.architectury:yarn-mappings-patch-neoforge:$yarnMappingsPatchVersion")
-    })
+    mappings("net.fabricmc:yarn:$yarnMappings:v2")
 
     val fzzyConfigVersion: String by rootProject
-    modImplementation("me.fzzyhmstrs:fzzy_config:$fzzyConfigVersion+neoforge") {
+    modImplementation("me.fzzyhmstrs:fzzy_config:$fzzyConfigVersion+forge") {
         exclude("net.fabricmc.fabric-api")
     }
 
     // Neo only deps
 
-    val neoforgeLoaderVersion: String by rootProject
-    neoForge("net.neoforged:neoforge:$neoforgeLoaderVersion")
+    val forgeLoaderVersion: String by rootProject
+    forge("net.minecraftforge:forge:$forgeLoaderVersion")
     val kotlinForForgeVersion: String by project
     modImplementation("thedarkcolour:kotlinforforge-neoforge:$kotlinForForgeVersion")
 
     "common"(project(":common", "namedElements")) { this.setTransitive(false) }
-    "shadowCommon"(project(":common", "transformProductionNeoForge")) { this.setTransitive(false) }
+    "shadowCommon"(project(":common", "transformProductionForge")) { this.setTransitive(false) }
 }
 
 val modName: String by rootProject
@@ -90,12 +86,12 @@ val modHomepage: String by rootProject
 tasks {
 
     processResources {
-        val neoforgeLoaderVersion: String by rootProject
+        val forgeLoaderVersion: String by rootProject
         val kotlinForForgeVersion: String by rootProject
         val fzzyConfigVersion: String by rootProject
         inputs.property("version", project.version)
         inputs.property("id", base.archivesName.get())
-        inputs.property("neoforgeLoaderVersion", neoforgeLoaderVersion)
+        inputs.property("forgeLoaderVersion", forgeLoaderVersion)
         inputs.property("kotlinForForgeVersion", kotlinForForgeVersion)
         inputs.property("fzzyConfigVersion", fzzyConfigVersion)
         inputs.property("modName", modName)
@@ -103,11 +99,11 @@ tasks {
         inputs.property("modAuthor", modAuthor)
         inputs.property("modSources", modSources)
         inputs.property("modIssues", modIssues)
-        filesMatching("META-INF/neoforge.mods.toml") {
+        filesMatching("META-INF/mods.toml") {
             expand(mutableMapOf(
                 "version" to project.version,
                 "id" to base.archivesName.get(),
-                "neoforgeLoaderVersion" to neoforgeLoaderVersion,
+                "forgeLoaderVersion" to forgeLoaderVersion,
                 "kotlinForForgeVersion" to kotlinForForgeVersion,
                 "fzzyConfigVersion" to fzzyConfigVersion,
                 "modName" to modName,

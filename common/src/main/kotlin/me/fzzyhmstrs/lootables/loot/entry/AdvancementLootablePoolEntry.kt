@@ -52,7 +52,7 @@ class AdvancementLootablePoolEntry(private val advancement: Identifier): Lootabl
     }
 
     override fun serverDescription(playerEntity: ServerPlayerEntity): Text {
-        val adv = playerEntity.serverWorld.server.advancementLoader.get(advancement)?.value?.display?.map { it.title }?.orElse(FcText.literal(advancement.toString())) ?: FcText.literal(advancement.toString())
+        val adv = playerEntity.serverWorld.server.advancementLoader.get(advancement)?.display?.title ?: FcText.literal(advancement.toString())
         return "lootables.entry.advancement".translate(adv)
     }
 
@@ -62,7 +62,7 @@ class AdvancementLootablePoolEntry(private val advancement: Identifier): Lootabl
             Lootables.LOGGER.error("Advancement Lootable Display couldn't find advancement $advancement")
             return AdvancementLootablePoolEntryDisplay(Optional.empty())
         }
-        return AdvancementLootablePoolEntryDisplay(adv.value.display.map { it.icon })
+        return AdvancementLootablePoolEntryDisplay(Optional.ofNullable(adv.display?.icon))
     }
 
     override fun maxUses(): Int {

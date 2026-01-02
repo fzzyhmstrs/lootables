@@ -18,10 +18,10 @@ import net.minecraft.command.argument.ArgumentTypes
 import net.minecraft.command.argument.serialize.ConstantArgumentSerializer
 import net.minecraft.registry.RegistryKeys
 import net.minecraft.server.command.ServerCommandSource
-import net.neoforged.bus.api.IEventBus
-import net.neoforged.neoforge.common.NeoForge
-import net.neoforged.neoforge.event.RegisterCommandsEvent
-import net.neoforged.neoforge.registries.DeferredRegister
+import net.minecraftforge.common.MinecraftForge
+import net.minecraftforge.event.RegisterCommandsEvent
+import net.minecraftforge.eventbus.api.IEventBus
+import net.minecraftforge.registries.DeferredRegister
 import java.util.function.Supplier
 
 object LootablesCommands {
@@ -39,7 +39,7 @@ object LootablesCommands {
             )
         })
 
-        NeoForge.EVENT_BUS.addListener(::registerCommands)
+        MinecraftForge.EVENT_BUS.addListener(::registerCommands)
     }
 
     private fun registerCommands(event: RegisterCommandsEvent) {

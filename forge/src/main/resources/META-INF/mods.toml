@@ -1,5 +1,5 @@
 modLoader = "javafml"
-loaderVersion = "[2,)"
+loaderVersion = "[1,)"
 license = "TDL-M"
 issueTrackerURL = "${modIssues}"
 
@@ -19,29 +19,29 @@ logoFile = "icon.png"
 # config = "emi_loot.mixins.json"
 
 [[dependencies.${id}]]
-modId = "neoforge"
-type = "REQUIRED"
-versionRange = "[21.0,)"
+modId = "forge"
+mandatory = true
+versionRange = "[47,)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.${id}]]
 modId = "minecraft"
-type = "REQUIRED"
-versionRange = "[1.21,1.21.1]"
+mandatory = true
+versionRange = "[1.20.1]"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.${id}]]
 modId = "fzzy_config"
-type = "REQUIRED"
+mandatory = true
 versionRange = "[${fzzyConfigVersion},)"
 ordering = "AFTER"
 side = "BOTH"
 
 [[dependencies.${id}]]
 modId = "kotlinforforge"
-type = "REQUIRED"
+mandatory = true
 versionRange = "[${kotlinForForgeVersion},)"
 ordering = "NONE"
 side = "BOTH"

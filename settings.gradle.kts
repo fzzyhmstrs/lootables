@@ -23,4 +23,4 @@ rootProject.name = archivesBaseName
 
 include("common")
 include("fabric")
-include("neoforge")
+include("forge")

@@ -3,13 +3,13 @@ package me.fzzyhmstrs.lootables
 import me.fzzyhmstrs.fzzy_config.nullCast
 import me.fzzyhmstrs.lootables.command.LootablesCommands
 import net.minecraft.server.network.ServerPlayerEntity
-import net.neoforged.api.distmarker.Dist
-import net.neoforged.bus.api.IEventBus
-import net.neoforged.fml.common.Mod
-import net.neoforged.neoforge.common.NeoForge
-import net.neoforged.neoforge.event.OnDatapackSyncEvent
-import net.neoforged.neoforge.event.entity.player.PlayerEvent.PlayerLoggedOutEvent
-import net.neoforged.neoforge.event.server.ServerStartingEvent
+import net.minecraftforge.common.MinecraftForge
+import net.minecraftforge.event.OnDatapackSyncEvent
+import net.minecraftforge.event.entity.player.PlayerEvent
+import net.minecraftforge.event.server.ServerStartingEvent
+import net.minecraftforge.eventbus.api.IEventBus
+import net.minecraftforge.fml.common.Mod
+import net.minecraftforge.fml.loading.FMLLoader
 
 
 @Mod(Lootables.ID)
@@ -17,9 +17,13 @@ class ISNeoforge(bus: IEventBus) {
     init {
         Lootables.init()
         LootablesCommands.init(bus)
-        NeoForge.EVENT_BUS.addListener(::onStart)
-        NeoForge.EVENT_BUS.addListener(::onLoad)
-        NeoForge.EVENT_BUS.addListener(::onLogout)
+        MinecraftForge.EVENT_BUS.addListener(::onStart)
+        MinecraftForge.EVENT_BUS.addListener(::onLoad)
+        MinecraftForge.EVENT_BUS.addListener(::onLogout)
+
+        if (FMLLoader.getDist().isClient) {
+            LootablesClient.init()
+        }
     }
 
     private fun onStart(event: ServerStartingEvent) {
@@ -36,20 +40,10 @@ class ISNeoforge(bus: IEventBus) {
         }
     }
 
-    private fun onLogout(event: PlayerLoggedOutEvent) {
+    private fun onLogout(event: PlayerEvent.PlayerLoggedOutEvent) {
         event.entity.nullCast<ServerPlayerEntity>()?.let {
             Lootables.runPlayerDisconnect(it)
         }
     }
-
-}
-
-@Mod(Lootables.ID, dist = [Dist.CLIENT])
-class ISNeoForgeClient(@Suppress("UNUSED_PARAMETER") bus: IEventBus) {
-
-    init {
-        LootablesClient.init()
-    }
-
 
 }

@@ -75,11 +75,7 @@ val minecraftVersion: String by rootProject
 dependencies {
     minecraft("com.mojang:minecraft:$minecraftVersion")
     val yarnMappings: String by project
-    val yarnMappingsPatchVersion: String by project
-    mappings( loom.layered {
-        mappings("net.fabricmc:yarn:$yarnMappings:v2")
-        mappings("dev.architectury:yarn-mappings-patch-neoforge:$yarnMappingsPatchVersion")
-    })
+    mappings("net.fabricmc:yarn:$yarnMappings:v2")
 
     val fzzyConfigVersion: String by rootProject
     modImplementation("me.fzzyhmstrs:fzzy_config:$fzzyConfigVersion") {
