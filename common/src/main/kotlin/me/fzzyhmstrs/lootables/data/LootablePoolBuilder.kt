@@ -23,7 +23,7 @@ import net.minecraft.util.Identifier
 import java.util.*
 
 /**
- * Builder for a [LootablePool]. The pool will be an inline pool when used in [LootableTableBuilder.inlinePool], as the name implies. It will be a reference pool when defined in [LootableTableDataProvider.pool], usable in tables via [LootableTableBuilder.referencePool]
+ * Builder for a [LootablePool]. The pool will be an inline pool when used in [LootableTableBuilder.inlinePool], as the name implies. It will be a reference pool when defined in [LootablesDataProvider.pool], usable in tables via [LootableTableBuilder.referencePool]
  * @author fzzyhmstrs
  * @since 0.2.0
  */

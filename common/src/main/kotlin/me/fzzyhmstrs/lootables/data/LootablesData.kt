@@ -284,62 +284,7 @@ internal object LootablesData {
         getChoicesData(playerEntity.server).onDisconnect(playerEntity)
     }
 
-    fun init() {
-
-        /*ServerLifecycleEvents.BEFORE_SAVE.register { _, _, _ ->
-            saveUsageData()
-        }*/
-
-        /*ServerLifecycleEvents.SERVER_STARTING.register { server ->
-            //performed syncronously to avoid race condition with join or something
-            reload(server.resourceManager, server.reloadableRegistries.registryManager)
-            server.isDedicated
-        }*/
-
-        /*ServerLifecycleEvents.END_DATA_PACK_RELOAD.register { server, resourceManager, _ ->
-            if (server.playerManager.playerList.isEmpty()) return@register
-            CompletableFuture.supplyAsync {
-                reload(resourceManager, server.reloadableRegistries.registryManager)
-            }.thenApplyAsync {
-                getSyncData(server.playerManager.playerList)
-            }.thenAccept { sd ->
-                sd.forEachPlayer(server.playerManager.playerList) { p, m ->
-                    ConfigApi.network().send(DataSyncS2CCustomPayload(m), p)
-                }
-            }
-        }*/
-
-        /*ServerPlayConnectionEvents.JOIN.register { handler, _, server ->
-            CompletableFuture.supplyAsync {
-                dataInvalid = true
-                val list: MutableList<ServerPlayerEntity> = server.playerManager.playerList.toMutableList()
-                list.add(handler.getPlayer())
-                getSyncData(list)
-            }.thenAccept { sd ->
-                sd.forPlayer(handler.getPlayer()) { p, m ->
-                    ConfigApi.network().send(DataSyncS2CCustomPayload(m), p)
-                }
-            }
-        }*/
-
-        /*ServerPlayConnectionEvents.DISCONNECT.register { handler, _ ->
-            for ((uuid, pendingChoices) in pendingChoicesMap) {
-                if (pendingChoices.playerUuid == handler.getPlayer().uuid) {
-                    pendingChoices.abort(handler.getPlayer())
-                    storedChoices[uuid] = pendingChoices.poolChoices
-                }
-            }
-        }*/
-
-        /*ServerLifecycleEvents.SERVER_STOPPING.register { server ->
-            for ((uuid, pendingChoices) in pendingChoicesMap) {
-                val player = server.playerManager.getPlayer(pendingChoices.playerUuid) ?: continue
-                pendingChoices.abort(player)
-                storedChoices[uuid] = pendingChoices.poolChoices
-            }
-            saveStoredChoices()
-        }*/
-    }
+    fun init() {}
 
     private data class UsageData(private val usesMap: MutableMap<Identifier, MutableMap<UUID, Int>>, private val keyMap: MutableMap<Identifier, MutableMap<UUID, Int>>): PersistentState() {
         fun getUses(id: Identifier, uuid: UUID): Int {
